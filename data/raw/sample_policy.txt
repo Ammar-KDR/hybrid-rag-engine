@@ -1,0 +1,5 @@
+Employees must submit travel expense claims within 30 calendar days.
+
+Claims submitted after 30 days require approval from the finance manager.
+
+Receipts are required for expenses above $25.
