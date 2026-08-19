@@ -1,0 +1,13 @@
+Kubernetes Pods are the smallest deployable computing units in Kubernetes. A Pod can contain one or more containers.
+
+Containers inside the same Pod share networking and storage resources. They are scheduled together on the same node.
+
+Readiness probes determine whether a container is ready to accept traffic.
+
+When a readiness probe fails, Kubernetes removes the Pod from matching Service endpoints until the probe succeeds again.
+
+PersistentVolumes provide storage resources in a Kubernetes cluster.
+
+A PersistentVolumeClaim allows a user to request storage without needing to understand the underlying storage implementation.
+
+StorageClasses describe different classes of storage offered by the cluster.
