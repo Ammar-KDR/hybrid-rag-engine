@@ -1,0 +1,160 @@
+[
+    {
+        "id": "001",
+        "question": "What is a Kubernetes Pod?",
+        "expected_chunk_ids": [
+            "46986f821b149f63a86ebf5e53546e4fc0f6a8fba0971e8b0bdeca306858e91b"
+        ],
+        "category": "simple_lookup"
+    },
+    {
+        "id": "002",
+        "question": "What is the smallest deployable unit used to run applications in Kubernetes?",
+        "expected_chunk_ids": [
+            "46986f821b149f63a86ebf5e53546e4fc0f6a8fba0971e8b0bdeca306858e91b"
+        ],
+        "category": "semantic"
+    },
+    {
+        "id": "003",
+        "question": "How can I recover a Kubernetes application that is failing?",
+        "expected_chunk_ids": [
+            "76b7a98a17abb3243bc82fad4688fa2e41984c23d215b3e2a7026bd3a772514f",
+            "7fd6ae2b245b7bb2c1cc7ae650ef0f8d5a9ac7aefa6d26050cd2baab86e0d6f5"
+        ],
+        "category": "semantic"
+    },
+    {
+        "id": "004",
+        "question": "What command can restart a failed Kubernetes deployment?",
+        "expected_chunk_ids": [
+            "7fd6ae2b245b7bb2c1cc7ae650ef0f8d5a9ac7aefa6d26050cd2baab86e0d6f5"
+        ],
+        "category": "terminology"
+    },
+    {
+        "id": "005",
+        "question": "How do Kubernetes rollbacks work?",
+        "expected_chunk_ids": [
+            "46992d6e6f1a1eab8319f4f64b95b678dcf7ebf21ff771270b069e80787b5509"
+        ],
+        "category": "simple_lookup"
+    },
+    {
+        "id": "006",
+        "question": "How do I check why a Linux service failed?",
+        "expected_chunk_ids": [
+            "c3b9a32eee21106abc0fe6270aaf8fcca3e45eafcdae0f63f478f568ae0be75e"
+        ],
+        "category": "semantic"
+    },
+    {
+        "id": "007",
+        "question": "Which Linux commands help inspect running processes?",
+        "expected_chunk_ids": [
+            "b8ef1eb531604162a9f5d2ae70bea599e02248fad8a38a6499f82981fd9a4f4e"
+        ],
+        "category": "simple_lookup"
+    },
+    {
+        "id": "008",
+        "question": "Why would a Linux system become slow because of memory problems?",
+        "expected_chunk_ids": [
+            "6443b47075da8769f44d04fe4d7c5535ee9874fe9a3c1350841fea74e154eca1"
+        ],
+        "category": "semantic"
+    },
+    {
+        "id": "009",
+        "question": "What can prevent a network connection from reaching an application?",
+        "expected_chunk_ids": [
+            "5bf44dc2c44bfef994378fcbfb61a09d18db956e84cb38cdebad0bf8055945d5"
+        ],
+        "category": "semantic"
+    },
+    {
+        "id": "010",
+        "question": "How does DNS affect application connectivity?",
+        "expected_chunk_ids": [
+            "84049efc0748a790ec487ecd584bfee11412059c8d88c222bd0b3adb8d84650a"
+        ],
+        "category": "terminology"
+    },
+    {
+        "id": "011",
+        "question": "What protocol provides reliable communication between systems?",
+        "expected_chunk_ids": [
+            "528fd73a61a3c93370bcfb1b3a1e2b6e92c6dbcef5782f5fa9b1a6982d874d2d"
+        ],
+        "category": "simple_lookup"
+    },
+    {
+        "id": "012",
+        "question": "How do Docker containers store persistent data?",
+        "expected_chunk_ids": [
+            "76b7a98a17abb3243bc82fad4688fa2e41984c23d215b3e2a7026bd3a772514f"
+        ],
+        "category": "semantic"
+    },
+    {
+        "id": "013",
+        "question": "What is the purpose of Docker images?",
+        "expected_chunk_ids": [
+            "9813b8b6e67b13429cb702234078c77b8c4fe64d0e649c356814f2fa2880daf2"
+        ],
+        "category": "simple_lookup"
+    },
+    {
+        "id": "014",
+        "question": "Why are database indexes used?",
+        "expected_chunk_ids": [
+            "b82aea92ec6e1f772eee96f81c0dd79c8bb26542ba6f3a31032eb2962f1c4293"
+        ],
+        "category": "simple_lookup"
+    },
+    {
+        "id": "015",
+        "question": "How do database transactions keep data reliable?",
+        "expected_chunk_ids": [
+            "0db6d83b449e760d537493aaecf87501ac2d2fe5e13254b0989c742a7c655023"
+        ],
+        "category": "semantic"
+    },
+    {
+        "id": "016",
+        "question": "How can database performance problems be investigated?",
+        "expected_chunk_ids": [
+            "54986861ec561dfa5cf1566acc43cb659172d6bc34de962fd3f1271525cb39bf",
+            "b82aea92ec6e1f772eee96f81c0dd79c8bb26542ba6f3a31032eb2962f1c4293"
+        ],
+        "category": "multi_document"
+    },
+    {
+        "id": "017",
+        "question": "How do I verify that an application recovered successfully after an incident?",
+        "expected_chunk_ids": [
+            "04eed45a787581158f02d6564a4ec8f6fa9e28fb3a4cc5afd32f754a9e74df7d"
+        ],
+        "category": "semantic"
+    },
+    {
+        "id": "018",
+        "question": "How do I configure an AWS Lambda function?",
+        "expected_chunk_ids": [],
+        "category": "unanswerable"
+    },
+    {
+        "id": "019",
+        "question": "How do I train a machine learning model?",
+        "expected_chunk_ids": [],
+        "category": "unanswerable"
+    },
+    {
+        "id": "020",
+        "question": "What command is used to manage Kubernetes services?",
+        "expected_chunk_ids": [
+            "4a5a2f45d6ec2dd818367bedc634e9c2ffbc7a7e843cbfde0cc345beb21b820c"
+        ],
+        "category": "terminology"
+    }
+]

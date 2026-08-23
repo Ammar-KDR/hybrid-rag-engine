@@ -23,11 +23,14 @@ def test_insert_vector():
 
     point_id=store.add_point(
         collection_name=collection,
-        chunk_id="test123",
+        chunk_id="test1234",
         vector=vector,
         payload={
             "text": text,
             "source": "test.md",
+            "file_type": "md",
+            "chunk_index": 0
+
         },
     )
 
