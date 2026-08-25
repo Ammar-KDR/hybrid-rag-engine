@@ -65,6 +65,7 @@ class RetrievalEvaluator:
                     "recall":recall,
                     "precision":precision,
                     "mrr":mrr,
+                    "category": item.get("category"),
                 }
             )
 

@@ -66,8 +66,11 @@ class MarkdownStructureChunker:
                     content_end = matches[i + 1].start()
 
                 # Extract content and strip leading/trailing whitespace
-                content = text[match.start():content_end].strip()
-            
+                content = text[match.end():content_end].strip()
+
+                if not content:
+                    continue
+
                 sections.append({
                     'heading': heading_text,
                     'heading_level': level_number,

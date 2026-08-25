@@ -1,0 +1,204 @@
+[
+    {
+        "id": 1,
+        "category": "lexical",
+        "question": "What does HTTP 429 Too Many Requests mean?",
+        "expected_chunk_ids": [
+            "05e2a97744bbbf26d29c9e5249c9972ee0f478e47437a24b657f386b8f961865"
+        ]
+    },
+    {
+        "id": 2,
+        "category": "lexical",
+        "question": "What does HTTP 401 Unauthorized indicate?",
+        "expected_chunk_ids": [
+            "e1662a63d0dbbb6cbf03c26b487c3adc6abdfa44979b6d5b28ee2cb789e626c7"
+        ]
+    },
+    {
+        "id": 3,
+        "category": "lexical",
+        "question": "Which Docker command lists available images?",
+        "expected_chunk_ids": [
+            "2ee960db8cbf4b03bdda051d94aad00f9b5061e1051ecd34a0a55ca63e0b5de5"
+        ]
+    },
+    {
+        "id": 4,
+        "category": "lexical",
+        "question": "Which Docker command downloads an image from a registry?",
+        "expected_chunk_ids": [
+            "2ce673f987a3789ec36ecfa4ac464f735af5ade2b225cb9fe3bd2b8fce56ca13"
+        ]
+    },
+    {
+        "id": 5,
+        "category": "lexical",
+        "question": "What does a database connection pool exhausted error mean?",
+        "expected_chunk_ids": [
+            "c9ba4e131389deeafa594e3c04928af0cf8749163137d37e2efab44a297896ca"
+        ]
+    },
+    {
+        "id": 6,
+        "category": "lexical",
+        "question": "What command can be used to inspect Linux processes?",
+        "expected_chunk_ids": [
+            "494064eb348e302f7c78ac69b38afe71722fd46ed6711e739d810380c983e48d"
+        ]
+    },
+    {
+        "id": 7,
+        "category": "lexical",
+        "question": "What does NXDOMAIN mean in DNS?",
+        "expected_chunk_ids": [
+            "e0a95584b7c9f655795a24a4cade0013ad375700b09fc1cff5ef35c20e59a089"
+        ]
+    },
+    {
+        "id": 8,
+        "category": "lexical",
+        "question": "What causes a connection refused error?",
+        "expected_chunk_ids": [
+            "66c4b5bbe20f01e732791586e8a7ec760024dddf4fb9818fed3ba2d708723ff0"
+        ]
+    },
+    {
+        "id": 9,
+        "category": "lexical",
+        "question": "What does SIGKILL indicate for a process or container?",
+        "expected_chunk_ids": [
+            "3294534c6cde8510f854c442106fa06fe5877d5bcb099b079cca93e0b7923596"
+        ]
+    },
+    {
+        "id": 10,
+        "category": "lexical",
+        "question": "Which command checks Docker images?",
+        "expected_chunk_ids": [
+            "2ee960db8cbf4b03bdda051d94aad00f9b5061e1051ecd34a0a55ca63e0b5de5"
+        ]
+    },
+    {
+        "id": 11,
+        "category": "semantic",
+        "question": "How should an engineer investigate an API failure?",
+        "expected_chunk_ids": [
+            "a3baaa41d6672a2972bd1c5206ef3dc15447d450238ff52d9bf343c0ba51caba"
+        ]
+    },
+    {
+        "id": 12,
+        "category": "semantic",
+        "question": "How can application incidents be investigated?",
+        "expected_chunk_ids": [
+            "6426757c81611600bb18cd744362fe3cb7798e3d9cc29eb6e9de7500ff45b6e6"
+        ]
+    },
+    {
+        "id": 13,
+        "category": "semantic",
+        "question": "How can I troubleshoot a slow database query?",
+        "expected_chunk_ids": [
+            "7cc05aaa28f4f6bc76a0f2ecb883ef5cd0994ca2ea784d89ede9cda48d8ba808"
+        ]
+    },
+    {
+        "id": 14,
+        "category": "semantic",
+        "question": "Why might an application fail after a deployment?",
+        "expected_chunk_ids": [
+            "9e13efe96a3928d3c7514ee452c6304e7c35bbd8b754190b6f406abcbd427a0e"
+        ]
+    },
+    {
+        "id": 15,
+        "category": "semantic",
+        "question": "How do health checks help determine application availability?",
+        "expected_chunk_ids": [
+            "713fdc0e90079888476f8e41379ba12a0ed3257c84bda64a3726cceac8a8e47c"
+        ]
+    },
+    {
+        "id": 16,
+        "category": "semantic",
+        "question": "How does DNS translate names into network addresses?",
+        "expected_chunk_ids": [
+            "7a77fd1127b57aad1c52f6af5c8d2adfd306ef4b774e2e88a7f38bf1bb6f2d4d"
+        ]
+    },
+    {
+        "id": 17,
+        "category": "semantic",
+        "question": "Why do applications experience database connection problems?",
+        "expected_chunk_ids": [
+            "befef53eed6e2654ce1888cc8154ee48b7d32ec1824b38208eccc4d92968eae1",
+            "c9ba4e131389deeafa594e3c04928af0cf8749163137d37e2efab44a297896ca"
+
+        ]
+    },
+    {
+        "id": 18,
+        "category": "semantic",
+        "question": "How can Linux administrators investigate running applications?",
+        "expected_chunk_ids": [
+            "d2e9ac57543c609aeae56692334068f16d852b5a50241db948b1bcbbdf41ff80"
+        ]
+    },
+    {
+        "id": 19,
+        "category": "semantic",
+        "question": "How can API authentication problems be diagnosed?",
+        "expected_chunk_ids": [
+            "4b2f1d669b08fdc3f4089a8a55734b82714a3319e727252df58b6060d9b73751"
+        ]
+    },
+    {
+        "id": 20,
+        "category": "semantic",
+        "question": "What are common reasons a service becomes unavailable?",
+        "expected_chunk_ids": [
+            "d71e8b48605d1ae0dd7520f271af23e7c57076e1e4ff2fceb34cf44786a8797a"
+        ]
+    },
+    {
+        "id": 21,
+        "category": "mixed",
+        "question": "How do I troubleshoot a 429 API rate limit failure?",
+        "expected_chunk_ids": [
+            "05e2a97744bbbf26e29c9e5249c9972ee0f478e47437a24b657f386b8f961865"
+        ]
+    },
+    {
+        "id": 22,
+        "category": "mixed",
+        "question": "An application cannot connect to a server and shows ECONNREFUSED. What does this mean?",
+        "expected_chunk_ids": [
+            "66c4b5bbe20f01e732791586e8a7ec760024dddf4fb9818fed3ba2d708723ff0"
+        ]
+    },
+    {
+        "id": 23,
+        "category": "mixed",
+        "question": "How can I debug an API endpoint using command line tools?",
+        "expected_chunk_ids": [
+            "135ffb7e6862f91849ea1e77f455041132bed35375cbedb830832f68b2382a7d"
+        ]
+    },
+    {
+        "id": 24,
+        "category": "mixed",
+        "question": "How can I investigate too many database connections?",
+        "expected_chunk_ids": [
+            "c9ba4e131389deeafa594e3c04928af0cf8749163137d37e2efab44a297896ca"
+        ]
+    },
+    {
+        "id": 25,
+        "category": "mixed",
+        "question": "How do I troubleshoot a failed Docker image operation?",
+        "expected_chunk_ids": [
+            "5e4a912a8a35965e1c4a1e51e39b1afe17a9ed2067f3beaa6ecc7391832a72e2"
+        ]
+    }
+]
