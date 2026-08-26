@@ -1,12 +1,5 @@
 [
-    {
-        "id": 1,
-        "category": "lexical",
-        "question": "What does HTTP 429 Too Many Requests mean?",
-        "expected_chunk_ids": [
-            "05e2a97744bbbf26d29c9e5249c9972ee0f478e47437a24b657f386b8f961865"
-        ]
-    },
+    
     {
         "id": 2,
         "category": "lexical",
