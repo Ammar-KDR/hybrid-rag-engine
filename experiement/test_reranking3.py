@@ -69,6 +69,7 @@ def print_reranked_results(results):
     for result in results:
 
         print("\n" + "-" * 80)
+        print(result)
 
         print(
             f"Reranked rank: {result.reranked_rank}"
