@@ -1,10 +1,11 @@
 import re
 from .model import GenerationResult, BuiltContext, GeneratedAnswer , Citation
+from rag.citation import extract_references
 
 
 class AnswerBuilder:
 
-    CITATION_PATTERN = re.compile(r"\[(\d+)\]")
+    
 
     def build(
         self,
@@ -13,7 +14,7 @@ class AnswerBuilder:
         context: BuiltContext,
     ) -> GeneratedAnswer:
 
-        references = self._extract_references(
+        references = extract_references(
             generation.text
         )
 
@@ -49,21 +50,4 @@ class AnswerBuilder:
             latency_ms=generation.latency_ms,
         )
 
-    def _extract_references(
-        self,
-        answer: str,
-    ) -> list[int]:
-
-        matches = self.CITATION_PATTERN.findall(answer)
-
-        references = []
-        seen = set()
-
-        for match in matches:
-            reference = int(match)
-
-            if reference not in seen:
-                references.append(reference)
-                seen.add(reference)
-
-        return references
+    
