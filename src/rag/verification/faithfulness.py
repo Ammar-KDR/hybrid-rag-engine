@@ -13,6 +13,7 @@ class FaithfulnessEvaluator:
     def evaluate(
         self,
         claims: list[Claim],
+        question:str,
         evidence_text: str,
     ) -> FaithfulnessSummary:
 
@@ -20,6 +21,7 @@ class FaithfulnessEvaluator:
 
         for claim in claims:
             result = self.verifier.verify(
+                question=question,
                 claim=claim,
                 evidence_text=evidence_text,
             )

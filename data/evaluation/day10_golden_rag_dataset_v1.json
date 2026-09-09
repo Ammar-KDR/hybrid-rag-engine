@@ -1,0 +1,3346 @@
+[
+  {
+    "id": "rag_001",
+    "primary_category": "simple_lookup",
+    "tags": [
+      "kubernetes",
+      "command",
+      "deployment"
+    ],
+    "difficulty": "easy",
+    "question": "What command restarts a Kubernetes Deployment?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "Use `kubectl rollout restart deployment <deployment-name>`.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "The restart command is `kubectl rollout restart deployment <deployment-name>`.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/kubernetes.md",
+        "section": "Kubernetes Operations Guide > Deployments"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/kubernetes.md",
+        "section": "Kubernetes Operations Guide > Deployments",
+        "text": "kubectl rollout restart deployment <deployment-name>"
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "deterministic",
+    "notes": "Adapted from the existing retrieval benchmark; gold truth is source/section based rather than chunk-ID based."
+  },
+  {
+    "id": "rag_002",
+    "primary_category": "simple_lookup",
+    "tags": [
+      "dns",
+      "record_type",
+      "ipv4"
+    ],
+    "difficulty": "easy",
+    "question": "Which DNS record maps a domain name to an IPv4 address?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "An A record maps a domain name to an IPv4 address.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "An A record maps a domain name to an IPv4 address.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/DNS_reference.md",
+        "section": "DNS Record Types > A Record"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/DNS_reference.md",
+        "section": "DNS Record Types > A Record",
+        "text": "An A record maps a domain name to an IPv4 address."
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "deterministic",
+    "notes": ""
+  },
+  {
+    "id": "rag_003",
+    "primary_category": "simple_lookup",
+    "tags": [
+      "docker",
+      "storage",
+      "persistence"
+    ],
+    "difficulty": "easy",
+    "question": "What Docker storage mechanism is recommended for persistent application data?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "Docker volumes are the recommended method for storing persistent application data.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "Volumes are recommended for persistent application data.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/docker_storage.md",
+        "section": "Docker Volumes"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/docker_storage.md",
+        "section": "Docker Volumes",
+        "text": "Volumes are the recommended method for storing persistent application data."
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "deterministic",
+    "notes": ""
+  },
+  {
+    "id": "rag_004",
+    "primary_category": "simple_lookup",
+    "tags": [
+      "database",
+      "postgresql",
+      "port"
+    ],
+    "difficulty": "easy",
+    "question": "What is the default PostgreSQL port?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "The default PostgreSQL port is 5432.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "The default PostgreSQL port is 5432.",
+        "required": true,
+        "supported_by": [
+          "e1",
+          "e2"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/database_configuration.md",
+        "section": "PostgreSQL Configuration > PostgreSQL Port"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/database_configuration.md",
+        "section": "PostgreSQL Configuration > PostgreSQL Port",
+        "text": "The default PostgreSQL port is:"
+      },
+      {
+        "id": "e2",
+        "document": "data/raw/database_configuration.md",
+        "section": "PostgreSQL Configuration > PostgreSQL Port",
+        "text": "~~~text\n5432\n~~~"
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "deterministic",
+    "notes": ""
+  },
+  {
+    "id": "rag_005",
+    "primary_category": "simple_lookup",
+    "tags": [
+      "kubernetes",
+      "probe",
+      "readiness"
+    ],
+    "difficulty": "easy",
+    "question": "What does a Kubernetes readiness probe check?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "A readiness probe checks whether the application can receive traffic; a container can be running but not ready.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "A readiness probe checks whether the application can receive traffic.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_2",
+        "description": "A container can be running but not ready.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/kubernets_configuration.md",
+        "section": "Health Probes > Readiness Probe"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/kubernets_configuration.md",
+        "section": "Health Probes > Readiness Probe",
+        "text": "A readiness probe checks whether the application can receive traffic."
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "required_facts",
+    "notes": ""
+  },
+  {
+    "id": "rag_006",
+    "primary_category": "simple_lookup",
+    "tags": [
+      "linux",
+      "systemd",
+      "service"
+    ],
+    "difficulty": "easy",
+    "question": "Which command restarts a systemd service named nginx?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "Use `systemctl restart nginx`.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "The restart command is `systemctl restart nginx`.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/linux_command.md",
+        "section": "Service Management > systemctl"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/linux_command.md",
+        "section": "Service Management > systemctl",
+        "text": "~~~bash\nsystemctl restart nginx\n~~~"
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "deterministic",
+    "notes": ""
+  },
+  {
+    "id": "rag_007",
+    "primary_category": "simple_lookup",
+    "tags": [
+      "api",
+      "http",
+      "503"
+    ],
+    "difficulty": "easy",
+    "question": "What does HTTP 503 Service Unavailable mean?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "HTTP 503 means the service is temporarily unavailable.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "A 503 error means the service is temporarily unavailable.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/api_erros.md",
+        "section": "503 Service Unavailable"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/api_erros.md",
+        "section": "503 Service Unavailable",
+        "text": "A 503 error means the service is temporarily unavailable."
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "deterministic",
+    "notes": ""
+  },
+  {
+    "id": "rag_008",
+    "primary_category": "semantic_paraphrase",
+    "tags": [
+      "dns",
+      "semantic",
+      "resolution"
+    ],
+    "difficulty": "medium",
+    "question": "Why can an application fail to reach a hostname even when the network itself is working?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "DNS can be broken even when basic network connectivity exists. A system may reach an IP address successfully but fail to access a hostname because DNS resolution is not working.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "DNS problems can cause applications to fail even when network connectivity exists.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_2",
+        "description": "A system may reach an IP address but fail to access a hostname because DNS resolution is broken.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/networking.md",
+        "section": "Network Troubleshooting Guide > DNS"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/networking.md",
+        "section": "Network Troubleshooting Guide > DNS",
+        "text": "DNS problems can cause applications to fail even when network connectivity exists."
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "required_facts_plus_judge",
+    "notes": ""
+  },
+  {
+    "id": "rag_009",
+    "primary_category": "semantic_paraphrase",
+    "tags": [
+      "docker",
+      "storage",
+      "semantic"
+    ],
+    "difficulty": "medium",
+    "question": "How can I keep database data after the container that wrote it is deleted?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "Store the database data in a Docker volume rather than only in the container filesystem. Data in a mounted volume persists after the container is removed.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "Data stored only inside the container filesystem is lost when the container is removed.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_2",
+        "description": "Using a Docker volume allows the data to persist after container removal.",
+        "required": true,
+        "supported_by": [
+          "e2"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/docker_storage.md",
+        "section": "Docker Storage Reference > Docker Container Storage Overview"
+      },
+      {
+        "document": "data/raw/docker_storage.md",
+        "section": "Using Volumes With Containers"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/docker_storage.md",
+        "section": "Docker Storage Reference > Docker Container Storage Overview",
+        "text": "When a container is removed, any data stored inside the container filesystem is lost."
+      },
+      {
+        "id": "e2",
+        "document": "data/raw/docker_storage.md",
+        "section": "Using Volumes With Containers",
+        "text": "will persist even if the container is removed."
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "required_facts_plus_judge",
+    "notes": ""
+  },
+  {
+    "id": "rag_010",
+    "primary_category": "semantic_paraphrase",
+    "tags": [
+      "api",
+      "troubleshooting",
+      "workflow"
+    ],
+    "difficulty": "medium",
+    "question": "How should an engineer systematically investigate an API failure?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "Verify the endpoint URL, check authentication, validate the request payload, inspect the response status code, review application logs, check dependent services, and confirm recovery after changes.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "The investigation should verify the endpoint, authentication, request payload, and response status.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_2",
+        "description": "It should also review logs and dependencies and confirm recovery after changes.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/api_erros.md",
+        "section": "API Troubleshooting Workflow"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/api_erros.md",
+        "section": "API Troubleshooting Workflow",
+        "text": "1. Verify endpoint URL.\n2. Check authentication.\n3. Validate request payload.\n4. Inspect response status code.\n5. Review application logs.\n6. Check dependent services.\n7. Confirm recovery after changes."
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "required_facts_plus_judge",
+    "notes": "Reuses a validated concept from the existing retrieval benchmark but expands the gold answer into explicit required facts."
+  },
+  {
+    "id": "rag_011",
+    "primary_category": "semantic_paraphrase",
+    "tags": [
+      "deployment",
+      "rollback",
+      "operations"
+    ],
+    "difficulty": "medium",
+    "question": "A new release caused a major production regression. What recovery approach does the runbook recommend?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "Stop further rollout, preserve relevant logs and deployment metadata, compare with the previous known-good release, and if rollback is safe restore that known-good version and monitor health indicators.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "Stop further rollout of the affected version.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_2",
+        "description": "Preserve relevant logs and deployment metadata.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_3",
+        "description": "Compare the current release with the previous known-good version.",
+        "required": true,
+        "supported_by": [
+          "e2"
+        ]
+      },
+      {
+        "id": "fact_4",
+        "description": "If safe, restore the previous known-good release and monitor health indicators.",
+        "required": true,
+        "supported_by": [
+          "e3"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/sample_runbook.md",
+        "section": "Deployment Recovery > Failed Deployment"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/sample_runbook.md",
+        "section": "Deployment Recovery > Failed Deployment",
+        "text": "If a new release causes a significant production regression, first stop further rollout of the affected version. Preserve relevant logs and deployment metadata before taking recovery actions."
+      },
+      {
+        "id": "e2",
+        "document": "data/raw/sample_runbook.md",
+        "section": "Deployment Recovery > Failed Deployment",
+        "text": "Compare the current release with the previous known-good version. Confirm whether the incident began immediately after deployment and whether all application instances are affected."
+      },
+      {
+        "id": "e3",
+        "document": "data/raw/sample_runbook.md",
+        "section": "Deployment Recovery > Failed Deployment",
+        "text": "If rollback is considered safe, restore the previous known-good release and monitor the system until key health indicators return to expected levels."
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "required_facts_plus_judge",
+    "notes": ""
+  },
+  {
+    "id": "rag_012",
+    "primary_category": "semantic_paraphrase",
+    "tags": [
+      "database",
+      "connection_pool",
+      "troubleshooting"
+    ],
+    "difficulty": "medium",
+    "question": "Why might an application run out of usable database connections?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "Connection pool exhaustion can happen because connections leak, queries run for a long time, the pool is too small, transactions are held, or traffic suddenly increases.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "Connection leaks can exhaust the pool.",
+        "required": true,
+        "supported_by": [
+          "e2"
+        ]
+      },
+      {
+        "id": "fact_2",
+        "description": "Long-running queries can exhaust the pool.",
+        "required": true,
+        "supported_by": [
+          "e2"
+        ]
+      },
+      {
+        "id": "fact_3",
+        "description": "Insufficient pool size can contribute to exhaustion.",
+        "required": true,
+        "supported_by": [
+          "e2"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/database_errors.md",
+        "section": "Database Connection Errors > Connection Pool Exhausted"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/database_errors.md",
+        "section": "Database Connection Errors > Connection Pool Exhausted",
+        "text": "Connection pool exhaustion occurs when an application uses all available database connections."
+      },
+      {
+        "id": "e2",
+        "document": "data/raw/database_errors.md",
+        "section": "Database Connection Errors > Connection Pool Exhausted",
+        "text": "- Connection leaks\n- Long-running queries\n- Insufficient pool size"
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "required_facts_plus_judge",
+    "notes": ""
+  },
+  {
+    "id": "rag_013",
+    "primary_category": "semantic_paraphrase",
+    "tags": [
+      "linux",
+      "memory",
+      "troubleshooting"
+    ],
+    "difficulty": "medium",
+    "question": "How should I investigate a Linux application that is consuming unusually large amounts of memory?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "Check overall memory with `free -h` and inspect process memory usage, for example with `ps aux --sort=-%mem`; high memory can indicate leaks, large data processing, or incorrect application limits.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "High memory usage can indicate memory leaks, large data processing, or incorrect application limits.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_2",
+        "description": "Use `free -h` to check memory.",
+        "required": true,
+        "supported_by": [
+          "e2"
+        ]
+      },
+      {
+        "id": "fact_3",
+        "description": "Use `ps aux --sort=-%mem` to inspect process memory.",
+        "required": true,
+        "supported_by": [
+          "e3"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/linux_process_debugging.md",
+        "section": "Process Resource Analysis > Memory Usage"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/linux_process_debugging.md",
+        "section": "Process Resource Analysis > Memory Usage",
+        "text": "High memory usage can indicate:"
+      },
+      {
+        "id": "e2",
+        "document": "data/raw/linux_process_debugging.md",
+        "section": "Process Resource Analysis > Memory Usage",
+        "text": "~~~bash\nfree -h\n~~~"
+      },
+      {
+        "id": "e3",
+        "document": "data/raw/linux_process_debugging.md",
+        "section": "Process Resource Analysis > Memory Usage",
+        "text": "~~~bash\nps aux --sort=-%mem\n~~~"
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "required_facts_plus_judge",
+    "notes": ""
+  },
+  {
+    "id": "rag_014",
+    "primary_category": "semantic_paraphrase",
+    "tags": [
+      "kubernetes",
+      "service_discovery",
+      "dns"
+    ],
+    "difficulty": "medium",
+    "question": "How can one Kubernetes application find another service without depending on a fixed IP address?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "Kubernetes provides internal service discovery. Each Service gets a stable DNS name that applications can use to connect to it instead of using a fixed IP.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "Kubernetes provides internal service discovery using service names.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_2",
+        "description": "Each service receives a stable DNS name.",
+        "required": true,
+        "supported_by": [
+          "e2"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/kubernets_networking.md",
+        "section": "Kubernetes Networking Reference > Kubernetes Service Discovery"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/kubernets_networking.md",
+        "section": "Kubernetes Networking Reference > Kubernetes Service Discovery",
+        "text": "Kubernetes provides internal service discovery to allow applications to communicate using service names instead of fixed IP addresses."
+      },
+      {
+        "id": "e2",
+        "document": "data/raw/kubernets_networking.md",
+        "section": "Kubernetes Networking Reference > Kubernetes Service Discovery",
+        "text": "Each service receives a stable DNS name."
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "required_facts_plus_judge",
+    "notes": ""
+  },
+  {
+    "id": "rag_015",
+    "primary_category": "exact_terminology",
+    "tags": [
+      "kubernetes",
+      "CrashLoopBackOff",
+      "error"
+    ],
+    "difficulty": "easy",
+    "question": "What does CrashLoopBackOff mean?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "CrashLoopBackOff occurs when a Kubernetes container repeatedly starts and then exits unsuccessfully, with Kubernetes increasing the delay between restart attempts.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "The container repeatedly starts and exits unsuccessfully.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_2",
+        "description": "Kubernetes increases the delay between restart attempts.",
+        "required": true,
+        "supported_by": [
+          "e2"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/kubernets_error.md",
+        "section": "Kubernetes Error Reference > CrashLoopBackOff"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/kubernets_error.md",
+        "section": "Kubernetes Error Reference > CrashLoopBackOff",
+        "text": "CrashLoopBackOff occurs when a Kubernetes container repeatedly starts and then exits unsuccessfully."
+      },
+      {
+        "id": "e2",
+        "document": "data/raw/kubernets_error.md",
+        "section": "Kubernetes Error Reference > CrashLoopBackOff",
+        "text": "Kubernetes increases the delay between restart attempts to prevent a failing application from continuously consuming resources."
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "required_facts",
+    "notes": ""
+  },
+  {
+    "id": "rag_016",
+    "primary_category": "exact_terminology",
+    "tags": [
+      "kubernetes",
+      "ImagePullBackOff",
+      "error"
+    ],
+    "difficulty": "easy",
+    "question": "What does ImagePullBackOff indicate?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "ImagePullBackOff indicates that Kubernetes cannot download the container image required to start a Pod.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "Kubernetes cannot download the required container image.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/kubernets_error.md",
+        "section": "Kubernetes Error Reference > ImagePullBackOff"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/kubernets_error.md",
+        "section": "Kubernetes Error Reference > ImagePullBackOff",
+        "text": "ImagePullBackOff occurs when Kubernetes cannot download the container image required to start a pod."
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "deterministic",
+    "notes": ""
+  },
+  {
+    "id": "rag_017",
+    "primary_category": "exact_terminology",
+    "tags": [
+      "kubernetes",
+      "OOMKilled",
+      "memory"
+    ],
+    "difficulty": "easy",
+    "question": "What does OOMKilled mean for a Kubernetes container?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "OOMKilled means the container was terminated because it exceeded its configured memory limit.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "The container was terminated because it exceeded its configured memory limit.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/kubernets_error.md",
+        "section": "Kubernetes Error Reference > OOMKilled"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/kubernets_error.md",
+        "section": "Kubernetes Error Reference > OOMKilled",
+        "text": "OOMKilled means a container was terminated because it exceeded its configured memory limit."
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "deterministic",
+    "notes": ""
+  },
+  {
+    "id": "rag_018",
+    "primary_category": "exact_terminology",
+    "tags": [
+      "dns",
+      "NXDOMAIN",
+      "error"
+    ],
+    "difficulty": "easy",
+    "question": "What does NXDOMAIN mean in DNS?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "NXDOMAIN means the requested domain does not exist.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "NXDOMAIN means the requested domain does not exist.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/DNS_reference.md",
+        "section": "Common DNS Errors > NXDOMAIN"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/DNS_reference.md",
+        "section": "Common DNS Errors > NXDOMAIN",
+        "text": "NXDOMAIN means the requested domain does not exist."
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "deterministic",
+    "notes": "Adapted from the existing retrieval benchmark."
+  },
+  {
+    "id": "rag_019",
+    "primary_category": "exact_terminology",
+    "tags": [
+      "network",
+      "ECONNREFUSED",
+      "connection_refused"
+    ],
+    "difficulty": "easy",
+    "question": "An application reports ECONNREFUSED. What does that indicate?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "ECONNREFUSED means the client reached the server/network path, but no application is accepting connections on the requested port.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "The client reaches the server but no application accepts connections on the requested port.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_2",
+        "description": "The network path is available while the destination service is unavailable.",
+        "required": true,
+        "supported_by": [
+          "e2"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/network_errors.md",
+        "section": "Connection Refused > Definition"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/network_errors.md",
+        "section": "Connection Refused > Definition",
+        "text": "Connection refused occurs when a client reaches a server, but no application is accepting connections on the requested port."
+      },
+      {
+        "id": "e2",
+        "document": "data/raw/network_errors.md",
+        "section": "Connection Refused > Definition",
+        "text": "The network path is available, but the destination service is unavailable."
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "required_facts",
+    "notes": ""
+  },
+  {
+    "id": "rag_020",
+    "primary_category": "exact_terminology",
+    "tags": [
+      "authentication",
+      "ERR_AUTH_1042",
+      "token"
+    ],
+    "difficulty": "medium",
+    "question": "What does ERR_AUTH_1042 mean in the production runbook?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "`ERR_AUTH_1042` means the user's refresh token has been revoked. The client should request a new authentication session instead of retrying the same revoked token.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "ERR_AUTH_1042 means the refresh token has been revoked.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_2",
+        "description": "The client should request a new authentication session rather than retry the revoked token.",
+        "required": true,
+        "supported_by": [
+          "e2"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/sample_runbook.md",
+        "section": "Authentication > Token Errors"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/sample_runbook.md",
+        "section": "Authentication > Token Errors",
+        "text": "`ERR_AUTH_1042` occurs when a user's refresh token has been revoked. Revocation may happen after a password reset, an administrator action, suspicious account activity, or an explicit logout from all devices."
+      },
+      {
+        "id": "e2",
+        "document": "data/raw/sample_runbook.md",
+        "section": "Authentication > Token Errors",
+        "text": "The client should request a new authentication session instead of repeatedly retrying the revoked token. Retrying the same refresh token will not recover the session because the token has already been invalidated by the authentication service."
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "required_facts",
+    "notes": ""
+  },
+  {
+    "id": "rag_021",
+    "primary_category": "technical_identifier",
+    "tags": [
+      "kubernetes",
+      "imagePullPolicy",
+      "IfNotPresent"
+    ],
+    "difficulty": "easy",
+    "question": "What does `imagePullPolicy: IfNotPresent` do?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "`IfNotPresent` makes Kubernetes use the local image if it exists and pull it only when the image is missing locally.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "Kubernetes uses the local image if it already exists.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_2",
+        "description": "If the image is missing locally, Kubernetes downloads it.",
+        "required": true,
+        "supported_by": [
+          "e2"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/kubernets_configuration.md",
+        "section": "Kubernetes Configuration Reference > IfNotPresent"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/kubernets_configuration.md",
+        "section": "Kubernetes Configuration Reference > IfNotPresent",
+        "text": "Kubernetes uses the local image if it already exists."
+      },
+      {
+        "id": "e2",
+        "document": "data/raw/kubernets_configuration.md",
+        "section": "Kubernetes Configuration Reference > IfNotPresent",
+        "text": "If the image is missing locally, Kubernetes downloads it."
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "required_facts",
+    "notes": ""
+  },
+  {
+    "id": "rag_022",
+    "primary_category": "technical_identifier",
+    "tags": [
+      "authentication",
+      "MAX_RETRY_COUNT",
+      "configuration"
+    ],
+    "difficulty": "easy",
+    "question": "What is the default production value of `MAX_RETRY_COUNT`?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "The default production value is `MAX_RETRY_COUNT=3`.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "The default production value is 3.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/sample_runbook.md",
+        "section": "Authentication > Retry Configuration"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/sample_runbook.md",
+        "section": "Authentication > Retry Configuration",
+        "text": "```text\nMAX_RETRY_COUNT=3\n```"
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "deterministic",
+    "notes": ""
+  },
+  {
+    "id": "rag_023",
+    "primary_category": "technical_identifier",
+    "tags": [
+      "kubernetes",
+      "kubectl",
+      "namespaces"
+    ],
+    "difficulty": "easy",
+    "question": "Which kubectl command lists Pods in all namespaces?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "Use `kubectl get pods -A`.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "The command is `kubectl get pods -A`.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/kubernets_command.md",
+        "section": "Kubernetes Commands Reference > Pod Management Commands"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/kubernets_command.md",
+        "section": "Kubernetes Commands Reference > Pod Management Commands",
+        "text": "~~~bash\nkubectl get pods -A\n~~~"
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "deterministic",
+    "notes": ""
+  },
+  {
+    "id": "rag_024",
+    "primary_category": "technical_identifier",
+    "tags": [
+      "docker",
+      "disk",
+      "command"
+    ],
+    "difficulty": "easy",
+    "question": "Which Docker command shows Docker disk usage?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "Use `docker system df`.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "The command is `docker system df`.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/docker_storage.md",
+        "section": "Disk Space Problems"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/docker_storage.md",
+        "section": "Disk Space Problems",
+        "text": "~~~bash\ndocker system df\n~~~"
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "deterministic",
+    "notes": ""
+  },
+  {
+    "id": "rag_025",
+    "primary_category": "technical_identifier",
+    "tags": [
+      "database",
+      "statement_timeout",
+      "configuration"
+    ],
+    "difficulty": "easy",
+    "question": "What does `statement_timeout=30000` configure?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "It configures a query timeout, limiting how long a query can execute.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "Query timeout limits how long a query can execute.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_2",
+        "description": "`statement_timeout=30000` is the example configuration.",
+        "required": true,
+        "supported_by": [
+          "e2"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/database_configuration.md",
+        "section": "Query Performance Configuration > Query Timeout"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/database_configuration.md",
+        "section": "Query Performance Configuration > Query Timeout",
+        "text": "Query timeout limits how long a query can execute."
+      },
+      {
+        "id": "e2",
+        "document": "data/raw/database_configuration.md",
+        "section": "Query Performance Configuration > Query Timeout",
+        "text": "~~~text\nstatement_timeout=30000\n~~~"
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "required_facts",
+    "notes": ""
+  },
+  {
+    "id": "rag_026",
+    "primary_category": "technical_identifier",
+    "tags": [
+      "linux",
+      "SIGKILL",
+      "signal",
+      "command"
+    ],
+    "difficulty": "easy",
+    "question": "Which command sends SIGKILL to a process?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "Use `kill -9 <pid>`.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "`kill -9 <pid>` sends SIGKILL.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/linux_process_debugging.md",
+        "section": "Process Signals > SIGKILL"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/linux_process_debugging.md",
+        "section": "Process Signals > SIGKILL",
+        "text": "~~~bash\nkill -9 <pid>\n~~~"
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "deterministic",
+    "notes": ""
+  },
+  {
+    "id": "rag_027",
+    "primary_category": "multi_hop",
+    "tags": [
+      "kubernetes",
+      "CrashLoopBackOff",
+      "troubleshooting"
+    ],
+    "difficulty": "medium",
+    "question": "What can cause CrashLoopBackOff, and what should I inspect to investigate it?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "CrashLoopBackOff can be caused by startup crashes, missing environment variables or dependencies, invalid configuration, bad container commands, or failed external-service connections. Investigate with `kubectl get pods`, `kubectl describe pod <pod-name>`, and `kubectl logs <pod-name>`.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "Common causes include startup crashes, missing environment variables, invalid configuration, missing dependencies, incorrect commands, and failed external-service connections.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_2",
+        "description": "Check Pod status with `kubectl get pods`.",
+        "required": true,
+        "supported_by": [
+          "e2"
+        ]
+      },
+      {
+        "id": "fact_3",
+        "description": "Inspect Pod details with `kubectl describe pod <pod-name>`.",
+        "required": true,
+        "supported_by": [
+          "e3"
+        ]
+      },
+      {
+        "id": "fact_4",
+        "description": "Review application logs with `kubectl logs <pod-name>`.",
+        "required": true,
+        "supported_by": [
+          "e4"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/kubernets_error.md",
+        "section": "Kubernetes Error Reference > CrashLoopBackOff"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/kubernets_error.md",
+        "section": "Kubernetes Error Reference > CrashLoopBackOff",
+        "text": "- Application crashes during startup\n- Missing environment variables\n- Invalid application configuration\n- Missing dependencies\n- Incorrect container commands\n- Failed connections to external services"
+      },
+      {
+        "id": "e2",
+        "document": "data/raw/kubernets_error.md",
+        "section": "Kubernetes Error Reference > CrashLoopBackOff",
+        "text": "~~~bash\nkubectl get pods\n~~~"
+      },
+      {
+        "id": "e3",
+        "document": "data/raw/kubernets_error.md",
+        "section": "Kubernetes Error Reference > CrashLoopBackOff",
+        "text": "~~~bash\nkubectl describe pod <pod-name>\n~~~"
+      },
+      {
+        "id": "e4",
+        "document": "data/raw/kubernets_error.md",
+        "section": "Kubernetes Error Reference > CrashLoopBackOff",
+        "text": "~~~bash\nkubectl logs <pod-name>\n~~~"
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "required_facts_plus_judge",
+    "notes": ""
+  },
+  {
+    "id": "rag_028",
+    "primary_category": "multi_hop",
+    "tags": [
+      "network",
+      "connection_refused",
+      "troubleshooting"
+    ],
+    "difficulty": "medium",
+    "question": "What does connection refused tell you about the network path, and which checks should you perform next?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "Connection refused means the client reached the server but no application accepted the requested port, so the network path is available while the destination service is unavailable. Check service status, listening ports, and test the endpoint with curl.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "Connection refused means the client reached the server but no application accepted the port.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_2",
+        "description": "The network path is available.",
+        "required": true,
+        "supported_by": [
+          "e2"
+        ]
+      },
+      {
+        "id": "fact_3",
+        "description": "Check whether the service is running.",
+        "required": true,
+        "supported_by": [
+          "e3"
+        ]
+      },
+      {
+        "id": "fact_4",
+        "description": "Check listening ports.",
+        "required": true,
+        "supported_by": [
+          "e4"
+        ]
+      },
+      {
+        "id": "fact_5",
+        "description": "Test the service response with curl.",
+        "required": true,
+        "supported_by": [
+          "e5"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/network_errors.md",
+        "section": "Connection Refused > Definition"
+      },
+      {
+        "document": "data/raw/network_errors.md",
+        "section": "Connection Refused > Troubleshooting"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/network_errors.md",
+        "section": "Connection Refused > Definition",
+        "text": "Connection refused occurs when a client reaches a server, but no application is accepting connections on the requested port."
+      },
+      {
+        "id": "e2",
+        "document": "data/raw/network_errors.md",
+        "section": "Connection Refused > Definition",
+        "text": "The network path is available, but the destination service is unavailable."
+      },
+      {
+        "id": "e3",
+        "document": "data/raw/network_errors.md",
+        "section": "Connection Refused > Troubleshooting",
+        "text": "~~~bash\nsystemctl status <service-name>\n~~~"
+      },
+      {
+        "id": "e4",
+        "document": "data/raw/network_errors.md",
+        "section": "Connection Refused > Troubleshooting",
+        "text": "~~~bash\nnetstat -tulpn\n~~~"
+      },
+      {
+        "id": "e5",
+        "document": "data/raw/network_errors.md",
+        "section": "Connection Refused > Troubleshooting",
+        "text": "~~~bash\ncurl http://hostname:port\n~~~"
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "required_facts_plus_judge",
+    "notes": ""
+  },
+  {
+    "id": "rag_029",
+    "primary_category": "multi_hop",
+    "tags": [
+      "kubernetes",
+      "OOMKilled",
+      "memory",
+      "remediation"
+    ],
+    "difficulty": "medium",
+    "question": "A Pod was OOMKilled. What likely happened, what can cause it, and what remedies does the corpus suggest?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "The container exceeded its configured memory limit. Causes include memory leaks, incorrect memory limits, large data-processing operations, or traffic spikes. Suggested remedies include increasing memory limits, optimizing memory use, investigating leaks, or reducing workload size.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "OOMKilled means the container exceeded its configured memory limit.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_2",
+        "description": "Possible causes include memory leaks, incorrect memory limits, large data processing, and traffic increases.",
+        "required": true,
+        "supported_by": [
+          "e2"
+        ]
+      },
+      {
+        "id": "fact_3",
+        "description": "Possible remedies include increasing limits, optimizing memory, investigating leaks, and reducing workload size.",
+        "required": true,
+        "supported_by": [
+          "e3"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/kubernets_error.md",
+        "section": "Kubernetes Error Reference > OOMKilled"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/kubernets_error.md",
+        "section": "Kubernetes Error Reference > OOMKilled",
+        "text": "OOMKilled means a container was terminated because it exceeded its configured memory limit."
+      },
+      {
+        "id": "e2",
+        "document": "data/raw/kubernets_error.md",
+        "section": "Kubernetes Error Reference > OOMKilled",
+        "text": "- Memory leak inside the application\n- Incorrect memory limits\n- Large data processing operations\n- Unexpected traffic increases"
+      },
+      {
+        "id": "e3",
+        "document": "data/raw/kubernets_error.md",
+        "section": "Kubernetes Error Reference > OOMKilled",
+        "text": "- Increase memory limits\n- Optimize application memory usage\n- Investigate memory leaks\n- Reduce workload size"
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "required_facts_plus_judge",
+    "notes": ""
+  },
+  {
+    "id": "rag_030",
+    "primary_category": "multi_hop",
+    "tags": [
+      "health_checks",
+      "readiness",
+      "liveness",
+      "operations"
+    ],
+    "difficulty": "hard",
+    "question": "Why shouldn't readiness and liveness failures be treated as the same problem?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "Readiness determines whether an instance should receive traffic and can fail when dependencies are unavailable even if the process is running. Liveness asks whether the process is still functioning and whether a restart may be appropriate. A temporary database outage can make an app unready without requiring a restart.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "Readiness determines whether an instance should receive production traffic.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_2",
+        "description": "A running instance can be unready because dependencies are unavailable.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_3",
+        "description": "Liveness determines whether the process is functioning and whether restart may be appropriate.",
+        "required": true,
+        "supported_by": [
+          "e2"
+        ]
+      },
+      {
+        "id": "fact_4",
+        "description": "A temporary database outage can make the app unready without requiring restart.",
+        "required": true,
+        "supported_by": [
+          "e2"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/sample_runbook.md",
+        "section": "Application Health > Readiness Checks"
+      },
+      {
+        "document": "data/raw/sample_runbook.md",
+        "section": "Application Health > Readiness Checks > Liveness Checks"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/sample_runbook.md",
+        "section": "Application Health > Readiness Checks",
+        "text": "The readiness endpoint determines whether an application instance should receive production traffic. An instance may be running but still report itself as not ready while required dependencies are unavailable."
+      },
+      {
+        "id": "e2",
+        "document": "data/raw/sample_runbook.md",
+        "section": "Application Health > Readiness Checks > Liveness Checks",
+        "text": "Liveness checks answer a different question. They determine whether the process is still functioning and whether restarting the instance may be appropriate."
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "required_facts_plus_judge",
+    "notes": ""
+  },
+  {
+    "id": "rag_031",
+    "primary_category": "multi_hop",
+    "tags": [
+      "database",
+      "connection_pool",
+      "operations",
+      "tradeoff"
+    ],
+    "difficulty": "hard",
+    "question": "Why is blindly increasing a database connection pool risky, and what should engineers inspect first?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "Pool exhaustion may be caused by long-running queries, uncommitted transactions, leaked connections, or traffic spikes. Increasing the pool without finding the cause can shift the problem to PostgreSQL because too many concurrent connections increase memory use and reduce performance. Engineers should inspect active/idle connections, query duration, transaction age, instance count, and recent deployments.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "Engineers should determine why connections are being held before increasing the pool.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_2",
+        "description": "Causes can include long queries, old transactions, connection leaks, and traffic spikes.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_3",
+        "description": "Too many concurrent PostgreSQL connections can increase memory use and reduce performance.",
+        "required": true,
+        "supported_by": [
+          "e2"
+        ]
+      },
+      {
+        "id": "fact_4",
+        "description": "Inspect active/idle connections, query duration, transaction age, application instance count, and recent deployments.",
+        "required": true,
+        "supported_by": [
+          "e3"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/sample_runbook.md",
+        "section": "Database Operations > Connection Pool Exhaustion"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/sample_runbook.md",
+        "section": "Database Operations > Connection Pool Exhaustion",
+        "text": "Before increasing the pool size, engineers should determine why connections are being held. Common causes include long-running queries, transactions that are not committed or rolled back, application code that fails to release connections, or sudden increases in request traffic."
+      },
+      {
+        "id": "e2",
+        "document": "data/raw/sample_runbook.md",
+        "section": "Database Operations > Connection Pool Exhaustion",
+        "text": "Increasing the pool limit without identifying the cause may move the failure from the application to PostgreSQL itself. Too many concurrent connections can increase memory consumption and reduce database performance."
+      },
+      {
+        "id": "e3",
+        "document": "data/raw/sample_runbook.md",
+        "section": "Database Operations > Connection Pool Exhaustion",
+        "text": "During investigation, check the number of active and idle connections, query duration, transaction age, application instance count, and recent deployment activity. Compare these values with normal production baselines."
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "required_facts_plus_judge",
+    "notes": ""
+  },
+  {
+    "id": "rag_032",
+    "primary_category": "multi_hop",
+    "tags": [
+      "deployment",
+      "recovery",
+      "validation",
+      "runbook"
+    ],
+    "difficulty": "hard",
+    "question": "After rolling back a bad production release, what must be verified before the incident is considered resolved?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "Verify authentication, database access, core API requests, background workers, and externally visible health endpoints. Also confirm that users can complete critical workflows and that error rates have returned to normal; running processes alone are not enough.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "Verify authentication, database access, core API requests, background workers, and external health endpoints.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_2",
+        "description": "Do not consider the incident resolved only because processes are running.",
+        "required": true,
+        "supported_by": [
+          "e2"
+        ]
+      },
+      {
+        "id": "fact_3",
+        "description": "Verify critical user workflows and normal error rates.",
+        "required": true,
+        "supported_by": [
+          "e2"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/sample_runbook.md",
+        "section": "Deployment Recovery > Post-Recovery Validation"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/sample_runbook.md",
+        "section": "Deployment Recovery > Post-Recovery Validation",
+        "text": "After recovery, verify authentication, database access, core API requests, background workers, and externally visible health endpoints."
+      },
+      {
+        "id": "e2",
+        "document": "data/raw/sample_runbook.md",
+        "section": "Deployment Recovery > Post-Recovery Validation",
+        "text": "The incident should not be considered resolved solely because application processes are running. Engineers should verify that users can successfully complete critical workflows and that error rates have returned to normal levels."
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "required_facts_plus_judge",
+    "notes": ""
+  },
+  {
+    "id": "rag_033",
+    "primary_category": "multi_document",
+    "tags": [
+      "application",
+      "database",
+      "postgresql",
+      "dependency"
+    ],
+    "difficulty": "hard",
+    "question": "An application cannot connect to PostgreSQL. What application-level dependency checks and database connection settings should you verify?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "At the application level, check that the database dependency is available, network connectivity works, credentials are valid, and service logs are reviewed. For the database connection itself, verify hostname, port, database name, username, and password; common failures include wrong host/port, invalid credentials, or an unavailable database service.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "Check dependency availability, network connectivity, credentials, and service logs.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_2",
+        "description": "A database connection requires hostname, port, database name, username, and password.",
+        "required": true,
+        "supported_by": [
+          "e2"
+        ]
+      },
+      {
+        "id": "fact_3",
+        "description": "Wrong host/port, invalid credentials, or unavailable database service can cause connection problems.",
+        "required": true,
+        "supported_by": [
+          "e3"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/app_troubleshooting.md",
+        "section": "Dependency Failures"
+      },
+      {
+        "document": "data/raw/database_configuration.md",
+        "section": "Connection Configuration"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/app_troubleshooting.md",
+        "section": "Dependency Failures",
+        "text": "1. Check dependency availability.\n2. Verify network connectivity.\n3. Check credentials.\n4. Review service logs."
+      },
+      {
+        "id": "e2",
+        "document": "data/raw/database_configuration.md",
+        "section": "Connection Configuration",
+        "text": "- Hostname\n- Port\n- Database name\n- Username\n- Password"
+      },
+      {
+        "id": "e3",
+        "document": "data/raw/database_configuration.md",
+        "section": "Connection Configuration",
+        "text": "- Incorrect hostname\n- Wrong database port\n- Invalid credentials\n- Database service unavailable"
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "required_facts_plus_judge",
+    "notes": ""
+  },
+  {
+    "id": "rag_034",
+    "primary_category": "multi_document",
+    "tags": [
+      "kubernetes",
+      "dns",
+      "CoreDNS",
+      "service_discovery"
+    ],
+    "difficulty": "hard",
+    "question": "A Kubernetes service name is not resolving. What should you check in CoreDNS and how can you test service-name resolution from inside the cluster?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "Check that CoreDNS Pods are healthy, including with `kubectl get pods -n kube-system`. Then test the service name with `nslookup <service-name>` (or the full service DNS name) from inside the cluster.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "Kubernetes uses CoreDNS for internal service discovery and unhealthy CoreDNS Pods can cause DNS issues.",
+        "required": true,
+        "supported_by": [
+          "e1",
+          "e2"
+        ]
+      },
+      {
+        "id": "fact_2",
+        "description": "Check CoreDNS Pods with `kubectl get pods -n kube-system`.",
+        "required": true,
+        "supported_by": [
+          "e3"
+        ]
+      },
+      {
+        "id": "fact_3",
+        "description": "Test service DNS inside a Pod with `nslookup <service-name>`.",
+        "required": true,
+        "supported_by": [
+          "e4"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/DNS_reference.md",
+        "section": "DNS in Kubernetes"
+      },
+      {
+        "document": "data/raw/kubernets_networking.md",
+        "section": "DNS Troubleshooting"
+      },
+      {
+        "document": "data/raw/kubernets_networking.md",
+        "section": "Troubleshooting Commands"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/DNS_reference.md",
+        "section": "DNS in Kubernetes",
+        "text": "Kubernetes uses CoreDNS for internal service discovery."
+      },
+      {
+        "id": "e2",
+        "document": "data/raw/DNS_reference.md",
+        "section": "DNS in Kubernetes",
+        "text": "- Service name cannot resolve\n- CoreDNS pods are unhealthy\n- Incorrect namespace\n- Missing service"
+      },
+      {
+        "id": "e3",
+        "document": "data/raw/kubernets_networking.md",
+        "section": "DNS Troubleshooting",
+        "text": "~~~bash\nkubectl get pods -n kube-system\n~~~"
+      },
+      {
+        "id": "e4",
+        "document": "data/raw/kubernets_networking.md",
+        "section": "Troubleshooting Commands",
+        "text": "~~~bash\nnslookup <service-name>\n~~~"
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "required_facts_plus_judge",
+    "notes": ""
+  },
+  {
+    "id": "rag_035",
+    "primary_category": "multi_document",
+    "tags": [
+      "linux",
+      "kubernetes",
+      "OOM",
+      "memory"
+    ],
+    "difficulty": "hard",
+    "question": "How does a Linux OOM Killer event differ from Kubernetes OOMKilled, and what memory issue connects them?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "The Linux OOM Killer is a kernel mechanism that terminates processes when the system runs out of available memory. Kubernetes OOMKilled means a container was terminated after exceeding its configured memory limit. Both are tied to memory exhaustion/excessive memory use, but the documented triggers differ.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "Linux OOM Killer terminates processes when the system runs out of available memory.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_2",
+        "description": "Kubernetes OOMKilled means a container exceeded its configured memory limit.",
+        "required": true,
+        "supported_by": [
+          "e2"
+        ]
+      },
+      {
+        "id": "fact_3",
+        "description": "Both involve memory exhaustion or excessive memory use.",
+        "required": true,
+        "supported_by": [
+          "e1",
+          "e2"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/linux_errors.md",
+        "section": "Linux System Errors Reference > Out Of Memory (OOM) Killer"
+      },
+      {
+        "document": "data/raw/kubernets_error.md",
+        "section": "Kubernetes Error Reference > OOMKilled"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/linux_errors.md",
+        "section": "Linux System Errors Reference > Out Of Memory (OOM) Killer",
+        "text": "The Linux OOM Killer is a kernel mechanism that terminates processes when the system runs out of available memory."
+      },
+      {
+        "id": "e2",
+        "document": "data/raw/kubernets_error.md",
+        "section": "Kubernetes Error Reference > OOMKilled",
+        "text": "OOMKilled means a container was terminated because it exceeded its configured memory limit."
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "required_facts_plus_judge",
+    "notes": ""
+  },
+  {
+    "id": "rag_036",
+    "primary_category": "multi_document",
+    "tags": [
+      "database",
+      "slow_query",
+      "indexes",
+      "operations"
+    ],
+    "difficulty": "hard",
+    "question": "A database query is slow. What possible causes should you consider, and why shouldn't you immediately add an index?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "Possible causes include missing indexes, large table scans, inefficient joins, or poor query design, but the production runbook warns not to add an index automatically because slowdowns can also come from lock contention, unexpectedly large results, poor joins, outdated statistics, or competing workloads.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "Possible slow-query causes include missing indexes, large scans, inefficient joins, and poor query design.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_2",
+        "description": "Do not immediately add an index simply because a query is slow.",
+        "required": true,
+        "supported_by": [
+          "e2"
+        ]
+      },
+      {
+        "id": "fact_3",
+        "description": "Other causes can include lock contention, large result sets, outdated statistics, or competing workloads.",
+        "required": true,
+        "supported_by": [
+          "e2"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/database_errors.md",
+        "section": "Slow Query Problems > Slow Queries"
+      },
+      {
+        "document": "data/raw/sample_runbook.md",
+        "section": "Database Operations > Slow Queries"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/database_errors.md",
+        "section": "Slow Query Problems > Slow Queries",
+        "text": "- Missing indexes\n- Large table scans\n- Inefficient joins\n- Poor query design"
+      },
+      {
+        "id": "e2",
+        "document": "data/raw/sample_runbook.md",
+        "section": "Database Operations > Slow Queries",
+        "text": "Do not immediately add an index simply because a query is slow. The problem may instead be caused by lock contention, unexpectedly large result sets, poor join behavior, outdated statistics, or another workload consuming database resources."
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "required_facts_plus_judge",
+    "notes": ""
+  },
+  {
+    "id": "rag_037",
+    "primary_category": "multi_document",
+    "tags": [
+      "kubernetes",
+      "linux",
+      "restart",
+      "commands"
+    ],
+    "difficulty": "medium",
+    "question": "What command restarts a Kubernetes Deployment, and what command restarts a Linux systemd service?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "Restart a Kubernetes Deployment with `kubectl rollout restart deployment <deployment-name>` and restart a systemd service with `systemctl restart <service-name>`.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "Kubernetes Deployment restart uses `kubectl rollout restart deployment <deployment-name>`.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_2",
+        "description": "Linux systemd service restart uses `systemctl restart service-name`.",
+        "required": true,
+        "supported_by": [
+          "e2"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/kubernetes.md",
+        "section": "Kubernetes Operations Guide > Deployments"
+      },
+      {
+        "document": "data/raw/linux.md",
+        "section": "Linux System Administration Guide > System Services"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/kubernetes.md",
+        "section": "Kubernetes Operations Guide > Deployments",
+        "text": "kubectl rollout restart deployment <deployment-name>"
+      },
+      {
+        "id": "e2",
+        "document": "data/raw/linux.md",
+        "section": "Linux System Administration Guide > System Services",
+        "text": "systemctl restart service-name"
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "required_facts",
+    "notes": ""
+  },
+  {
+    "id": "rag_038",
+    "primary_category": "ambiguous",
+    "tags": [
+      "application",
+      "troubleshooting",
+      "context_dependent"
+    ],
+    "difficulty": "hard",
+    "question": "An application is unavailable. What should I check first?",
+    "answerable": true,
+    "answerability_type": "ambiguous_but_answerable",
+    "reference_answer": "The exact checks depend on the environment, but a defensible first pass is to confirm the application/status, identify when the issue started and whether a recent deployment occurred, check dependencies, and inspect logs.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "A good first pass checks whether the application is running and when the problem started.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_2",
+        "description": "Check whether a recent deployment occurred and whether dependencies are available.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_3",
+        "description": "Inspect application logs as part of investigation.",
+        "required": true,
+        "supported_by": [
+          "e2"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/app_troubleshooting.md",
+        "section": "Initial Investigation"
+      },
+      {
+        "document": "data/raw/app_troubleshooting.md",
+        "section": "Application Logs"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/app_troubleshooting.md",
+        "section": "Initial Investigation",
+        "text": "- Is the application running?\n- When did the problem start?\n- Are all users affected?\n- Did a recent deployment occur?\n- Are dependencies available?"
+      },
+      {
+        "id": "e2",
+        "document": "data/raw/app_troubleshooting.md",
+        "section": "Application Logs",
+        "text": "Logs provide information about application behavior."
+      }
+    ],
+    "acceptable_answer_paths": [
+      {
+        "name": "general_application",
+        "documents": [
+          "data/raw/app_troubleshooting.md"
+        ]
+      },
+      {
+        "name": "kubernetes_application",
+        "documents": [
+          "data/raw/kubernetes.md",
+          "data/raw/kubernets_error.md"
+        ]
+      }
+    ],
+    "evaluation_method": "required_facts_plus_judge",
+    "notes": "Question is intentionally environment-ambiguous. A response may use the general application path or identify the environment before giving platform-specific commands."
+  },
+  {
+    "id": "rag_039",
+    "primary_category": "ambiguous",
+    "tags": [
+      "logs",
+      "docker",
+      "kubernetes",
+      "linux"
+    ],
+    "difficulty": "hard",
+    "question": "How do I inspect the logs for a failing service?",
+    "answerable": true,
+    "answerability_type": "ambiguous_but_answerable",
+    "reference_answer": "The command depends on where the service runs: Docker uses `docker logs <container-id>`, Kubernetes uses `kubectl logs <pod-name>`, and a systemd service can be inspected with `journalctl -u <service-name>`.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "Docker logs can be read with `docker logs <container-id>`.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_2",
+        "description": "Kubernetes Pod logs can be read with `kubectl logs <pod-name>`.",
+        "required": true,
+        "supported_by": [
+          "e2"
+        ]
+      },
+      {
+        "id": "fact_3",
+        "description": "systemd service logs can be read with `journalctl -u service-name`.",
+        "required": true,
+        "supported_by": [
+          "e3"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/docker_commands.md",
+        "section": "Container Inspection > Docker Logs"
+      },
+      {
+        "document": "data/raw/kubernets_command.md",
+        "section": "Kubernetes Commands Reference > Pod Management Commands"
+      },
+      {
+        "document": "data/raw/linux.md",
+        "section": "Linux System Administration Guide > System Services"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/docker_commands.md",
+        "section": "Container Inspection > Docker Logs",
+        "text": "~~~bash\ndocker logs <container-id>\n~~~"
+      },
+      {
+        "id": "e2",
+        "document": "data/raw/kubernets_command.md",
+        "section": "Kubernetes Commands Reference > Pod Management Commands",
+        "text": "~~~bash\nkubectl logs <pod-name>\n~~~"
+      },
+      {
+        "id": "e3",
+        "document": "data/raw/linux.md",
+        "section": "Linux System Administration Guide > System Services",
+        "text": "journalctl -u service-name"
+      }
+    ],
+    "acceptable_answer_paths": [
+      {
+        "name": "docker",
+        "documents": [
+          "data/raw/docker_commands.md"
+        ]
+      },
+      {
+        "name": "kubernetes",
+        "documents": [
+          "data/raw/kubernets_command.md"
+        ]
+      },
+      {
+        "name": "systemd",
+        "documents": [
+          "data/raw/linux.md",
+          "data/raw/linux_command.md"
+        ]
+      }
+    ],
+    "evaluation_method": "required_facts_plus_judge",
+    "notes": "A strong answer should acknowledge that the runtime is unspecified rather than pretending there is one universal log command."
+  },
+  {
+    "id": "rag_040",
+    "primary_category": "ambiguous",
+    "tags": [
+      "health_check",
+      "readiness",
+      "liveness",
+      "systemd"
+    ],
+    "difficulty": "hard",
+    "question": "How can I check whether a service is healthy?",
+    "answerable": true,
+    "answerability_type": "ambiguous_but_answerable",
+    "reference_answer": "Health depends on context. Application readiness checks whether it can receive traffic, liveness checks whether the process is functioning, while a Linux systemd service can be checked with `systemctl status <service-name>`.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "Readiness determines whether an application can receive traffic.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_2",
+        "description": "Liveness determines whether the process is alive/functioning.",
+        "required": true,
+        "supported_by": [
+          "e2"
+        ]
+      },
+      {
+        "id": "fact_3",
+        "description": "A systemd service can be checked with `systemctl status service-name`.",
+        "required": true,
+        "supported_by": [
+          "e3"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/app_troubleshooting.md",
+        "section": "Application Health Checks > Readiness Check"
+      },
+      {
+        "document": "data/raw/app_troubleshooting.md",
+        "section": "Application Health Checks > Liveness Check"
+      },
+      {
+        "document": "data/raw/linux.md",
+        "section": "Linux System Administration Guide > System Services"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/app_troubleshooting.md",
+        "section": "Application Health Checks > Readiness Check",
+        "text": "A readiness check determines whether the application can receive traffic."
+      },
+      {
+        "id": "e2",
+        "document": "data/raw/app_troubleshooting.md",
+        "section": "Application Health Checks > Liveness Check",
+        "text": "A liveness check determines whether the application process is alive."
+      },
+      {
+        "id": "e3",
+        "document": "data/raw/linux.md",
+        "section": "Linux System Administration Guide > System Services",
+        "text": "systemctl status service-name"
+      }
+    ],
+    "acceptable_answer_paths": [
+      {
+        "name": "application_health",
+        "documents": [
+          "data/raw/app_troubleshooting.md"
+        ]
+      },
+      {
+        "name": "linux_service",
+        "documents": [
+          "data/raw/linux.md"
+        ]
+      }
+    ],
+    "evaluation_method": "required_facts_plus_judge",
+    "notes": ""
+  },
+  {
+    "id": "rag_041",
+    "primary_category": "ambiguous",
+    "tags": [
+      "network",
+      "connection_refused",
+      "docker",
+      "kubernetes"
+    ],
+    "difficulty": "hard",
+    "question": "How should I troubleshoot connection refused?",
+    "answerable": true,
+    "answerability_type": "ambiguous_but_answerable",
+    "reference_answer": "Connection refused generally means the destination was reached but nothing accepted the requested port. Check whether the service/application is running and whether the correct port is listening; platform-specific checks can then use Docker or Kubernetes commands.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "Connection refused means the server was reached but no application accepted the requested port.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_2",
+        "description": "Check service status and listening ports.",
+        "required": true,
+        "supported_by": [
+          "e2",
+          "e3"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/network_errors.md",
+        "section": "Connection Refused > Definition"
+      },
+      {
+        "document": "data/raw/network_errors.md",
+        "section": "Connection Refused > Troubleshooting"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/network_errors.md",
+        "section": "Connection Refused > Definition",
+        "text": "Connection refused occurs when a client reaches a server, but no application is accepting connections on the requested port."
+      },
+      {
+        "id": "e2",
+        "document": "data/raw/network_errors.md",
+        "section": "Connection Refused > Troubleshooting",
+        "text": "~~~bash\nsystemctl status <service-name>\n~~~"
+      },
+      {
+        "id": "e3",
+        "document": "data/raw/network_errors.md",
+        "section": "Connection Refused > Troubleshooting",
+        "text": "~~~bash\nnetstat -tulpn\n~~~"
+      }
+    ],
+    "acceptable_answer_paths": [
+      {
+        "name": "generic_network",
+        "documents": [
+          "data/raw/network_errors.md"
+        ]
+      },
+      {
+        "name": "docker",
+        "documents": [
+          "data/raw/docker_networking.md"
+        ]
+      },
+      {
+        "name": "kubernetes",
+        "documents": [
+          "data/raw/kubernets_networking.md"
+        ]
+      }
+    ],
+    "evaluation_method": "required_facts_plus_judge",
+    "notes": ""
+  },
+  {
+    "id": "rag_042",
+    "primary_category": "ambiguous",
+    "tags": [
+      "disk",
+      "linux",
+      "docker",
+      "troubleshooting"
+    ],
+    "difficulty": "medium",
+    "question": "How do I investigate a disk-space problem?",
+    "answerable": true,
+    "answerability_type": "ambiguous_but_answerable",
+    "reference_answer": "For host/filesystem capacity, use `df -h` and tools such as `du` to find large directories. If the issue is specifically Docker storage, `docker system df` shows Docker disk usage.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "Use `df -h` to check filesystem disk usage.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_2",
+        "description": "Use `du` to estimate file/directory sizes.",
+        "required": true,
+        "supported_by": [
+          "e2"
+        ]
+      },
+      {
+        "id": "fact_3",
+        "description": "Use `docker system df` for Docker-specific disk usage.",
+        "required": true,
+        "supported_by": [
+          "e3"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/linux_command.md",
+        "section": "File and Storage Commands > df"
+      },
+      {
+        "document": "data/raw/linux_command.md",
+        "section": "File and Storage Commands > du"
+      },
+      {
+        "document": "data/raw/docker_storage.md",
+        "section": "Disk Space Problems"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/linux_command.md",
+        "section": "File and Storage Commands > df",
+        "text": "~~~bash\ndf -h\n~~~"
+      },
+      {
+        "id": "e2",
+        "document": "data/raw/linux_command.md",
+        "section": "File and Storage Commands > du",
+        "text": "~~~bash\ndu -sh /var/log\n~~~"
+      },
+      {
+        "id": "e3",
+        "document": "data/raw/docker_storage.md",
+        "section": "Disk Space Problems",
+        "text": "~~~bash\ndocker system df\n~~~"
+      }
+    ],
+    "acceptable_answer_paths": [
+      {
+        "name": "linux_filesystem",
+        "documents": [
+          "data/raw/linux_command.md",
+          "data/raw/linux.md"
+        ]
+      },
+      {
+        "name": "docker_storage",
+        "documents": [
+          "data/raw/docker_storage.md"
+        ]
+      }
+    ],
+    "evaluation_method": "required_facts_plus_judge",
+    "notes": ""
+  },
+  {
+    "id": "rag_043",
+    "primary_category": "unanswerable",
+    "tags": [
+      "aws",
+      "lambda",
+      "out_of_corpus"
+    ],
+    "difficulty": "easy",
+    "question": "How do I configure memory for an AWS Lambda function?",
+    "answerable": false,
+    "answerability_type": "unanswerable_clear",
+    "reference_answer": null,
+    "required_facts": [],
+    "expected_sources": [],
+    "evidence_spans": [],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "abstention_only",
+    "notes": "No AWS Lambda configuration material exists in the indexed corpus."
+  },
+  {
+    "id": "rag_044",
+    "primary_category": "unanswerable",
+    "tags": [
+      "terraform",
+      "state",
+      "out_of_corpus"
+    ],
+    "difficulty": "easy",
+    "question": "How should I configure a remote Terraform state backend?",
+    "answerable": false,
+    "answerability_type": "unanswerable_clear",
+    "reference_answer": null,
+    "required_facts": [],
+    "expected_sources": [],
+    "evidence_spans": [],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "abstention_only",
+    "notes": "No Terraform material exists in the indexed corpus."
+  },
+  {
+    "id": "rag_045",
+    "primary_category": "unanswerable",
+    "tags": [
+      "redis",
+      "persistence",
+      "out_of_corpus"
+    ],
+    "difficulty": "easy",
+    "question": "What Redis persistence mode should I use for production?",
+    "answerable": false,
+    "answerability_type": "unanswerable_clear",
+    "reference_answer": null,
+    "required_facts": [],
+    "expected_sources": [],
+    "evidence_spans": [],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "abstention_only",
+    "notes": "No Redis material exists in the indexed corpus."
+  },
+  {
+    "id": "rag_046",
+    "primary_category": "unanswerable",
+    "tags": [
+      "kafka",
+      "consumer_groups",
+      "out_of_corpus"
+    ],
+    "difficulty": "easy",
+    "question": "How do Kafka consumer groups divide partitions among consumers?",
+    "answerable": false,
+    "answerability_type": "unanswerable_clear",
+    "reference_answer": null,
+    "required_facts": [],
+    "expected_sources": [],
+    "evidence_spans": [],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "abstention_only",
+    "notes": "No Kafka material exists in the indexed corpus."
+  },
+  {
+    "id": "rag_047",
+    "primary_category": "unanswerable",
+    "tags": [
+      "kubernetes",
+      "helm",
+      "out_of_corpus"
+    ],
+    "difficulty": "medium",
+    "question": "How do I roll back a Helm release in Kubernetes?",
+    "answerable": false,
+    "answerability_type": "unanswerable_clear",
+    "reference_answer": null,
+    "required_facts": [],
+    "expected_sources": [],
+    "evidence_spans": [],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "abstention_only",
+    "notes": "The corpus covers Kubernetes Deployment rollbacks but contains no Helm commands or Helm release behavior."
+  },
+  {
+    "id": "rag_048",
+    "primary_category": "unanswerable",
+    "tags": [
+      "monitoring",
+      "prometheus",
+      "out_of_corpus"
+    ],
+    "difficulty": "easy",
+    "question": "How do I write a Prometheus alert for high CPU usage?",
+    "answerable": false,
+    "answerability_type": "unanswerable_clear",
+    "reference_answer": null,
+    "required_facts": [],
+    "expected_sources": [],
+    "evidence_spans": [],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "abstention_only",
+    "notes": "The corpus discusses CPU investigation but contains no Prometheus alerting material."
+  },
+  {
+    "id": "rag_049",
+    "primary_category": "weak_evidence",
+    "tags": [
+      "kubernetes",
+      "resources",
+      "production",
+      "boundary"
+    ],
+    "difficulty": "hard",
+    "question": "How should I optimize Kubernetes resource limits for a production workload?",
+    "answerable": false,
+    "answerability_type": "unanswerable_weak_evidence",
+    "reference_answer": null,
+    "required_facts": [],
+    "expected_sources": [
+      {
+        "document": "data/raw/kubernets_configuration.md",
+        "section": "Resource Configuration > CPU Requests and Limits"
+      },
+      {
+        "document": "data/raw/kubernets_configuration.md",
+        "section": "Resource Configuration > Memory Requests and Limits"
+      },
+      {
+        "document": "data/raw/kubernets_configuration.md",
+        "section": "Common Configuration Problems"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/kubernets_configuration.md",
+        "section": "Resource Configuration > CPU Requests and Limits",
+        "text": "CPU requests define guaranteed CPU resources."
+      },
+      {
+        "id": "e2",
+        "document": "data/raw/kubernets_configuration.md",
+        "section": "Resource Configuration > Memory Requests and Limits",
+        "text": "Memory requests define guaranteed memory."
+      },
+      {
+        "id": "e3",
+        "document": "data/raw/kubernets_configuration.md",
+        "section": "Common Configuration Problems",
+        "text": "- OOMKilled\n- slow applications\n- container restarts"
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "abstention_only",
+    "notes": "The corpus defines requests/limits and failure effects but does not provide a production sizing or optimization methodology. This is the Day 9 blocked weak-evidence case."
+  },
+  {
+    "id": "rag_050",
+    "primary_category": "weak_evidence",
+    "tags": [
+      "postgresql",
+      "max_connections",
+      "production",
+      "boundary"
+    ],
+    "difficulty": "hard",
+    "question": "What should `max_connections` be set to on a production PostgreSQL server?",
+    "answerable": false,
+    "answerability_type": "unanswerable_weak_evidence",
+    "reference_answer": null,
+    "required_facts": [],
+    "expected_sources": [
+      {
+        "document": "data/raw/database_configuration.md",
+        "section": "PostgreSQL Configuration > max_connections"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/database_configuration.md",
+        "section": "PostgreSQL Configuration > max_connections",
+        "text": "max_connections defines the maximum number of concurrent database connections."
+      },
+      {
+        "id": "e2",
+        "document": "data/raw/database_configuration.md",
+        "section": "PostgreSQL Configuration > max_connections",
+        "text": "Increasing this value allows more clients but requires additional memory."
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "abstention_only",
+    "notes": "The corpus gives an example value of 100 and notes the memory tradeoff, but does not establish an optimal production setting."
+  },
+  {
+    "id": "rag_051",
+    "primary_category": "weak_evidence",
+    "tags": [
+      "database",
+      "connection_pool",
+      "sizing",
+      "boundary"
+    ],
+    "difficulty": "hard",
+    "question": "What is the optimal `maximumPoolSize` for my production application?",
+    "answerable": false,
+    "answerability_type": "unanswerable_weak_evidence",
+    "reference_answer": null,
+    "required_facts": [],
+    "expected_sources": [
+      {
+        "document": "data/raw/database_configuration.md",
+        "section": "Connection Pool Configuration > Maximum Pool Size"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/database_configuration.md",
+        "section": "Connection Pool Configuration > Maximum Pool Size",
+        "text": "Controls the maximum number of active connections."
+      },
+      {
+        "id": "e2",
+        "document": "data/raw/database_configuration.md",
+        "section": "Connection Pool Configuration > Maximum Pool Size",
+        "text": "~~~text\nmaximumPoolSize=20\n~~~"
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "abstention_only",
+    "notes": "The corpus explains the setting and gives an example, but no workload-specific sizing rule or optimal value."
+  },
+  {
+    "id": "rag_052",
+    "primary_category": "weak_evidence",
+    "tags": [
+      "api",
+      "429",
+      "backoff",
+      "boundary"
+    ],
+    "difficulty": "hard",
+    "question": "What exact retry delays and maximum retry count should I use for HTTP 429 responses?",
+    "answerable": false,
+    "answerability_type": "unanswerable_weak_evidence",
+    "reference_answer": null,
+    "required_facts": [],
+    "expected_sources": [
+      {
+        "document": "data/raw/api_erros.md",
+        "section": "429 Too Many Requests"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/api_erros.md",
+        "section": "429 Too Many Requests",
+        "text": "A 429 error means the client exceeded the allowed request rate."
+      },
+      {
+        "id": "e2",
+        "document": "data/raw/api_erros.md",
+        "section": "429 Too Many Requests",
+        "text": "- Implement retries\n- Add exponential backoff\n- Reduce request frequency"
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "abstention_only",
+    "notes": "The corpus recommends retries, exponential backoff, and lower request frequency but does not specify exact delays or a 429 retry-count policy."
+  },
+  {
+    "id": "rag_053",
+    "primary_category": "weak_evidence",
+    "tags": [
+      "docker",
+      "host_networking",
+      "production",
+      "boundary"
+    ],
+    "difficulty": "hard",
+    "question": "Should I use Docker host networking in production to improve performance?",
+    "answerable": false,
+    "answerability_type": "unanswerable_weak_evidence",
+    "reference_answer": null,
+    "required_facts": [],
+    "expected_sources": [
+      {
+        "document": "data/raw/docker_networking.md",
+        "section": "Host Networking"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/docker_networking.md",
+        "section": "Host Networking",
+        "text": "The host network mode allows containers to share the host network stack."
+      },
+      {
+        "id": "e2",
+        "document": "data/raw/docker_networking.md",
+        "section": "Host Networking",
+        "text": "- Lower network overhead\n- Direct host access"
+      },
+      {
+        "id": "e3",
+        "document": "data/raw/docker_networking.md",
+        "section": "Host Networking",
+        "text": "- Reduced isolation\n- Possible port conflicts"
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "abstention_only",
+    "notes": "The corpus lists host-network advantages and disadvantages but does not give a production decision rule."
+  },
+  {
+    "id": "rag_054",
+    "primary_category": "weak_evidence",
+    "tags": [
+      "database",
+      "backup",
+      "retention",
+      "boundary"
+    ],
+    "difficulty": "hard",
+    "question": "What PostgreSQL backup retention schedule should I use in production?",
+    "answerable": false,
+    "answerability_type": "unanswerable_weak_evidence",
+    "reference_answer": null,
+    "required_facts": [],
+    "expected_sources": [
+      {
+        "document": "data/raw/database_configuration.md",
+        "section": "Backup Configuration"
+      },
+      {
+        "document": "data/raw/database_configuration.md",
+        "section": "Backup Configuration > Full Backup"
+      },
+      {
+        "document": "data/raw/database_configuration.md",
+        "section": "Backup Configuration > Incremental Backup"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/database_configuration.md",
+        "section": "Backup Configuration",
+        "text": "- Data loss\n- Hardware failures\n- Human mistakes\n- Application errors"
+      },
+      {
+        "id": "e2",
+        "document": "data/raw/database_configuration.md",
+        "section": "Backup Configuration > Full Backup",
+        "text": "Stores the complete database state."
+      },
+      {
+        "id": "e3",
+        "document": "data/raw/database_configuration.md",
+        "section": "Backup Configuration > Incremental Backup",
+        "text": "Stores changes since the previous backup."
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "abstention_only",
+    "notes": "The corpus describes full and incremental backups but provides no PostgreSQL retention schedule, RPO/RTO target, or production retention policy."
+  },
+  {
+    "id": "rag_055",
+    "primary_category": "adversarial_retrieval",
+    "tags": [
+      "authentication",
+      "401",
+      "runbook",
+      "distractor"
+    ],
+    "difficulty": "hard",
+    "question": "An expired access token returns HTTP 401 in the production platform. Does that necessarily mean there is a platform incident, and what should the client do?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "No. The runbook says an expired access token normally produces 401 and this does not necessarily indicate a platform incident. The client should attempt the configured refresh-token flow; if the refresh token is valid, a replacement access token is issued.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "An expired access token normally produces HTTP 401.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_2",
+        "description": "This does not necessarily indicate a platform incident.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_3",
+        "description": "The client should attempt the configured refresh-token flow.",
+        "required": true,
+        "supported_by": [
+          "e2"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/sample_runbook.md",
+        "section": "Authentication > Token Errors > Expired Access Tokens"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/sample_runbook.md",
+        "section": "Authentication > Token Errors > Expired Access Tokens",
+        "text": "An expired access token normally produces an HTTP `401 Unauthorized` response. This is expected behavior and does not necessarily indicate a platform incident."
+      },
+      {
+        "id": "e2",
+        "document": "data/raw/sample_runbook.md",
+        "section": "Authentication > Token Errors > Expired Access Tokens",
+        "text": "The client should attempt the configured refresh-token flow. If the refresh token is still valid, the authentication service will issue a replacement access token and normal requests can continue."
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "required_facts_plus_judge",
+    "notes": "Adversarial because generic 401 reference chunks are lexically strong but omit the production-runbook nuance."
+  },
+  {
+    "id": "rag_056",
+    "primary_category": "adversarial_retrieval",
+    "tags": [
+      "database",
+      "slow_query",
+      "index",
+      "distractor"
+    ],
+    "difficulty": "hard",
+    "question": "A slow query is found in production. Should an engineer immediately add an index?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "No. The production runbook explicitly says not to add an index immediately because the slowdown may instead come from lock contention, unexpectedly large result sets, poor join behavior, outdated statistics, or another workload consuming resources.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "Do not immediately add an index simply because a query is slow.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_2",
+        "description": "Other possible causes include lock contention, large results, poor joins, outdated statistics, or competing workloads.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/sample_runbook.md",
+        "section": "Database Operations > Slow Queries"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/sample_runbook.md",
+        "section": "Database Operations > Slow Queries",
+        "text": "Do not immediately add an index simply because a query is slow. The problem may instead be caused by lock contention, unexpectedly large result sets, poor join behavior, outdated statistics, or another workload consuming database resources."
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "required_facts_plus_judge",
+    "notes": "Adversarial because several database documents strongly associate indexes with query performance."
+  },
+  {
+    "id": "rag_057",
+    "primary_category": "adversarial_retrieval",
+    "tags": [
+      "readiness",
+      "liveness",
+      "health_check",
+      "distractor"
+    ],
+    "difficulty": "hard",
+    "question": "An application process is running, but it should temporarily stop receiving traffic while a dependency is unavailable. Is this primarily a liveness or readiness concern?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "It is primarily a readiness concern. Readiness determines whether the instance should receive production traffic, and an instance may be running but unready while dependencies are unavailable. Liveness addresses whether the process itself is still functioning.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "Readiness determines whether the instance should receive production traffic.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_2",
+        "description": "An instance may be running but not ready while dependencies are unavailable.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_3",
+        "description": "Liveness asks whether the process is still functioning.",
+        "required": true,
+        "supported_by": [
+          "e2"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/sample_runbook.md",
+        "section": "Application Health > Readiness Checks"
+      },
+      {
+        "document": "data/raw/sample_runbook.md",
+        "section": "Application Health > Readiness Checks > Liveness Checks"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/sample_runbook.md",
+        "section": "Application Health > Readiness Checks",
+        "text": "The readiness endpoint determines whether an application instance should receive production traffic. An instance may be running but still report itself as not ready while required dependencies are unavailable."
+      },
+      {
+        "id": "e2",
+        "document": "data/raw/sample_runbook.md",
+        "section": "Application Health > Readiness Checks > Liveness Checks",
+        "text": "Liveness checks answer a different question. They determine whether the process is still functioning and whether restarting the instance may be appropriate."
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "required_facts_plus_judge",
+    "notes": "Adversarial because liveness and readiness share health-check terminology and nearby content."
+  },
+  {
+    "id": "rag_058",
+    "primary_category": "adversarial_retrieval",
+    "tags": [
+      "network",
+      "ECONNREFUSED",
+      "timeout",
+      "distractor"
+    ],
+    "difficulty": "hard",
+    "question": "If the destination may be unreachable, does ECONNREFUSED describe that situation as well as a connection timeout?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "No. The corpus distinguishes them: connection refused means the client reached the server and the network path is available but nothing accepted the port, while a timeout can mean the destination is not reachable or no response arrived in time.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "Connection refused means the client reached the server but nothing accepted the requested port.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_2",
+        "description": "For connection refused, the network path is available.",
+        "required": true,
+        "supported_by": [
+          "e2"
+        ]
+      },
+      {
+        "id": "fact_3",
+        "description": "A timeout occurs when no response arrives within the expected period and the destination may not be reachable.",
+        "required": true,
+        "supported_by": [
+          "e3"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/network_errors.md",
+        "section": "Connection Refused > Definition"
+      },
+      {
+        "document": "data/raw/network_errors.md",
+        "section": "Connection Timeout > Definition"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/network_errors.md",
+        "section": "Connection Refused > Definition",
+        "text": "Connection refused occurs when a client reaches a server, but no application is accepting connections on the requested port."
+      },
+      {
+        "id": "e2",
+        "document": "data/raw/network_errors.md",
+        "section": "Connection Refused > Definition",
+        "text": "The network path is available, but the destination service is unavailable."
+      },
+      {
+        "id": "e3",
+        "document": "data/raw/network_errors.md",
+        "section": "Connection Timeout > Definition",
+        "text": "A connection timeout occurs when a client sends a request but does not receive a response within the expected period."
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "required_facts_plus_judge",
+    "notes": "Adversarial because both error families share connection/network terminology but imply different network-path states."
+  },
+  {
+    "id": "rag_059",
+    "primary_category": "adversarial_retrieval",
+    "tags": [
+      "kubernetes",
+      "ImagePullBackOff",
+      "docker",
+      "distractor"
+    ],
+    "difficulty": "hard",
+    "question": "A Kubernetes Pod shows ImagePullBackOff after an image change. What should you inspect and how can you verify that the configured image is actually available?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "Inspect Pod events with `kubectl describe pod <pod-name>`, check the configured image/tag, and verify registry availability by trying `docker pull example/application:v1` for the documented example image.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "Inspect Pod events with `kubectl describe pod <pod-name>`.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_2",
+        "description": "Check the configured image.",
+        "required": true,
+        "supported_by": [
+          "e2"
+        ]
+      },
+      {
+        "id": "fact_3",
+        "description": "Verify image availability with `docker pull example/application:v1`.",
+        "required": true,
+        "supported_by": [
+          "e3"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/kubernets_error.md",
+        "section": "Kubernetes Error Reference > ImagePullBackOff"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/kubernets_error.md",
+        "section": "Kubernetes Error Reference > ImagePullBackOff",
+        "text": "Inspect pod events:"
+      },
+      {
+        "id": "e2",
+        "document": "data/raw/kubernets_error.md",
+        "section": "Kubernetes Error Reference > ImagePullBackOff",
+        "text": "~~~yaml\nimage: example/application:v1\n~~~"
+      },
+      {
+        "id": "e3",
+        "document": "data/raw/kubernets_error.md",
+        "section": "Kubernetes Error Reference > ImagePullBackOff",
+        "text": "~~~bash\ndocker pull example/application:v1\n~~~"
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "required_facts_plus_judge",
+    "notes": "Adversarial because Docker image-management documents have strong lexical overlap, but the failure state and diagnostic sequence are Kubernetes-specific."
+  },
+  {
+    "id": "rag_060",
+    "primary_category": "adversarial_retrieval",
+    "tags": [
+      "authentication",
+      "MAX_RETRY_COUNT",
+      "429",
+      "distractor"
+    ],
+    "difficulty": "hard",
+    "question": "Does `MAX_RETRY_COUNT=3` define the retry limit for HTTP 429 rate-limit failures?",
+    "answerable": true,
+    "answerability_type": "answerable",
+    "reference_answer": "No. In the production runbook, `MAX_RETRY_COUNT` controls authentication retries. The HTTP 429 documentation separately recommends retries, exponential backoff, and reducing request frequency, but it does not define that configuration key or a numeric retry limit.",
+    "required_facts": [
+      {
+        "id": "fact_1",
+        "description": "MAX_RETRY_COUNT controls the maximum authentication retry count and defaults to 3.",
+        "required": true,
+        "supported_by": [
+          "e1"
+        ]
+      },
+      {
+        "id": "fact_2",
+        "description": "HTTP 429 guidance recommends retries, exponential backoff, and reducing request frequency.",
+        "required": true,
+        "supported_by": [
+          "e2"
+        ]
+      },
+      {
+        "id": "fact_3",
+        "description": "The 429 guidance does not provide a numeric retry limit.",
+        "required": true,
+        "supported_by": [
+          "e2"
+        ]
+      }
+    ],
+    "expected_sources": [
+      {
+        "document": "data/raw/sample_runbook.md",
+        "section": "Authentication > Retry Configuration"
+      },
+      {
+        "document": "data/raw/api_erros.md",
+        "section": "429 Too Many Requests"
+      }
+    ],
+    "evidence_spans": [
+      {
+        "id": "e1",
+        "document": "data/raw/sample_runbook.md",
+        "section": "Authentication > Retry Configuration",
+        "text": "The maximum authentication retry count is controlled by `MAX_RETRY_COUNT`. Production clients should use bounded retries with exponential backoff instead of retrying failed authentication requests indefinitely."
+      },
+      {
+        "id": "e2",
+        "document": "data/raw/api_erros.md",
+        "section": "429 Too Many Requests",
+        "text": "- Implement retries\n- Add exponential backoff\n- Reduce request frequency"
+      }
+    ],
+    "acceptable_answer_paths": [],
+    "evaluation_method": "required_facts_plus_judge",
+    "notes": "Adversarial because the question intentionally links two retry-related concepts that belong to different parts of the corpus."
+  }
+]

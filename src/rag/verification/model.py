@@ -90,13 +90,23 @@ class AbstentionSignals:
 
     citation_precision: float | None
     citation_coverage: float | None
-
+    faithfulness_score: float | None
+    supported_ratio: float | None
+    partially_supported_ratio: float | None
+    unsupported_ratio: float | None
+    contradicted_ratio: float | None
+    
+class AbstentionDecisionType(str, Enum):
+    ACCEPT = "ACCEPT"
+    ACCEPT_WITH_WARNING = "ACCEPT_WITH_WARNING"
+    ABSTAIN = "ABSTAIN"
 
 @dataclass
 class AbstentionDecision:
     should_abstain: bool
     reasons: list[str]
     signals: AbstentionSignals
+    decision: AbstentionDecisionType
 
 @dataclass
 class VerifiedAnswer:
@@ -112,3 +122,5 @@ class VerifiedAnswer:
 
     abstention: AbstentionDecision
     verification_latency_ms:float
+
+

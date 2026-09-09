@@ -196,11 +196,6 @@ def main():
     # Export snapshot
     # -------------------------
 
-    export_chunks(
-        chunks
-    )
-
-
     print(
         "Hybrid corpus ready."
     )

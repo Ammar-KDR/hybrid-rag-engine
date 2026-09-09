@@ -102,6 +102,7 @@ class AnswerVerificationPipeline:
         # -----------------------------------------------------
 
         faithfulness = self.faithfulness_evaluator.evaluate(
+            question=generated_answer.question,
             claims=claims,
             evidence_text=evidence_text,
         )

@@ -56,7 +56,7 @@ class ContextBuilder:
 
         for block in blocks:
             lines = [
-                f"[EVIDENCE {block.reference}]"
+                f"[{block.reference}]"
             ]
 
             if block.source:
@@ -79,7 +79,7 @@ class ContextBuilder:
             lines.append(block.text.strip())
 
             lines.append(
-                f"[/EVIDENCE {block.reference}]"
+                f"[/{block.reference}]"
             )
 
             rendered_blocks.append(

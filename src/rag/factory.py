@@ -10,10 +10,22 @@ from rag.reranking.reranker import CrossEncoderReranker
 from rag.reranking.rank_fusion_reranker import RankFusionReranker
 from rag.generation.answer_builder import AnswerBuilder
 from rag.generation.context_builder import ContextBuilder
-from rag.generation.generator import GeminiGenerationService
+from rag.generation.generator import LMStudioGenerationService
 from rag.generation.prompt import PromptBuilder
 from sentence_transformers import CrossEncoder
-
+from rag.verification.pipeline import AnswerVerificationPipeline
+from rag.verification.claim_extractor import GeminiClaimExtractor
+from rag.verification.citation_verifier import GeminiCitationVerifier
+from rag.verification.metrics import CitationMetricsCalculator
+from rag.verification.faithfulness import FaithfulnessEvaluator
+from rag.verification.faithfulness_verifier import GeminiFaithfulnessVerifier
+from rag.verification.abstention import AbstentionPolicy
+from rag.verification.runner import CitationVerificationRunner
+from rag.verification.citation_verifier import LMStudioCitationVerifier
+from rag.verification.claim_extractor import LMStudioClaimExtractor
+from rag.verification.faithfulness_verifier import LMStudioFaithfulnessVerifier
+VERIFICATION_MODEL = "qwen/qwen3-4b-2507"
+GENERATION_MODEL = "qwen/qwen3-4b-2507"
 
 def create_rag_pipeline() -> RAGPipeline:
     embedding_service = EmbeddingService()
@@ -49,15 +61,36 @@ def create_rag_pipeline() -> RAGPipeline:
         rrf_k=60,
     )
 
+    claim_extractor = LMStudioClaimExtractor(model=VERIFICATION_MODEL)
+
+    citation_verifier=LMStudioCitationVerifier(model=VERIFICATION_MODEL)
+    citation_runner = CitationVerificationRunner(verifier=citation_verifier)
+
+    metrics_calculator = CitationMetricsCalculator()
+    faithfulness_verifier= LMStudioFaithfulnessVerifier(model=VERIFICATION_MODEL)
+
+    faithfulness_evaluator = FaithfulnessEvaluator(verifier=faithfulness_verifier)
+
+    abstention_policy = AbstentionPolicy()
+
+    verification_pipeline = AnswerVerificationPipeline(
+        claim_extractor=claim_extractor,
+        citation_runner=citation_runner,
+        metrics_calculator=metrics_calculator,
+        faithfulness_evaluator=faithfulness_evaluator,
+        abstention_policy=abstention_policy,
+    )
+
     pipeline = RAGPipeline(
         retriever=hybrid_retriever,
         reranker=rank_fusion_reranker,
         context_builder=ContextBuilder(final_context_k=5),
         prompt_builder=PromptBuilder(),
-        generator=GeminiGenerationService(
-            model="gemini-3.5-flash"
+        generator=LMStudioGenerationService(
+        model="qwen/qwen3-4b-2507"
         ),
         answer_builder=AnswerBuilder(),
+        verification_pipeline=verification_pipeline,
         candidate_k=20,
     )
 
