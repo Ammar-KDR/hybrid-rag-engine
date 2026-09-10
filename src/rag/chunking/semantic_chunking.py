@@ -8,21 +8,76 @@ from rag.ingestion.model import Chunk, Document
 DEFAULT_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 
 
-def split_into_paragraphs(text: str) -> list[str]:
-    """
-    Split on one or more blank lines.
+def split_into_paragraphs(
+    text: str,
+) -> list[str]:
 
-    We intentionally use paragraphs as the smallest semantic units
-    rather than embedding every individual sentence.
-    """
-    paragraphs = re.split(r"\n\s*\n", text)
+    raw_paragraphs = re.split(
+        r"\n\s*\n",
+        text,
+    )
 
-    return [
+    raw_paragraphs = [
         paragraph.strip()
-        for paragraph in paragraphs
+        for paragraph in raw_paragraphs
         if paragraph.strip()
     ]
 
+
+    paragraphs = []
+
+    pending_headings = []
+
+
+    for paragraph in raw_paragraphs:
+
+        is_heading = bool(
+            re.fullmatch(
+                r"#{1,6}\s+.+",
+                paragraph,
+            )
+        )
+
+
+        if is_heading:
+
+            pending_headings.append(
+                paragraph
+            )
+
+            continue
+
+
+        if pending_headings:
+
+            paragraph = (
+                "\n".join(
+                    pending_headings
+                )
+                +
+                "\n\n"
+                +
+                paragraph
+            )
+
+            pending_headings = []
+
+
+        paragraphs.append(
+            paragraph
+        )
+
+
+    if pending_headings:
+
+        paragraphs.append(
+            "\n".join(
+                pending_headings
+            )
+        )
+
+
+    return paragraphs
 
 class SemanticChunker:
 
@@ -30,7 +85,8 @@ class SemanticChunker:
         self,
         model_name: str = DEFAULT_MODEL,
         similarity_threshold: float = 0.55,
-        max_chunk_chars: int = 4000,
+        min_chunk_chars:int =300,
+        max_chunk_chars: int = 2000,
     ):
         if not -1 <= similarity_threshold <= 1:
             raise ValueError(
@@ -39,7 +95,7 @@ class SemanticChunker:
 
         self.similarity_threshold = similarity_threshold
         self.max_chunk_chars = max_chunk_chars
-
+        self.min_chunk_chars = min_chunk_chars
         self.model = SentenceTransformer(model_name)
 
 
@@ -88,8 +144,22 @@ class SemanticChunker:
                 current_paragraphs + [next_paragraph]
             )
 
+            current_text = "\n\n".join(
+                current_paragraphs
+            )
+
+            large_enough_to_break = (
+                len(current_text)
+                >=
+                self.min_chunk_chars
+            )
+
             semantic_break = (
-                similarity < self.similarity_threshold
+                large_enough_to_break
+                and
+                similarity
+                <
+                self.similarity_threshold
             )
 
             size_break = (

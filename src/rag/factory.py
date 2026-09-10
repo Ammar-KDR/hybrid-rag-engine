@@ -1,4 +1,4 @@
-from rag.ingestion.pipeline import build_chunks
+from rag.ingestion.pipeline import build_chunks,build_semantic_chunks
 from rag.retrieval.Dense_retrieval import DenseRetriever
 from rag.retrieval.bm25_retrieval import BM25Retriever
 from rag.retrieval.fusion import ReciprocalRankFusion
@@ -24,6 +24,7 @@ from rag.verification.runner import CitationVerificationRunner
 from rag.verification.citation_verifier import LMStudioCitationVerifier
 from rag.verification.claim_extractor import LMStudioClaimExtractor
 from rag.verification.faithfulness_verifier import LMStudioFaithfulnessVerifier
+
 VERIFICATION_MODEL = "qwen/qwen3-4b-2507"
 GENERATION_MODEL = "qwen/qwen3-4b-2507"
 
@@ -40,7 +41,7 @@ def create_rag_pipeline() -> RAGPipeline:
     )
 
     bm25_retriever = BM25Retriever(
-        chunks=build_chunks()
+        chunks= build_chunks()
     )
 
     hybrid_retriever = HybridRetriever(

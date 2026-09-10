@@ -1,15 +1,17 @@
 from pathlib import Path
 import json
 
-from rag.ingestion.pipeline import build_chunks
+from rag.ingestion.pipeline import build_chunks , build_semantic_chunks
 from rag.embedding.service import EmbeddingService
 from rag.vector_store.qdrant import QdrantVectorStore
+from rag.chunking.semantic_chunking import SemanticChunker
+DATA_PATH = Path("data/raw")
 
 
-NEW_COLLECTION_NAME = "documents3"
+NEW_COLLECTION_NAME = "documents6s"
 
 OUTPUT_FILE = Path(
-    "data/evaluation/chunks2.json"
+    "data/evaluation/chunks3.json"
 )
 
 
@@ -123,7 +125,7 @@ def main():
     # Build chunks
     # -------------------------
 
-    chunks = build_chunks()
+    chunks = build_semantic_chunks()
 
 
     print(

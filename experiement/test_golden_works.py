@@ -9,7 +9,14 @@ from dataclasses import asdict
 from rag.evaluation.golden_answer_eval import (
     GoldenAnswerEvaluator,
 )
+from rag.evaluation.case_evaluation_result import (
+    CaseEvaluationResult,
+)
 
+from rag.evaluation.evaluation_result_store import (
+    EvaluationResultStore,
+)
+from rag.evaluation.gold_correctness_eval import GoldenCorrectnessEvaluation , LMStudioCorrectnessJudge ,GoldenCorrectnessEvaluator
 TEXT_PREVIEW_LENGTH = 500
 FAITHFULNESS_FAILURE_THRESHOLD = 0.7
 
@@ -234,10 +241,8 @@ def main():
 
     
     case_ids = [
-    "rag_031",
-    "rag_033",
-    "rag_049",
-    "rag_058",
+    case.id
+    for case in cases
 ]
 
     case_lookup = {
@@ -257,14 +262,41 @@ def main():
     golden_answer_evaluator = (
         GoldenAnswerEvaluator()
     )
+    correctness_judge = (
+    LMStudioCorrectnessJudge()
+)
+
+    golden_correctness_evaluator = (
+        GoldenCorrectnessEvaluator(
+            judge=correctness_judge
+        )
+    )
+
 
    
 
     results = []
+    result_store = (
+    EvaluationResultStore(
+        path="data/evaluation/day10_structure_corr_v1.jsonl"
+    )
+)
 
+    completed_case_ids = (
+        result_store.load_completed_case_ids()
+    )
     for case_id in case_ids:
 
         case = case_lookup[case_id]
+
+        if case.id in completed_case_ids:
+
+            print(
+                f"Skipping completed case: {case.id}"
+            )
+
+            continue
+
 
         result = pipeline.run(
             case.question
@@ -279,21 +311,228 @@ def main():
     )
 )
         golden_answer_evaluation = (
-    golden_answer_evaluator.evaluate(
-        case=case,
-        answer=(
-            result
-            .verified_answer
-            .final_answer
-        ),
+            golden_answer_evaluator.evaluate(
+                case=case,
+                answer=(
+                    result
+                    .answer
+                    .answer
+                ),
+
+                claims=(
+                    result
+                    .verified_answer
+                    .claims
+                    .claims
+                ),
+            )
+        )
+        golden_correctness_evaluation = (
+            golden_correctness_evaluator.evaluate(
+                case=case,
+                claims=(
+                    result
+                    .verified_answer
+                    .claims
+                    .claims
+                ),
+            )
+        )
+        golden_correctness_evaluation = (
+        golden_correctness_evaluator.evaluate(
+            case=case,
+            claims=result.verified_answer.claims.claims,
+        )
     )
-)
+        case_evaluation_result = (
+            CaseEvaluationResult(
+
+                case_id=case.id,
+
+                primary_category=(
+                    case.primary_category
+                ),
+
+                difficulty=(
+                    case.difficulty
+                ),
+
+                expected_answerable=(
+                    case.answerable
+                ),
+
+                decision=(
+                    result
+                    .verified_answer
+                    .abstention
+                    .decision
+                    .value
+                ),
+
+                should_abstain=(
+                    result
+                    .verified_answer
+                    .abstention
+                    .should_abstain
+                ),
+
+                candidate_source_recall=(
+                    retrieval_evaluation
+                    .candidate
+                    .source_recall
+                ),
+
+                candidate_evidence_recall=(
+                    retrieval_evaluation
+                    .candidate
+                    .evidence_span_recall
+                ),
+
+                candidate_hit=(
+                    retrieval_evaluation
+                    .candidate
+                    .hit
+                ),
+
+                candidate_mrr=(
+                    retrieval_evaluation
+                    .candidate
+                    .mrr
+                ),
+
+                final_source_recall=(
+                    retrieval_evaluation
+                    .final
+                    .source_recall
+                ),
+
+                final_evidence_recall=(
+                    retrieval_evaluation
+                    .final
+                    .evidence_span_recall
+                ),
+
+                final_hit=(
+                    retrieval_evaluation
+                    .final
+                    .hit
+                ),
+
+                final_mrr=(
+                    retrieval_evaluation
+                    .final
+                    .mrr
+                ),
+
+                completeness_score=(
+                    golden_answer_evaluation
+                    .completeness_score
+                ),
+
+                covered_facts=(
+                    golden_answer_evaluation
+                    .covered_facts
+                ),
+
+                total_required_facts=(
+                    golden_answer_evaluation
+                    .total_facts
+                ),
+
+                fact_results=[
+                    {
+                        "fact": fact.fact,
+                        "matched": fact.matched,
+                        "lexical_score": (
+                            fact.lexical_score
+                        ),
+                        "semantic_score": (
+                            fact.semantic_score
+                        ),
+                        "matched_by": (
+                            fact.matched_by
+                        ),
+                    }
+                    for fact in (
+                        golden_answer_evaluation
+                        .fact_results
+                    )
+                ],
+
+                faithfulness_score=(
+                    result
+                    .verified_answer
+                    .abstention
+                    .signals
+                    .faithfulness_score
+                ),
+
+                citation_precision=(
+                    result
+                    .verified_answer
+                    .citation_metrics
+                    .citation_precision
+                ),
+
+                citation_coverage=(
+                    result
+                    .verified_answer
+                    .citation_metrics
+                    .citation_coverage
+                ),
+
+                total_latency_ms=(
+                    result.total_latency_ms
+                ),
+
+                verification_latency_ms=(
+                    result.verification_latency_ms
+                ),
+                correctness_score=(
+                    golden_correctness_evaluation.correctness_score
+                ),
+
+                correct_claims=(
+                    golden_correctness_evaluation.correct_claims
+                ),
+
+                partially_correct_claims=(
+                    golden_correctness_evaluation.partially_correct_claims
+                ),
+
+                incorrect_claims=(
+                    golden_correctness_evaluation.incorrect_claims
+                ),
+
+                correctness_results=[
+                    {
+                        "claim": result.claim,
+                        "verdict": result.verdict.value,
+                        "explanation": result.explanation,
+                    }
+                    for result
+                    in golden_correctness_evaluation.claim_results
+                ],
+            )
+        )
+
+
+        result_store.append(
+            case_evaluation_result
+        )
+
+
+        completed_case_ids.add(
+            case.id
+        )
+        
 
         print_case_summary(
             case,
             result,
             retrieval_evaluation,
-            golden_answer_evaluation
+            golden_answer_evaluation,
+            golden_correctness_evaluation,
 
         )
 
@@ -455,7 +694,8 @@ def print_case_summary(
     case,
     result,
     retrieval_evaluation,
-    golden_answer_evaluation
+    golden_answer_evaluation,
+    golden_correctness_evaluation,
 ):
 
     faithfulness = (
@@ -654,6 +894,65 @@ def print_case_summary(
         "Completeness score:",
         golden_answer_evaluation.completeness_score,
 )
+
+    for fact_result in (
+        golden_answer_evaluation
+        .fact_results
+    ):
+
+        print(
+            "-",
+            fact_result.matched,
+            "| lexical:",
+            round(
+                fact_result.lexical_score,
+                3,
+            ),
+            "| semantic:",
+            round(
+                fact_result.semantic_score,
+                3,
+            ),
+            "| by:",
+            fact_result.matched_by,
+            "|",
+            fact_result.fact,
+        )
+        print()
+        print("Correctness:")
+
+        print(
+            "Correctness score:",
+            golden_correctness_evaluation.correctness_score,
+        )
+
+        print(
+            "Correct claims:",
+            golden_correctness_evaluation.correct_claims,
+        )
+
+        print(
+            "Partially correct claims:",
+            golden_correctness_evaluation.partially_correct_claims,
+        )
+
+        print(
+            "Incorrect claims:",
+            golden_correctness_evaluation.incorrect_claims,
+        )
+
+        for claim_result in (
+            golden_correctness_evaluation.claim_results
+        ):
+
+            print(
+                "-",
+                claim_result.verdict.value,
+                "|",
+                claim_result.claim,
+                "|",
+                claim_result.explanation,
+            )
 
 
 def is_failure_case(
