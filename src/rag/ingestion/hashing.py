@@ -11,3 +11,6 @@ def create_chunk_id(
     return hashlib.sha256(
         content.encode("utf-8")
     ).hexdigest()
+
+def create_document_id(content: bytes) -> str:
+    return hashlib.sha256(content).hexdigest()

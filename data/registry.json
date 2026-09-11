@@ -1,0 +1,236 @@
+{
+  "documents": [
+    {
+      "document_id": "f4f6f49eb7ace50546ef4f18c495bb5f808dd5a1244b6cbc1de642f478ba83e5",
+      "filename": "Ammar_Khader.md",
+      "file_type": "md",
+      "chunk_count": 1,
+      "ingested_at": "2026-09-11T16:30:39.523913+00:00",
+      "chunking_strategy": "structure"
+    },
+    {
+      "document_id": "f4851809169a09196e533d247a8a53e690ed327dbf7c783632a3dbeaaa2143b9",
+      "filename": "api_erros.md",
+      "file_type": "md",
+      "chunk_count": 12,
+      "ingested_at": "2026-09-11T17:15:14.355640+00:00",
+      "chunking_strategy": "structure"
+    },
+    {
+      "document_id": "c410e905223297c212dcee7039d0b53740fb943c6ea1abb452a70670c85e19c9",
+      "filename": "app_troubleshooting.md",
+      "file_type": "md",
+      "chunk_count": 12,
+      "ingested_at": "2026-09-11T17:15:18.561073+00:00",
+      "chunking_strategy": "structure"
+    },
+    {
+      "document_id": "926e7322ffe13b29fb94c281b1cc7baa3a9825a7c9414ef6815a9952ad4f314d",
+      "filename": "databases.md",
+      "file_type": "md",
+      "chunk_count": 7,
+      "ingested_at": "2026-09-11T17:15:23.026679+00:00",
+      "chunking_strategy": "structure"
+    },
+    {
+      "document_id": "b2d52da535a58071c5d79dbb5f8c57e621fef3b9f779d65c3407d0d3e1480825",
+      "filename": "database_configuration.md",
+      "file_type": "md",
+      "chunk_count": 16,
+      "ingested_at": "2026-09-11T17:15:27.395448+00:00",
+      "chunking_strategy": "structure"
+    },
+    {
+      "document_id": "833769076d7accb33f47efe18cbbcd75218d4af8f0e48a6eb17ea66e3973ce6d",
+      "filename": "database_errors.md",
+      "file_type": "md",
+      "chunk_count": 17,
+      "ingested_at": "2026-09-11T17:15:31.616097+00:00",
+      "chunking_strategy": "structure"
+    },
+    {
+      "document_id": "273c20046d29507bde1d483cecffe83ac3c29fec97a1a9d3fd9ce54aa55df1ac",
+      "filename": "DNS_reference.md",
+      "file_type": "md",
+      "chunk_count": 16,
+      "ingested_at": "2026-09-11T17:15:35.990281+00:00",
+      "chunking_strategy": "structure"
+    },
+    {
+      "document_id": "6b35ffe0c58590335b21ca612f0dfe8af8ecdc711cfac07efd9703c25ad17910",
+      "filename": "docker.md",
+      "file_type": "md",
+      "chunk_count": 7,
+      "ingested_at": "2026-09-11T17:15:40.266163+00:00",
+      "chunking_strategy": "structure"
+    },
+    {
+      "document_id": "72ca275586115e87c2e368c7dea2d3de4b162d77154f9aee1ef02d205872e1e3",
+      "filename": "docker_commands.md",
+      "file_type": "md",
+      "chunk_count": 18,
+      "ingested_at": "2026-09-11T17:15:44.464854+00:00",
+      "chunking_strategy": "structure"
+    },
+    {
+      "document_id": "3132447ed6bb6399015bc3d5450890920170197d468eb37c89688b764380ca9f",
+      "filename": "docker_networking.md",
+      "file_type": "md",
+      "chunk_count": 11,
+      "ingested_at": "2026-09-11T17:15:48.758280+00:00",
+      "chunking_strategy": "structure"
+    },
+    {
+      "document_id": "07a24431a817d13affca1b7f03ba65b91ee4ab2487a24e50f1cb03a5d90e3d84",
+      "filename": "docker_storage.md",
+      "file_type": "md",
+      "chunk_count": 12,
+      "ingested_at": "2026-09-11T17:15:53.039216+00:00",
+      "chunking_strategy": "structure"
+    },
+    {
+      "document_id": "868d3da2b63fcfbe7ff79d8b9f432e4714473ff7f490715cbc8d4e6cc0d47f24",
+      "filename": "html_test.html",
+      "file_type": "html",
+      "chunk_count": 1,
+      "ingested_at": "2026-09-11T17:15:57.273901+00:00",
+      "chunking_strategy": "semantic"
+    },
+    {
+      "document_id": "64c6a3513a585534698272c1c67b45efda1eaf3b4df0a97ef7aee7dcf0701ad3",
+      "filename": "kubernetes.md",
+      "file_type": "md",
+      "chunk_count": 7,
+      "ingested_at": "2026-09-11T17:16:01.561849+00:00",
+      "chunking_strategy": "structure"
+    },
+    {
+      "document_id": "260f61d10c3f70ee54cdfdad59ea0672a9fb37290919017ed94b71f3cd94602c",
+      "filename": "kubernets_command.md",
+      "file_type": "md",
+      "chunk_count": 6,
+      "ingested_at": "2026-09-11T17:16:05.999225+00:00",
+      "chunking_strategy": "structure"
+    },
+    {
+      "document_id": "db80c0b585858ecbaeb43cca974c4b66e353674fee3af15bc140e5476e9744dd",
+      "filename": "kubernets_configuration.md",
+      "file_type": "md",
+      "chunk_count": 15,
+      "ingested_at": "2026-09-11T17:16:10.505836+00:00",
+      "chunking_strategy": "structure"
+    },
+    {
+      "document_id": "1b561e04155adc52680f9e030bbe5234b4c7111544ad477393161a487fdcd7dd",
+      "filename": "kubernets_error.md",
+      "file_type": "md",
+      "chunk_count": 4,
+      "ingested_at": "2026-09-11T17:16:14.771834+00:00",
+      "chunking_strategy": "structure"
+    },
+    {
+      "document_id": "9d2a23ebc83a36f42bc4cc80717e2ed6c4c12f399eba42adf7d74ead13fa84bb",
+      "filename": "kubernets_networking.md",
+      "file_type": "md",
+      "chunk_count": 11,
+      "ingested_at": "2026-09-11T17:16:19.103070+00:00",
+      "chunking_strategy": "structure"
+    },
+    {
+      "document_id": "9272558f05e74d7ad9e926eb2853f081b40fd53d3f34ad1a5ee3cf12e80cc4fa",
+      "filename": "linux.md",
+      "file_type": "md",
+      "chunk_count": 7,
+      "ingested_at": "2026-09-11T17:16:23.554000+00:00",
+      "chunking_strategy": "structure"
+    },
+    {
+      "document_id": "f149d835821d0a57d99c8c0f828e642f813ba31642cacc64c299ff6e1d664320",
+      "filename": "linux_command.md",
+      "file_type": "md",
+      "chunk_count": 16,
+      "ingested_at": "2026-09-11T17:16:27.879559+00:00",
+      "chunking_strategy": "structure"
+    },
+    {
+      "document_id": "82f0b972b075c5248abb40c09d10f77cb92f1096f1cfcb3e990e35179595bbd5",
+      "filename": "linux_errors.md",
+      "file_type": "md",
+      "chunk_count": 11,
+      "ingested_at": "2026-09-11T17:16:32.228334+00:00",
+      "chunking_strategy": "structure"
+    },
+    {
+      "document_id": "ea04f7a039318ff497cbd499aa41e50bd1b6feb9323c17a3ca9a7c5bea0f9047",
+      "filename": "linux_process_debugging.md",
+      "file_type": "md",
+      "chunk_count": 16,
+      "ingested_at": "2026-09-11T17:16:36.741211+00:00",
+      "chunking_strategy": "structure"
+    },
+    {
+      "document_id": "071790a09a6ff7d1afd86f080c614613cb93e698958de28298f15b0a931d236c",
+      "filename": "networking.md",
+      "file_type": "md",
+      "chunk_count": 7,
+      "ingested_at": "2026-09-11T17:16:41.203863+00:00",
+      "chunking_strategy": "structure"
+    },
+    {
+      "document_id": "2290bbcf7314ea6b31136a26d223a23a6064bf3b9cb57918aaf66aead131d025",
+      "filename": "network_errors.md",
+      "file_type": "md",
+      "chunk_count": 20,
+      "ingested_at": "2026-09-11T17:16:45.467663+00:00",
+      "chunking_strategy": "structure"
+    },
+    {
+      "document_id": "903fe53e75c996fd573c30e57c0afbf2f062c1988a837c14dd9221d40f35fe82",
+      "filename": "sample_policy.txt",
+      "file_type": "txt",
+      "chunk_count": 1,
+      "ingested_at": "2026-09-11T17:16:49.763165+00:00",
+      "chunking_strategy": "semantic"
+    },
+    {
+      "document_id": "aee700f2ae1110a87bc2b6ae3feb4e36e86fddc9517f7348c6da83282f63ba7c",
+      "filename": "sample_runbook.md",
+      "file_type": "md",
+      "chunk_count": 14,
+      "ingested_at": "2026-09-11T17:16:54.170413+00:00",
+      "chunking_strategy": "structure"
+    },
+    {
+      "document_id": "c650e416d08d8edc3cb0754fe2ce1b6920a4d6a4665614fac7103b23b8f0ed5a",
+      "filename": "semantic_test.txt",
+      "file_type": "txt",
+      "chunk_count": 3,
+      "ingested_at": "2026-09-11T17:16:58.647889+00:00",
+      "chunking_strategy": "semantic"
+    },
+    {
+      "document_id": "3bd63b0ee944068b4de22ad7d0d685a426b12b76bec9f420e47cc1993538e693",
+      "filename": "omar_Khader.md",
+      "file_type": "md",
+      "chunk_count": 1,
+      "ingested_at": "2026-09-11T17:27:33.986027+00:00",
+      "chunking_strategy": "structure"
+    },
+    {
+      "document_id": "164fb71516949ff3b50873f02fde99ae4f0564b87aeeb69ad825427f8b2d9880",
+      "filename": "project_phoenix.md",
+      "file_type": "md",
+      "chunk_count": 1,
+      "ingested_at": "2026-09-11T22:34:01.923437+00:00",
+      "chunking_strategy": "structure"
+    },
+    {
+      "document_id": "f2c47ff602c37219673d8f6f42dd0c2591454a5a56a160b971d279d8e1a56148",
+      "filename": "The_Laws_of_Human_Nature_by_Robert_Greene_2018.pdf",
+      "file_type": "pdf",
+      "chunk_count": 718,
+      "ingested_at": "2026-09-11T22:42:44.321197+00:00",
+      "chunking_strategy": "semantic"
+    }
+  ]
+}

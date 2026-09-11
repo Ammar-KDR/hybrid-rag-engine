@@ -1,4 +1,4 @@
-from rag.ingestion.pipeline import build_chunks,build_semantic_chunks
+from rag.ingestion.pipeline import build_chunks
 from rag.retrieval.Dense_retrieval import DenseRetriever
 from rag.retrieval.bm25_retrieval import BM25Retriever
 from rag.retrieval.fusion import ReciprocalRankFusion

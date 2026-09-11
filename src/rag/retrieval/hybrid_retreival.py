@@ -40,4 +40,8 @@ class HybridRetriever:
         return fused_results[:top_k]
 
         
-        
+    def replace_bm25_retriever(
+        self,
+        bm25_retriever,
+    ):
+        self.bm25_retriever = bm25_retriever

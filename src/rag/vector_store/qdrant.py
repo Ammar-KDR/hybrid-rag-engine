@@ -34,8 +34,14 @@ class QdrantVectorStore:
     vector: list[float],
     payload: dict,
     ):
+        point_id = str(
+        uuid.uuid5(
+            uuid.NAMESPACE_URL,
+            chunk_id,
+            )
+        )
         point = PointStruct(
-            id=str(uuid.uuid4()),
+            id=point_id,
             vector=vector,
             payload={
             "chunk_id": chunk_id,
