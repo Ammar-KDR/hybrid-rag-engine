@@ -11,7 +11,7 @@ class Settings:
 
     QDRANT_COLLECTION = os.getenv(
         "QDRANT_COLLECTION",
-        "documents3",
+        "documents",
     )
 
     LM_STUDIO_BASE_URL = os.getenv(

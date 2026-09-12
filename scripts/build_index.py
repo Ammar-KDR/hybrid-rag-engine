@@ -20,7 +20,7 @@ DATA_PATH = settings.DATA_PATH
 CHUNK_STORE_PATH = settings.CHUNK_STORE_PATH
 REGISTRY_PATH = settings.REGISTRY_PATH
 
-COLLECTION_NAME = "settings.QDRANT_COLLECTION"
+COLLECTION_NAME = settings.QDRANT_COLLECTION
 
 
 def main() -> None:
@@ -148,7 +148,7 @@ def main() -> None:
     # 7. Rebuild Qdrant dense index
     # -------------------------------------------------
 
-    vector_store = QdrantVectorStore()
+    vector_store = QdrantVectorStore(url=settings.QDRANT_URL)
 
     vector_store.reset_collection(
         collection_name=COLLECTION_NAME,

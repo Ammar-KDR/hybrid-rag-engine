@@ -7,12 +7,10 @@ from qdrant_client.models import Filter, FieldCondition, MatchValue
 class QdrantVectorStore:
     def __init__(
         self,
-        host: str = "localhost",
-        port: int = 6333,
+        url: str = "http://localhost:6333"
     ):
         self.client = QdrantClient(
-            host=host,
-            port=port,
+            url=url
         )
     def create_collection(
         self,

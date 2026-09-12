@@ -1,6 +1,9 @@
 # Python virtual environment
 .venv/
-
+# Local virtual environments
+hyb_rag/
+venv/
+env/
 # Python generated files
 __pycache__/
 *.py[cod]
@@ -21,6 +24,7 @@ htmlcov/
 # Generated project data
 data/processed/
 data/indexes/
+data/registry.json
 
 # Vector database persistence
 chroma_data/

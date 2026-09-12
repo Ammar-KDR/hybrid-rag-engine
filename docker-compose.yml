@@ -1,0 +1,82 @@
+services:
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: hybrid-rag-qdrant
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "timeout 5 bash -c '</dev/tcp/localhost/6333'"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: hybrid-rag-api
+
+    ports:
+      - "8000:8000"
+
+    environment:
+
+      QDRANT_URL: http://qdrant:6333
+      LM_STUDIO_BASE_URL: http://host.docker.internal:1234/v1
+      LM_STUDIO_MODEL: ${LM_STUDIO_MODEL}
+
+    volumes:
+      - ./data:/app/data
+
+    depends_on:
+      qdrant:
+        condition: service_healthy
+
+    command:
+      [
+        "uvicorn",
+        "rag.api.app:app",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8000"
+      ]
+
+
+  ui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: hybrid-rag-ui
+
+    ports:
+      - "8501:8501"
+
+    environment:
+      API_BASE_URL: http://api:8000
+
+    depends_on:
+      - api
+
+    command:
+      [
+        "streamlit",
+        "run",
+        "src/rag/ui/app.py",
+        "--server.address=0.0.0.0"
+      ]
+
+
+volumes:
+
+  qdrant_data:

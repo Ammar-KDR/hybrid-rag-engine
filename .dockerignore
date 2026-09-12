@@ -1,6 +1,13 @@
 # Python environment
 .venv/
+# Python virtual environments
 
+hyb_rag/
+venv/
+env/
+# Python environments (generic)
+*/Lib/
+*/Scripts/
 # Python cache
 __pycache__/
 *.py[cod]

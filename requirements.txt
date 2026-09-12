@@ -1,5 +1,5 @@
 # ============================================================
-# Core configuration / data models
+# Core configuration / application models
 # ============================================================
 
 pydantic
@@ -26,19 +26,19 @@ tiktoken
 
 
 # ============================================================
-# Embeddings
+# LLM client
+# OpenAI-compatible client used with local LM Studio server
 # ============================================================
 
 openai
+google-genai
 
 
 # ============================================================
 # Vector database
-# Initial choice: ChromaDB
-# We may compare with / migrate to Qdrant later.
 # ============================================================
 
-chromadb
+qdrant-client
 
 
 # ============================================================
@@ -49,20 +49,22 @@ rank-bm25
 
 
 # ============================================================
-# Numerical / data tooling
+# Embeddings / reranking / local ML models
+# ============================================================
+
+torch
+transformers
+sentence-transformers
+
+
+# ============================================================
+# Numerical / evaluation tooling
 # ============================================================
 
 numpy
 pandas
 scipy
 scikit-learn
-
-
-# ============================================================
-# Reranking / local ML models
-# ============================================================
-
-sentence-transformers
 
 
 # ============================================================
@@ -94,4 +96,3 @@ pytest-cov
 # ============================================================
 
 ruff
-qdrant-client

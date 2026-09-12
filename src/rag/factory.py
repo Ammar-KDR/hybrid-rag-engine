@@ -37,7 +37,7 @@ CHUNK_STORE_PATH = Path(
 def create_rag_pipeline() -> RAGPipeline:
     embedding_service = EmbeddingService()
 
-    vector_store = QdrantVectorStore()
+    vector_store = QdrantVectorStore(url=settings.QDRANT_URL)
     rrf=ReciprocalRankFusion()
 
     dense_retriever = DenseRetriever(
