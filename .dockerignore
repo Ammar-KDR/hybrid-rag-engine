@@ -1,0 +1,39 @@
+# Python environment
+.venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Git
+.git/
+.gitignore
+
+# Secrets
+.env
+
+# Tests/cache
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Tool caches
+.ruff_cache/
+.mypy_cache/
+
+# Runtime/generated data
+data/indexes/
+data/qdrant/
+
+# Experiment artifacts
+experiement/
+experiments/results/
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Exploratory experiments
+experiement/
