@@ -1,8 +1,10 @@
 import streamlit as st
 import pandas as pd
-
+import os
 from rag.ui.client import RAGAPIClient
+from dotenv import load_dotenv
 
+load_dotenv()
 
 # =========================================================
 # Page configuration
@@ -14,9 +16,9 @@ st.set_page_config(
     layout="wide",
 )
 
-
+url=os.getenv("API_BASE_URL")
 client = RAGAPIClient(
-    base_url="http://127.0.0.1:8000"
+    base_url=url
 )
 
 

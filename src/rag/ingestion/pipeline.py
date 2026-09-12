@@ -6,11 +6,14 @@ from rag.ingestion.loader import (
 )
 from rag.chunking.structure_chunking import MarkdownStructureChunker
 from rag.chunking.semantic_chunking import SemanticChunker
+from rag.config import settings
 
 
-DATA_PATH = Path("data/raw")
+DATA_PATH = settings.DATA_PATH
 
-def build_chunks_for_file(file_path: str | Path):
+def build_chunks_for_file(file_path: str | Path,
+                          semantic_chunker: SemanticChunker | None = None):
+    
     path = Path(file_path)
 
     documents = load_document(path)
@@ -20,39 +23,41 @@ def build_chunks_for_file(file_path: str | Path):
         overlap=200,
     )
 
-    semantic_chunker = SemanticChunker(
-        similarity_threshold=0.55,
-        max_chunk_chars=2000,
-        min_chunk_chars=300,
-    )
+    if semantic_chunker is None:
+        semantic_chunker = SemanticChunker(
+            similarity_threshold=0.55,
+            max_chunk_chars=2000,
+            min_chunk_chars=300,
+        )
 
     all_chunks = []
 
     for document in documents:
 
         if document.file_type == "md":
-            print("USING MARKDOWN CHUNKER")
+            
             chunks = markdown_chunker.chunk(document)
         else:
-            print("USING SEMANTIC CHUNKER")
+            
             chunks = semantic_chunker.chunk(document)
 
         all_chunks.extend(chunks)
 
     return all_chunks
 
-def build_chunks():
+def build_chunks(semantic_chunker: SemanticChunker | None = None):
 
     markdown_chunker = MarkdownStructureChunker(
         max_chunk_chars=2000,
         overlap=200,
     )
 
-    fallback_chunker = SemanticChunker(
-        similarity_threshold=0.55,
-        max_chunk_chars=2000,
-        min_chunk_chars=300,
-    )
+    if semantic_chunker is None:
+        semantic_chunker = SemanticChunker(
+            similarity_threshold=0.55,
+            max_chunk_chars=2000,
+            min_chunk_chars=300,
+        )
 
     all_chunks = []
 
@@ -71,7 +76,7 @@ def build_chunks():
             if document.file_type == "md":
                 chunks = markdown_chunker.chunk(document)
             else:
-                chunks = fallback_chunker.chunk(document)
+                chunks = semantic_chunker.chunk(document)
 
             all_chunks.extend(chunks)
 

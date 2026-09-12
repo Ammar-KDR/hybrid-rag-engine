@@ -1,4 +1,5 @@
-from rag.ingestion.pipeline import build_chunks
+from pathlib import Path
+from rag.ingestion.chunk_store import ChunkStore
 from rag.retrieval.Dense_retrieval import DenseRetriever
 from rag.retrieval.bm25_retrieval import BM25Retriever
 from rag.retrieval.fusion import ReciprocalRankFusion
@@ -24,9 +25,14 @@ from rag.verification.runner import CitationVerificationRunner
 from rag.verification.citation_verifier import LMStudioCitationVerifier
 from rag.verification.claim_extractor import LMStudioClaimExtractor
 from rag.verification.faithfulness_verifier import LMStudioFaithfulnessVerifier
+from rag.config import settings
 
-VERIFICATION_MODEL = "qwen/qwen3-4b-2507"
-GENERATION_MODEL = "qwen/qwen3-4b-2507"
+
+VERIFICATION_MODEL = settings.LM_STUDIO_MODEL
+GENERATION_MODEL = settings.LM_STUDIO_MODEL
+CHUNK_STORE_PATH = Path(
+    "data/indexes/chunks.jsonl"
+)
 
 def create_rag_pipeline() -> RAGPipeline:
     embedding_service = EmbeddingService()
@@ -37,11 +43,22 @@ def create_rag_pipeline() -> RAGPipeline:
     dense_retriever = DenseRetriever(
         vector_store=vector_store,
         embedding_service=embedding_service,
-        collection_name="documents3",
+        collection_name=settings.QDRANT_COLLECTION,
     )
+    chunk_store = ChunkStore(
+    CHUNK_STORE_PATH
+)
 
+    chunks = chunk_store.load_all()
+
+    if not chunks:
+        raise RuntimeError(
+            "Chunk index is missing or empty. "
+            "Run 'python scripts/build_index.py' "
+            "before starting the application."
+        )
     bm25_retriever = BM25Retriever(
-        chunks= build_chunks()
+        chunks= chunks
     )
 
     hybrid_retriever = HybridRetriever(
@@ -88,7 +105,7 @@ def create_rag_pipeline() -> RAGPipeline:
         context_builder=ContextBuilder(final_context_k=5),
         prompt_builder=PromptBuilder(),
         generator=LMStudioGenerationService(
-        model="qwen/qwen3-4b-2507"
+        model=settings.LM_STUDIO_MODEL
         ),
         answer_builder=AnswerBuilder(),
         verification_pipeline=verification_pipeline,

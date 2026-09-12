@@ -3,10 +3,9 @@
 import json
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from rag.ingestion.hashing import create_document_id
-from rag.ingestion.loader import SUPPORTED_EXTENSIONS
-from rag.ingestion.pipeline import build_chunks_for_file
-from datetime import datetime, timezone
+
+
+import os
 
 @dataclass
 class DocumentRecord:
@@ -35,12 +34,27 @@ class DocumentRegistry:
             exist_ok=True,
         )
 
-        with self.path.open("w", encoding="utf-8") as f:
+        temp_path = self.path.with_suffix(
+            self.path.suffix + ".tmp"
+        )
+
+        with temp_path.open(
+            "w",
+            encoding="utf-8",
+        ) as f:
             json.dump(
                 data,
                 f,
                 indent=2,
             )
+
+            f.flush()
+            os.fsync(f.fileno())
+
+        os.replace(
+            temp_path,
+            self.path,
+        )
 
     def contains(self, document_id: str) -> bool:
         data = self._load()
@@ -70,50 +84,13 @@ class DocumentRegistry:
 
     def list_documents(self) -> list[dict]:
         return self._load()["documents"]
+    def replace_all(
+        self,
+        records: list[DocumentRecord],) -> None:
+        self._save({
+            "documents": [
+                asdict(record)
+                for record in records
+            ]
+        })
 
-def bootstrap_registry(
-    registry: DocumentRegistry,
-        data_path: Path,
-        ) -> None:
-
-    for file_path in data_path.iterdir():
-
-        if not file_path.is_file():
-                continue
-
-        if file_path.suffix.lower() not in SUPPORTED_EXTENSIONS:
-                continue
-
-        content = file_path.read_bytes()
-
-        document_id = create_document_id(content)
-
-        if registry.contains(document_id):
-            continue
-
-        chunks = build_chunks_for_file(file_path)
-
-        if not chunks:
-            continue
-
-        strategies = {
-                chunk.chunking_strategy
-                for chunk in chunks
-            }
-
-        chunking_strategy = (
-                next(iter(strategies))
-                if len(strategies) == 1
-                else "mixed"
-            )
-
-        record = DocumentRecord(
-                document_id=document_id,
-                filename=file_path.name,
-                file_type=file_path.suffix.lower().lstrip("."),
-                chunk_count=len(chunks),
-                ingested_at=datetime.now(timezone.utc).isoformat(),
-                chunking_strategy=chunking_strategy,
-            )
-
-        registry.add(record)

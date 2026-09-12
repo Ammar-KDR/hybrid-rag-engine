@@ -85,6 +85,7 @@ class SemanticChunker:
         self,
         model_name: str = DEFAULT_MODEL,
         similarity_threshold: float = 0.55,
+        model: SentenceTransformer | None = None,
         min_chunk_chars:int =300,
         max_chunk_chars: int = 2000,
     ):
@@ -96,7 +97,11 @@ class SemanticChunker:
         self.similarity_threshold = similarity_threshold
         self.max_chunk_chars = max_chunk_chars
         self.min_chunk_chars = min_chunk_chars
-        self.model = SentenceTransformer(model_name)
+        self.model = (
+        model
+        if model is not None
+        else SentenceTransformer(model_name)
+    )
 
 
     def chunk(self, document: Document) -> list[Chunk]:

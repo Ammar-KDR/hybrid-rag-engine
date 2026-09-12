@@ -3,10 +3,8 @@ from pathlib import Path
 
 from rag.ingestion.hashing import create_document_id
 from rag.ingestion.loader import SUPPORTED_EXTENSIONS
-from rag.ingestion.pipeline import (
-    build_chunks,
-    build_chunks_for_file,
-)
+from rag.ingestion.pipeline import build_chunks_for_file
+from rag.ingestion.chunk_store import ChunkStore
 from rag.ingestion.registry import (
     DocumentRecord,
     DocumentRegistry,
@@ -21,17 +19,19 @@ class IngestionService:
         data_path: Path,
         registry: DocumentRegistry,
         embedding_service,
+        semantic_chunker,
         vector_store,
+        chunk_store: ChunkStore,
         collection_name: str,
         hybrid_retriever,
     ):
         self.data_path = data_path
         self.registry = registry
-
+        self.chunk_store = chunk_store
         self.embedding_service = embedding_service
         self.vector_store = vector_store
         self.collection_name = collection_name
-
+        self.semantic_chunker = semantic_chunker
         self.hybrid_retriever = hybrid_retriever
 
 
@@ -119,9 +119,19 @@ class IngestionService:
             # -------------------------------------
             # 5. Chunk ONLY the new document
             # -------------------------------------
+            existing_chunks = []
+
+            old_bm25 = (
+                self.hybrid_retriever
+                .bm25_retriever
+            )
+
+            chunk_store_updated = False
+            bm25_updated = False
 
             new_chunks = build_chunks_for_file(
-                stored_path
+                stored_path,
+                semantic_chunker=self.semantic_chunker
             )
 
             if not new_chunks:
@@ -158,7 +168,26 @@ class IngestionService:
             # including the new canonical file.
             # -------------------------------------
 
-            all_chunks = build_chunks()
+            existing_chunks = (
+                self.chunk_store.load_all()
+            )
+
+            chunks_by_id = {
+                chunk.chunk_id: chunk
+                for chunk in existing_chunks
+            }
+
+            for chunk in new_chunks:
+                chunks_by_id[chunk.chunk_id] = chunk
+
+            all_chunks = list(
+                chunks_by_id.values()
+            )
+            self.chunk_store.replace_all(
+                all_chunks
+            )
+
+            chunk_store_updated = True
 
             new_bm25 = BM25Retriever(
                 chunks=all_chunks
@@ -195,6 +224,7 @@ class IngestionService:
             self.hybrid_retriever.replace_bm25_retriever(
                 new_bm25
             )
+            bm25_updated = True
 
 
             # -------------------------------------
@@ -240,15 +270,16 @@ class IngestionService:
             }
 
         except Exception:
-            # If we failed before successful
-            # ingestion, don't leave the uploaded
-            # source file behind.
-            #
-            # NOTE:
-            # A Qdrant failure partway through its
-            # loop could still have written some
-            # deterministic points. Retrying is
-            # safe because their UUIDs are stable.
+
+            if bm25_updated:
+                self.hybrid_retriever.replace_bm25_retriever(
+                    old_bm25
+                )
+
+            if chunk_store_updated:
+                self.chunk_store.replace_all(
+                    existing_chunks
+                )
 
             if not self.registry.contains(
                 document_id

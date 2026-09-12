@@ -26,7 +26,7 @@ class CitationResponse(BaseModel):
     chunk_id: str
     source: str
     page_number: int | None = None
-    heading_path: list[str]
+    heading_path: list[str] | None
 
 
 class LatencyResponse(BaseModel):

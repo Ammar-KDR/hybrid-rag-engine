@@ -71,3 +71,20 @@ class QdrantVectorStore:
             )
 
         return results.points
+    def reset_collection(
+        self,
+        collection_name: str,
+        vector_size: int = 384,
+    ) -> None:
+
+        if self.client.collection_exists(
+            collection_name=collection_name
+        ):
+            self.client.delete_collection(
+                collection_name=collection_name
+            )
+
+        self.create_collection(
+            collection_name=collection_name,
+            vector_size=vector_size,
+        )

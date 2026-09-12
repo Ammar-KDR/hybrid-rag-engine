@@ -3,10 +3,10 @@ from rag.verification.faithfulness_verifier import (
 )
 
 from rag.verification.model import Claim
-
+from rag.config import settings
 
 verifier = LMStudioFaithfulnessVerifier(
-    model="qwen/qwen3-4b-2507"
+    model=settings.LM_STUDIO_MODEL
 )
 
 

@@ -6,6 +6,9 @@ from fastapi import FastAPI
 from rag.factory import create_rag_pipeline
 from rag.ingestion.registry import DocumentRegistry
 from rag.ingestion.service import IngestionService
+from rag.ingestion.chunk_store import ChunkStore
+from rag.chunking.semantic_chunking import SemanticChunker
+from rag.config import settings
 
 from rag.api.errors import (
     AppError,
@@ -66,10 +69,20 @@ async def lifespan(app: FastAPI):
     # -----------------------------------------------------
 
     registry = DocumentRegistry(
-        Path("data/registry.json")
+        settings.REGISTRY_PATH
+    )
+    chunk_store = ChunkStore(
+    settings.CHUNK_STORE_PATH
     )
 
     app.state.document_registry = registry
+    embedding_service = dense_retriever.embedding_service
+    semantic_chunker = SemanticChunker(
+    model=embedding_service.model,
+    similarity_threshold=0.55,
+    max_chunk_chars=2000,
+    min_chunk_chars=300,
+    )
 
 
     # -----------------------------------------------------
@@ -77,14 +90,15 @@ async def lifespan(app: FastAPI):
     # -----------------------------------------------------
 
     ingestion_service = IngestionService(
-        data_path=Path("data/raw"),
+        data_path=settings.DATA_PATH,
 
         registry=registry,
+        chunk_store=chunk_store,
 
         embedding_service=(
-            dense_retriever.embedding_service
+            embedding_service
         ),
-
+        semantic_chunker=semantic_chunker,
         vector_store=(
             dense_retriever.vector_store
         ),

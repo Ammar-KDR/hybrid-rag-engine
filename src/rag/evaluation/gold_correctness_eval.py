@@ -4,6 +4,7 @@ from typing import Literal
 import re
 from openai import OpenAI
 from pydantic import BaseModel
+from rag.config import settings
 
 
 class CorrectnessVerdict(str, Enum):
@@ -212,8 +213,8 @@ class LMStudioCorrectnessJudge:
 
     def __init__(
         self,
-        model: str = "qwen/qwen3-4b-2507",
-        base_url: str = "http://127.0.0.1:1234/v1",
+        model: str = settings.LM_STUDIO_MODEL,
+        base_url: str = settings.LM_STUDIO_BASE_URL,
     ):
         self.model = model
 
