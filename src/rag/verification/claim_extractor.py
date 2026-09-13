@@ -411,11 +411,11 @@ class LMStudioClaimExtractor:
         parsed = _ClaimExtractionSchema.model_validate_json(
             response_text
         )
-        print("\n" + "=" * 70)
-        print("RAW CLAIM EXTRACTION OUTPUT")
-        print("=" * 70)
+        # print("\n" + "=" * 70)
+        # print("RAW CLAIM EXTRACTION OUTPUT")
+        # print("=" * 70)
 
-        print(response.choices[0].message.content)
+        # print(response.choices[0].message.content)
 
 
         # --------------------------------------------------

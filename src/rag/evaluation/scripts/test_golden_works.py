@@ -16,7 +16,7 @@ from rag.evaluation.case_evaluation_result import (
 from rag.evaluation.evaluation_result_store import (
     EvaluationResultStore,
 )
-from rag.evaluation.gold_correctness_eval import GoldenCorrectnessEvaluation , LMStudioCorrectnessJudge ,GoldenCorrectnessEvaluator
+from rag.evaluation.gold_correctness_eval import LMStudioCorrectnessJudge ,GoldenCorrectnessEvaluator
 TEXT_PREVIEW_LENGTH = 500
 FAITHFULNESS_FAILURE_THRESHOLD = 0.7
 
