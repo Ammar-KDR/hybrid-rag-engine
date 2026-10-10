@@ -1,3 +1,4 @@
+from pathlib import Path
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams,PointStruct
 import uuid
@@ -7,11 +8,17 @@ from qdrant_client.models import Filter, FieldCondition, MatchValue
 class QdrantVectorStore:
     def __init__(
         self,
-        url: str = "http://localhost:6333"
+        url: str | None = None,
+        path: str | Path | None = None,
     ):
-        self.client = QdrantClient(
-            url=url
-        )
+        if path is not None:
+            Path(path).mkdir(parents=True, exist_ok=True)
+            self.client = QdrantClient(path=str(path))
+        else:
+            self.client = QdrantClient(
+                url=url or "http://localhost:6333"
+            )
+
     def create_collection(
         self,
         collection_name: str = "documents",

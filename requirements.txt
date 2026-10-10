@@ -16,6 +16,8 @@ pypdf
 beautifulsoup4
 lxml
 markdown-it-py
+python-docx
+
 
 
 # ============================================================

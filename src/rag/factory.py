@@ -11,7 +11,10 @@ from rag.reranking.reranker import CrossEncoderReranker
 from rag.reranking.rank_fusion_reranker import RankFusionReranker
 from rag.generation.answer_builder import AnswerBuilder
 from rag.generation.context_builder import ContextBuilder
-from rag.generation.generator import LMStudioGenerationService
+from rag.generation.generator import (
+    LMStudioGenerationService,
+    OllamaGenerationService,
+)
 from rag.generation.prompt import PromptBuilder
 from sentence_transformers import CrossEncoder
 from rag.verification.pipeline import AnswerVerificationPipeline
@@ -28,26 +31,32 @@ from rag.verification.faithfulness_verifier import LMStudioFaithfulnessVerifier
 from rag.config import settings
 
 
-VERIFICATION_MODEL = settings.LM_STUDIO_MODEL
-GENERATION_MODEL = settings.LM_STUDIO_MODEL
-CHUNK_STORE_PATH = Path(
-    "data/indexes/chunks.jsonl"
+VERIFICATION_MODEL = (
+    settings.OLLAMA_MODEL
+    if settings.LLM_BACKEND == "ollama"
+    else settings.LM_STUDIO_MODEL
 )
+CHUNK_STORE_PATH = settings.CHUNK_STORE_PATH
+
 
 def create_rag_pipeline() -> RAGPipeline:
-    embedding_service = EmbeddingService()
+    embedding_service = EmbeddingService(
+        model_name=settings.EMBEDDING_MODEL_NAME
+    )
 
-    vector_store = QdrantVectorStore(url=settings.QDRANT_URL)
-    rrf=ReciprocalRankFusion()
+    if settings.QDRANT_STORAGE_MODE == "local":
+        vector_store = QdrantVectorStore(path=settings.QDRANT_LOCAL_PATH)
+    else:
+        vector_store = QdrantVectorStore(url=settings.QDRANT_URL)
+
+    rrf = ReciprocalRankFusion()
 
     dense_retriever = DenseRetriever(
         vector_store=vector_store,
         embedding_service=embedding_service,
         collection_name=settings.QDRANT_COLLECTION,
     )
-    chunk_store = ChunkStore(
-    CHUNK_STORE_PATH
-)
+    chunk_store = ChunkStore(CHUNK_STORE_PATH)
 
     chunks = chunk_store.load_all()
 
@@ -57,19 +66,17 @@ def create_rag_pipeline() -> RAGPipeline:
             "Run 'python scripts/build_index.py' "
             "before starting the application."
         )
-    bm25_retriever = BM25Retriever(
-        chunks= chunks
-    )
+    bm25_retriever = BM25Retriever(chunks=chunks)
 
     hybrid_retriever = HybridRetriever(
         dense_retriever=dense_retriever,
         bm25_retriever=bm25_retriever,
-        fusion=rrf
-        ,candidate_k=20
+        fusion=rrf,
+        candidate_k=20,
     )
 
     cross_encoder = CrossEncoderReranker(
-        model=CrossEncoder("BAAI/bge-reranker-base")
+        model=CrossEncoder(settings.RERANKER_MODEL_NAME)
     )
 
     rank_fusion_reranker = RankFusionReranker(
@@ -79,37 +86,74 @@ def create_rag_pipeline() -> RAGPipeline:
         rrf_k=60,
     )
 
-    claim_extractor = LMStudioClaimExtractor(model=VERIFICATION_MODEL)
+    # --------------------------------------------------
+    # Select generator based on LLM_BACKEND
+    # --------------------------------------------------
+    if settings.LLM_BACKEND == "ollama":
+        generator = OllamaGenerationService(
+            model=settings.OLLAMA_MODEL,
+            base_url=settings.OLLAMA_BASE_URL,
+        )
+    elif settings.LLM_BACKEND == "gemini":
+        from rag.generation.generator import GeminiGenerationService
+        generator = GeminiGenerationService()
+    else:
+        generator = LMStudioGenerationService(
+            model=settings.LM_STUDIO_MODEL,
+            base_url=settings.LM_STUDIO_BASE_URL,
+        )
 
-    citation_verifier=LMStudioCitationVerifier(model=VERIFICATION_MODEL)
-    citation_runner = CitationVerificationRunner(verifier=citation_verifier)
+    # --------------------------------------------------
+    # Verification Pipeline (enabled conditionally)
+    # --------------------------------------------------
+    if settings.ENABLE_VERIFICATION:
+        if settings.LLM_BACKEND == "ollama":
+            claim_extractor = LMStudioClaimExtractor(
+                model=settings.OLLAMA_MODEL,
+                base_url=settings.OLLAMA_BASE_URL,
+            )
+            citation_verifier = LMStudioCitationVerifier(
+                model=settings.OLLAMA_MODEL,
+                base_url=settings.OLLAMA_BASE_URL,
+            )
+            faithfulness_verifier = LMStudioFaithfulnessVerifier(
+                model=settings.OLLAMA_MODEL,
+                base_url=settings.OLLAMA_BASE_URL,
+            )
+        elif settings.LLM_BACKEND == "gemini":
+            claim_extractor = GeminiClaimExtractor()
+            citation_verifier = GeminiCitationVerifier()
+            faithfulness_verifier = GeminiFaithfulnessVerifier()
+        else:
+            claim_extractor = LMStudioClaimExtractor(model=VERIFICATION_MODEL)
+            citation_verifier = LMStudioCitationVerifier(model=VERIFICATION_MODEL)
+            faithfulness_verifier = LMStudioFaithfulnessVerifier(model=VERIFICATION_MODEL)
 
-    metrics_calculator = CitationMetricsCalculator()
-    faithfulness_verifier= LMStudioFaithfulnessVerifier(model=VERIFICATION_MODEL)
+        citation_runner = CitationVerificationRunner(verifier=citation_verifier)
+        metrics_calculator = CitationMetricsCalculator()
+        faithfulness_evaluator = FaithfulnessEvaluator(verifier=faithfulness_verifier)
+        abstention_policy = AbstentionPolicy()
 
-    faithfulness_evaluator = FaithfulnessEvaluator(verifier=faithfulness_verifier)
-
-    abstention_policy = AbstentionPolicy()
-
-    verification_pipeline = AnswerVerificationPipeline(
-        claim_extractor=claim_extractor,
-        citation_runner=citation_runner,
-        metrics_calculator=metrics_calculator,
-        faithfulness_evaluator=faithfulness_evaluator,
-        abstention_policy=abstention_policy,
-    )
+        verification_pipeline = AnswerVerificationPipeline(
+            claim_extractor=claim_extractor,
+            citation_runner=citation_runner,
+            metrics_calculator=metrics_calculator,
+            faithfulness_evaluator=faithfulness_evaluator,
+            abstention_policy=abstention_policy,
+        )
+    else:
+        verification_pipeline = None
 
     pipeline = RAGPipeline(
         retriever=hybrid_retriever,
         reranker=rank_fusion_reranker,
         context_builder=ContextBuilder(final_context_k=5),
         prompt_builder=PromptBuilder(),
-        generator=LMStudioGenerationService(
-        model=settings.LM_STUDIO_MODEL
-        ),
+        generator=generator,
         answer_builder=AnswerBuilder(),
         verification_pipeline=verification_pipeline,
         candidate_k=20,
+        enable_verification=settings.ENABLE_VERIFICATION,
     )
 
-    return pipeline
+    return pipeline

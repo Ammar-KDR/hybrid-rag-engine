@@ -172,3 +172,79 @@ class LMStudioGenerationService:
 
             latency_ms=latency_ms,
         )
+
+
+class OllamaGenerationService:
+
+    def __init__(
+        self,
+        model: str = settings.OLLAMA_MODEL,
+        base_url: str = settings.OLLAMA_BASE_URL,
+    ):
+        self.model = model
+
+        self.client = OpenAI(
+            base_url=base_url,
+            api_key="ollama",
+        )
+
+    def generate(
+        self,
+        prompt: GenerationPrompt,
+    ) -> GenerationResult:
+
+        start = time.perf_counter()
+
+        response = self.client.chat.completions.create(
+            model=self.model,
+
+            messages=[
+                {
+                    "role": "system",
+                    "content": prompt.system_prompt,
+                },
+                {
+                    "role": "user",
+                    "content": prompt.user_prompt,
+                },
+            ],
+
+            temperature=0.2,
+            max_tokens=1024,
+        )
+
+        latency_ms = (
+            time.perf_counter() - start
+        ) * 1000
+
+        text = (
+            response.choices[0].message.content
+            or ""
+        )
+
+        usage = response.usage
+
+        return GenerationResult(
+            text=text,
+            model=self.model,
+
+            input_tokens=(
+                usage.prompt_tokens
+                if usage
+                else None
+            ),
+
+            output_tokens=(
+                usage.completion_tokens
+                if usage
+                else None
+            ),
+
+            total_tokens=(
+                usage.total_tokens
+                if usage
+                else None
+            ),
+
+            latency_ms=latency_ms,
+        )

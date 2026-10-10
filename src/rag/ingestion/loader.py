@@ -6,7 +6,7 @@ from pypdf import PdfReader
 from .model import Document
 
 
-SUPPORTED_EXTENSIONS = {".txt", ".md", ".html", ".htm", ".pdf"}
+SUPPORTED_EXTENSIONS = {".txt", ".md", ".html", ".htm", ".pdf", ".docx"}
 
 
 def normalize_text(text: str) -> str:
@@ -81,6 +81,35 @@ def load_pdf_document(path: Path) -> list[Document]:
     return documents
 
 
+def load_docx_document(path: Path) -> list[Document]:
+    import docx
+
+    doc = docx.Document(path)
+    paragraphs = [p.text for p in doc.paragraphs if p.text.strip()]
+
+    for table in doc.tables:
+        for row in table.rows:
+            row_text = " | ".join(
+                cell.text.strip() for cell in row.cells if cell.text.strip()
+            )
+            if row_text:
+                paragraphs.append(row_text)
+
+    text = "\n\n".join(paragraphs)
+    text = normalize_text(text)
+
+    if not text:
+        return []
+
+    return [
+        Document(
+            text=text,
+            source=str(path),
+            file_type="docx",
+        )
+    ]
+
+
 def load_document(file_path: str | Path) -> list[Document]:
     path = Path(file_path)
 
@@ -111,7 +140,10 @@ def load_document(file_path: str | Path) -> list[Document]:
     if extension == ".pdf":
         return load_pdf_document(path)
 
+    if extension == ".docx":
+        return load_docx_document(path)
+
     # Defensive fallback.
     raise ValueError(
         f"No loader configured for: {extension}"
-    )
+    )

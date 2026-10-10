@@ -45,7 +45,10 @@ def build_chunks_for_file(file_path: str | Path,
 
     return all_chunks
 
-def build_chunks(semantic_chunker: SemanticChunker | None = None):
+def build_chunks(
+    semantic_chunker: SemanticChunker | None = None,
+    data_path: Path | None = None,
+):
 
     markdown_chunker = MarkdownStructureChunker(
         max_chunk_chars=2000,
@@ -60,8 +63,9 @@ def build_chunks(semantic_chunker: SemanticChunker | None = None):
         )
 
     all_chunks = []
+    target_path = Path(data_path) if data_path else DATA_PATH
 
-    for file_path in DATA_PATH.iterdir():
+    for file_path in sorted(target_path.rglob("*")):
 
         if not file_path.is_file():
             continue
@@ -81,4 +85,5 @@ def build_chunks(semantic_chunker: SemanticChunker | None = None):
             all_chunks.extend(chunks)
 
     return all_chunks
+
 

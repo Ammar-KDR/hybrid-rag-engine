@@ -29,6 +29,8 @@ data/registry.json
 # Vector database persistence
 chroma_data/
 .chroma/
+data/qdrant_storage/
+
 
 # Experiment outputs
 experiments/results/

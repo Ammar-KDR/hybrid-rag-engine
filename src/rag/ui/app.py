@@ -50,9 +50,11 @@ with st.sidebar:
             "md",
             "txt",
             "pdf",
+            "docx",
             "html",
             "htm",
         ],
+
     )
 
     if (

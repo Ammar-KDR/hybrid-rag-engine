@@ -32,13 +32,14 @@ def main() -> None:
 
     source_files = sorted(
         file_path
-        for file_path in DATA_PATH.iterdir()
+        for file_path in DATA_PATH.rglob("*")
         if (
             file_path.is_file()
             and file_path.suffix.lower()
             in SUPPORTED_EXTENSIONS
         )
     )
+
 
     if not source_files:
         raise RuntimeError(
@@ -148,7 +149,11 @@ def main() -> None:
     # 7. Rebuild Qdrant dense index
     # -------------------------------------------------
 
-    vector_store = QdrantVectorStore(url=settings.QDRANT_URL)
+    if settings.QDRANT_STORAGE_MODE == "local":
+        vector_store = QdrantVectorStore(path=settings.QDRANT_LOCAL_PATH)
+    else:
+        vector_store = QdrantVectorStore(url=settings.QDRANT_URL)
+
 
     vector_store.reset_collection(
         collection_name=COLLECTION_NAME,

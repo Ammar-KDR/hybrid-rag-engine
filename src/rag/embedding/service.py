@@ -1,14 +1,17 @@
 from sentence_transformers import SentenceTransformer
 
 from .model import EmbeddingModel
+from rag.config import settings
 
 
 class EmbeddingService:
     def __init__(
         self,
-        model_name: str = "sentence-transformers/all-MiniLM-L6-v2",
+        model_name: str | None = None,
     ):
+        model_name = model_name or settings.EMBEDDING_MODEL_NAME
         self.model = SentenceTransformer(model_name)
+
 
         self.info = EmbeddingModel(
             name=model_name,
