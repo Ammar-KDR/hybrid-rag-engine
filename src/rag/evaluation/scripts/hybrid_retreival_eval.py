@@ -773,10 +773,13 @@ def main():
 
     embedding_service = EmbeddingService()
 
-    vector_store = QdrantVectorStore(url="http://localhost:6333")
-    print(
-    vector_store.client.get_collections()
-)
+    from rag.config import settings
+
+    if settings.QDRANT_STORAGE_MODE == "local":
+        vector_store = QdrantVectorStore(path=settings.QDRANT_LOCAL_PATH)
+    else:
+        vector_store = QdrantVectorStore(url=settings.QDRANT_URL)
+
 
     print(
     vector_store.client.count(
