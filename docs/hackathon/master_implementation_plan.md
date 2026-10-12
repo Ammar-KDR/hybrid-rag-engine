@@ -381,11 +381,11 @@ tests/
 
 ## 6. Execution Progress Checklist
 
-- [ ] **Phase 0**: Remove `print(content)`, record baseline tests.
-- [ ] **Phase 1**: Empty-KB startup, `GET /v1/health`, offline preflight.
-- [ ] **Phase 2**: Canonical metadata & `RetrievalFilter` (Dense + BM25).
-- [ ] **Phase 3**: Conversational Memory & Heuristic Query Rewriter.
-- [ ] **Phase 4**: Visual Evidence Explorer & Safe Source Resolver.
-- [ ] **Phase 5**: Document Conflict Detective (`POST /v1/compare`).
-- [ ] **Phase 6**: Smart Staged Multi-Document Briefing (`POST /v1/brief`).
-- [ ] **Phase 10**: Streamlit Multi-Tab UI Integration & Demo Polish.
+- [x] **Phase 0**: Remove `print(content)`, record baseline tests. (Completed & Verified)
+- [x] **Phase 1**: Empty-KB startup, `GET /v1/health`, offline preflight. (Completed & Verified)
+- [x] **Phase 2**: Canonical metadata & `RetrievalFilter` (Dense + BM25). (Completed & Verified)
+- [x] **Phase 3**: Conversational Memory & Heuristic Query Rewriter. (Completed & Verified)
+- [x] **Phase 4**: Visual Evidence Explorer & Safe Source Resolver. (Completed & Verified)
+- [x] **Phase 5**: Document Conflict Detective (`POST /v1/compare`). (Completed & Verified)
+- [x] **Phase 6**: Smart Staged Multi-Document Briefing (`POST /v1/brief`). (Completed & Verified)
+- [x] **Phase 10**: Streamlit Multi-Tab UI Integration & Demo Polish. (Completed & Verified)
