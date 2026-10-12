@@ -36,7 +36,6 @@ async def ingest(
     filename = file.filename or ""
 
     content = await file.read()
-    print(content)
     try:
         result = ingestion_service.ingest(
             filename=filename,
