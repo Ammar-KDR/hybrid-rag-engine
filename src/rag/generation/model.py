@@ -10,6 +10,23 @@ class ContextBlock:
     file_type: Optional[str] = None
     page_number: Optional[int] = None
     heading_path: Optional[list[str]] = None
+    document_id: Optional[str] = None
+    filename: Optional[str] = None
+    final_score: Optional[float] = None
+
+
+@dataclass
+class EvidenceRef:
+    reference: int
+    chunk_id: str
+    document_id: str
+    filename: str
+    source: str
+    text: str
+    file_type: Optional[str] = None
+    page_number: Optional[int] = None
+    heading_path: Optional[list[str]] = None
+    final_score: Optional[float] = None
 
 
 @dataclass

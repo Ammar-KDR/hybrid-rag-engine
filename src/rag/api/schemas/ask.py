@@ -1,9 +1,31 @@
+from typing import Literal
 from pydantic import BaseModel, field_validator
+
+
+class ChatMessage(BaseModel):
+    role: Literal["user", "assistant"]
+    content: str
+
+
+class EvidenceRef(BaseModel):
+    reference: int
+    chunk_id: str
+    document_id: str | None = None
+    filename: str | None = None
+    source: str
+    text: str
+    file_type: str | None = None
+    page_number: int | None = None
+    heading_path: list[str] | None = None
+    final_score: float | None = None
 
 
 class AskRequest(BaseModel):
     question: str
     include_trace: bool = False
+    history: list[ChatMessage] = []
+    document_ids: list[str] | None = None
+    verification_mode: Literal["fast", "full"] = "fast"
 
     @field_validator("question")
     @classmethod
@@ -141,10 +163,14 @@ class RetrievalTraceResponse(BaseModel):
 class AskResponse(BaseModel):
     request_id: str
     question: str
+    original_question: str | None = None
+    retrieval_question: str | None = None
+    was_rewritten: bool = False
     answer: str
     abstained: bool
 
     citations: list[CitationResponse]
+    evidence: list[EvidenceRef] = []
 
     verification: VerificationResponse
 

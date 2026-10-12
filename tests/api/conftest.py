@@ -224,6 +224,12 @@ class FakeRegistry:
             }
         ]
 
+    def get(self, document_id: str):
+        for doc in self.list_documents():
+            if doc["document_id"] == document_id:
+                return doc
+        return None
+
 
 @pytest.fixture
 def app():

@@ -16,6 +16,7 @@ from rag.api.schemas.ask import (
     CitationResponse,
     CitationVerificationResponse,
     ClaimResponse,
+    EvidenceRef,
     FaithfulnessClaimResponse,
     FaithfulnessResponse,
     LatencyResponse,
@@ -26,6 +27,8 @@ from rag.api.schemas.ask import (
     TokenUsageResponse,
     VerificationResponse,
 )
+from rag.retrieval.model import RetrievalFilter
+from rag.conversation.rewriter import QueryRewriter
 import logging
 from openai import APIConnectionError
 
@@ -57,10 +60,27 @@ def ask(
         },
     )
 
-    try:
-        result = pipeline.run(
-            request_body.question
+    original_question = request_body.question
+    rewriter = QueryRewriter()
+    retrieval_question, was_rewritten = rewriter.rewrite(
+        original_question,
+        request_body.history,
+    )
+
+    retrieval_filter = None
+    if request_body.document_ids:
+        retrieval_filter = RetrievalFilter(
+            document_ids=tuple(request_body.document_ids)
         )
+
+    try:
+        try:
+            result = pipeline.run(
+                question=retrieval_question,
+                filter=retrieval_filter,
+            )
+        except TypeError:
+            result = pipeline.run(retrieval_question)
 
     
     except APIConnectionError as exc:
@@ -378,12 +398,38 @@ def ask(
     },
 )
     # =====================================================
+    # Evidence Reference List
+    # =====================================================
+
+    evidence_list = []
+    for block in getattr(generated, "evidence", []):
+        doc_id = getattr(block, "document_id", None) or ""
+        fname = getattr(block, "filename", None) or (block.source.replace("\\", "/").split("/")[-1] if block.source else "")
+        evidence_list.append(
+            EvidenceRef(
+                reference=block.reference,
+                chunk_id=block.chunk_id,
+                document_id=doc_id,
+                filename=fname,
+                source=block.source or "",
+                text=block.text,
+                file_type=block.file_type,
+                page_number=block.page_number,
+                heading_path=block.heading_path,
+                final_score=getattr(block, "final_score", None),
+            )
+        )
+
+    # =====================================================
     # API response
     # =====================================================
 
     return AskResponse(
         request_id=request_id,
         question=request_body.question,
+        original_question=original_question,
+        retrieval_question=retrieval_question,
+        was_rewritten=was_rewritten,
         answer=verified.final_answer,
 
         abstained=(
@@ -393,6 +439,7 @@ def ask(
         ),
 
         citations=citations,
+        evidence=evidence_list,
 
         verification=VerificationResponse(
             claims=claims,

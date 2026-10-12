@@ -36,6 +36,9 @@ class ContextBuilder:
                 file_type=metadata.get("file_type"),
                 page_number=metadata.get("page_number"),
                 heading_path=metadata.get("heading_path"),
+                document_id=metadata.get("document_id"),
+                filename=metadata.get("filename"),
+                final_score=getattr(chunk, "final_score", None),
             )
 
             blocks.append(block)
