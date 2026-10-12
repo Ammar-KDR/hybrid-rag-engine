@@ -10,11 +10,13 @@ def tokenize(text: str) -> list[str]:
     )
 class BM25Retriever:
 
-    def __init__(self, chunks):
-        self.chunks=chunks
-        tokenized_chunks= [tokenize(chunk.text) for chunk in self.chunks]
-        self.index= BM25Okapi(tokenized_chunks)
-
+    def __init__(self, chunks: list | None = None):
+        self.chunks = list(chunks) if chunks else []
+        if self.chunks:
+            tokenized_chunks = [tokenize(chunk.text) for chunk in self.chunks]
+            self.index = BM25Okapi(tokenized_chunks)
+        else:
+            self.index = None
 
     def retrieve(
         self,
@@ -22,6 +24,8 @@ class BM25Retriever:
         top_k: int = 5,
         filter=None
     ):
+        if not self.chunks or self.index is None:
+            return []
 
         query_tokens = tokenize(query)
 

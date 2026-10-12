@@ -72,6 +72,7 @@ class RAGPipeline:
     def run(
         self,
         question: str,
+        filter=None,
     ) -> RAGPipelineResult:
 
 
@@ -89,11 +90,46 @@ class RAGPipeline:
         candidates = self.retriever.retrieve(
             query=question,
             top_k=self.candidate_k,
+            filter=filter,
         )
 
         retrieval_latency_ms = (
             time.perf_counter() - retrieval_start
         ) * 1000
+
+        if not candidates:
+            empty_answer = GeneratedAnswer(
+                question=question,
+                answer="The knowledge base is currently empty or contains no relevant documents.",
+                citations=[],
+                unresolved_references=[],
+                evidence=[],
+                model="empty-pass",
+                input_tokens=0,
+                output_tokens=0,
+                total_tokens=0,
+                latency_ms=0.0,
+            )
+            verified_answer = self._create_fast_verified_answer(
+                empty_answer
+            )
+            total_latency_ms = (
+                time.perf_counter() - total_start
+            ) * 1000
+
+            return RAGPipelineResult(
+                answer=empty_answer,
+                verified_answer=verified_answer,
+                retrieval_latency_ms=retrieval_latency_ms,
+                reranking_latency_ms=0.0,
+                generation_latency_ms=0.0,
+                verification_latency_ms=0.0,
+                total_latency_ms=total_latency_ms,
+                candidate_count=0,
+                evidence_count=0,
+                candidates=[],
+                reranked_chunks=[],
+            )
 
 
         # --------------------------------------------------

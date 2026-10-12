@@ -59,13 +59,6 @@ def create_rag_pipeline() -> RAGPipeline:
     chunk_store = ChunkStore(CHUNK_STORE_PATH)
 
     chunks = chunk_store.load_all()
-
-    if not chunks:
-        raise RuntimeError(
-            "Chunk index is missing or empty. "
-            "Run 'python scripts/build_index.py' "
-            "before starting the application."
-        )
     bm25_retriever = BM25Retriever(chunks=chunks)
 
     hybrid_retriever = HybridRetriever(
