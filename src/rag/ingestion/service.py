@@ -139,6 +139,12 @@ class IngestionService:
                     "Document produced no chunks."
                 )
 
+            for chunk in new_chunks:
+                chunk.metadata["document_id"] = document_id
+                chunk.metadata["filename"] = safe_filename
+                chunk.metadata["file_type"] = chunk.file_type
+                chunk.metadata["source"] = chunk.source
+
 
             # -------------------------------------
             # 6. Prepare embeddings first

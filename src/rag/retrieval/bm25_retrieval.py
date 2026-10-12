@@ -28,20 +28,31 @@ class BM25Retriever:
             return []
 
         query_tokens = tokenize(query)
-
         scores = self.index.get_scores(query_tokens)
 
+        if filter is not None and getattr(filter, "document_ids", None):
+            target_ids = set(filter.document_ids)
+            candidate_indices = [
+                i for i, chunk in enumerate(self.chunks)
+                if (
+                    chunk.metadata.get("document_id") in target_ids
+                    or getattr(chunk, "document_id", None) in target_ids
+                    or chunk.metadata.get("doc_id") in target_ids
+                    or getattr(chunk, "source", "") in target_ids
+                )
+            ]
+        else:
+            candidate_indices = list(range(len(scores)))
+
         ranked_indices = sorted(
-            range(len(scores)),
+            candidate_indices,
             key=lambda i: scores[i],
             reverse=True
         )[:top_k]
 
-
         results = []
 
         for rank, idx in enumerate(ranked_indices, start=1):
-
             chunk = self.chunks[idx]
 
             metadata = {
@@ -49,6 +60,8 @@ class BM25Retriever:
                 "file_type": chunk.file_type,
                 "chunk_index": chunk.chunk_index,
                 "chunking_strategy": chunk.chunking_strategy,
+                "document_id": chunk.metadata.get("document_id") or getattr(chunk, "document_id", None),
+                "filename": chunk.metadata.get("filename") or getattr(chunk, "filename", None),
                 **chunk.metadata
             }
 
