@@ -23,11 +23,12 @@ st.set_page_config(
 
 # =========================================================
 # University Institutional Theme (PSUT White & Royal Navy)
+# Strict High-Contrast CSS: All text guaranteed 100% visible
 # =========================================================
 
-PSUT_WHITE_BLUE_CSS = """
+HIGH_CONTRAST_PSUT_CSS = """
 <style>
-/* Base container & typography */
+/* Base typography & container spacing */
 .main .block-container {
     padding-top: 1.2rem;
     padding-bottom: 3.5rem;
@@ -35,16 +36,16 @@ PSUT_WHITE_BLUE_CSS = """
 }
 
 /* Light institutional background */
-[data-testid="stAppViewContainer"] {
+[data-testid="stAppViewContainer"], body {
     background-color: #F8FAFC !important;
     color: #0F172A !important;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
-/* Sidebar clean styling */
+/* Sidebar styling */
 [data-testid="stSidebar"] {
     background-color: #FFFFFF !important;
-    border-right: 1px solid #E2E8F0 !important;
+    border-right: 1.5px solid #E2E8F0 !important;
 }
 
 /* Hide default streamlit headers and footer */
@@ -52,125 +53,123 @@ PSUT_WHITE_BLUE_CSS = """
 footer {visibility: hidden;}
 header {visibility: hidden;}
 
-/* Typography */
-h1, h2, h3, h4 {
+/* Universal text visibility overrides - High Contrast */
+h1, h2, h3, h4, h5, h6 {
     color: #002D62 !important;
-    font-weight: 700;
-    letter-spacing: -0.025em;
+    font-weight: 800 !important;
+    letter-spacing: -0.02em;
 }
 
-p, span, label {
-    color: #1E293B;
+p, span, label, div, li {
+    color: #0F172A;
 }
 
-/* University Header Branding */
-.uni-header-container {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    padding: 16px 20px;
-    background: #FFFFFF;
-    border: 1px solid #E2E8F0;
-    border-radius: 12px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-    margin-bottom: 16px;
+/* Form inputs & text areas */
+textarea, input[type="text"] {
+    color: #0F172A !important;
+    background-color: #FFFFFF !important;
+    border: 1.5px solid #94A3B8 !important;
+    border-radius: 8px !important;
+    font-size: 1rem !important;
+    font-weight: 500 !important;
 }
 
-.uni-title-box h1 {
-    font-size: 1.55rem;
-    font-weight: 800;
+textarea:focus, input[type="text"]:focus {
+    border-color: #002D62 !important;
+    box-shadow: 0 0 0 2px rgba(0, 45, 98, 0.2) !important;
+}
+
+textarea::placeholder {
+    color: #64748B !important;
+    font-weight: 400 !important;
+}
+
+/* Widget labels */
+[data-testid="stWidgetLabel"] p, label p {
     color: #002D62 !important;
-    margin: 0;
-    line-height: 1.2;
+    font-weight: 700 !important;
+    font-size: 0.92rem !important;
 }
 
-.uni-subtitle {
-    font-size: 0.88rem;
-    color: #64748B;
-    margin-top: 3px;
-    font-weight: 500;
-}
-
-/* Institutional Badges */
+/* Badges - Maximum Contrast & Legibility */
 .badge-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 6px;
-    margin-bottom: 20px;
+    gap: 10px;
+    margin-top: 8px;
+    margin-bottom: 22px;
 }
 
 .trust-badge {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 5px 12px;
+    padding: 6px 14px;
     border-radius: 9999px;
-    font-size: 0.76rem;
-    font-weight: 600;
-    letter-spacing: 0.02em;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.03em;
     text-transform: uppercase;
 }
 
-.badge-navy {
-    background: #EFF6FF;
-    color: #002D62;
-    border: 1px solid #BFDBFE;
+.badge-green {
+    background-color: #ECFDF5 !important;
+    color: #064E3B !important;
+    border: 1.5px solid #34D399 !important;
 }
 
 .badge-blue {
-    background: #EFF6FF;
-    color: #1D4ED8;
-    border: 1px solid #93C5FD;
+    background-color: #EFF6FF !important;
+    color: #1E3A8A !important;
+    border: 1.5px solid #60A5FA !important;
 }
 
-.badge-green {
-    background: #ECFDF5;
-    color: #047857;
-    border: 1px solid #A7F3D0;
+.badge-navy {
+    background-color: #F1F5F9 !important;
+    color: #002D62 !important;
+    border: 1.5px solid #94A3B8 !important;
 }
 
-.badge-gold {
-    background: #FFFBEB;
-    color: #B45309;
-    border: 1px solid #FDE68A;
+.badge-amber {
+    background-color: #FFFBEB !important;
+    color: #78350F !important;
+    border: 1.5px solid #FBBF24 !important;
 }
 
 /* Metric Cards */
 div[data-testid="stMetric"] {
-    background: #FFFFFF !important;
-    border: 1px solid #E2E8F0 !important;
+    background-color: #FFFFFF !important;
+    border: 1.5px solid #E2E8F0 !important;
     border-radius: 10px !important;
-    padding: 12px 16px !important;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
-    transition: transform 0.15s ease, border-color 0.15s ease;
+    padding: 14px 18px !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
 }
 
 div[data-testid="stMetric"]:hover {
-    border-color: #2563EB !important;
-    transform: translateY(-1px);
+    border-color: #002D62 !important;
 }
 
-div[data-testid="stMetricLabel"] {
-    color: #64748B !important;
-    font-size: 0.78rem !important;
-    font-weight: 600 !important;
+div[data-testid="stMetricLabel"] p {
+    color: #334155 !important;
+    font-size: 0.82rem !important;
+    font-weight: 700 !important;
     text-transform: uppercase;
     letter-spacing: 0.04em;
 }
 
-div[data-testid="stMetricValue"] {
+div[data-testid="stMetricValue"] div {
     color: #002D62 !important;
     font-weight: 800 !important;
-    font-size: 1.35rem !important;
+    font-size: 1.45rem !important;
 }
 
 /* Card Containers */
 div[data-testid="stVerticalBlock"] > div[data-testid="stVerticalBlockBorderWrapper"] {
-    background: #FFFFFF !important;
-    border: 1px solid #E2E8F0 !important;
+    background-color: #FFFFFF !important;
+    border: 1.5px solid #CBD5E1 !important;
     border-radius: 12px !important;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+    padding: 16px !important;
 }
 
 /* Executive takeaway header */
@@ -178,33 +177,54 @@ div[data-testid="stVerticalBlock"] > div[data-testid="stVerticalBlockBorderWrapp
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 1.05rem;
-    font-weight: 700;
+    font-size: 1.15rem;
+    font-weight: 800;
     color: #002D62;
     margin-bottom: 12px;
-    border-bottom: 2px solid #EFF6FF;
+    border-bottom: 2px solid #E2E8F0;
     padding-bottom: 8px;
+}
+
+.exec-body-text {
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: #0F172A;
+    font-weight: 500;
 }
 
 /* Source Pill Quotes */
 .source-pill-quote {
-    background: #F1F5F9;
-    border-left: 3px solid #2563EB;
+    background-color: #F1F5F9;
+    border-left: 4px solid #002D62;
     padding: 10px 14px;
     margin-top: 8px;
     border-radius: 0 6px 6px 0;
-    font-size: 0.84rem;
-    color: #1E293B;
+    font-size: 0.88rem;
+    color: #0F172A;
     font-style: italic;
-    line-height: 1.5;
+    line-height: 1.55;
+}
+
+/* Expanders */
+[data-testid="stExpander"] {
+    background-color: #FFFFFF !important;
+    border: 1.5px solid #CBD5E1 !important;
+    border-radius: 8px !important;
+    margin-bottom: 8px !important;
+}
+
+[data-testid="stExpander"] details summary p {
+    color: #002D62 !important;
+    font-weight: 700 !important;
+    font-size: 0.92rem !important;
 }
 
 /* Custom styled tabs */
 button[data-baseweb="tab"] {
-    font-size: 0.95rem !important;
-    font-weight: 600 !important;
-    color: #64748B !important;
-    padding: 10px 16px !important;
+    font-size: 0.98rem !important;
+    font-weight: 700 !important;
+    color: #475569 !important;
+    padding: 12px 18px !important;
 }
 
 button[data-baseweb="tab"][aria-selected="true"] {
@@ -215,7 +235,8 @@ button[data-baseweb="tab"][aria-selected="true"] {
 /* Buttons */
 .stButton>button {
     border-radius: 8px !important;
-    font-weight: 600 !important;
+    font-weight: 700 !important;
+    font-size: 0.9rem !important;
     transition: all 0.2s ease !important;
 }
 
@@ -224,30 +245,62 @@ button[data-baseweb="tab"][aria-selected="true"] {
     background-color: #002D62 !important;
     color: #FFFFFF !important;
     border: none !important;
-    box-shadow: 0 2px 4px rgba(0, 45, 98, 0.2) !important;
+    box-shadow: 0 2px 4px rgba(0, 45, 98, 0.25) !important;
+}
+
+.stButton>button[kind="primary"] p {
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
 }
 
 .stButton>button[kind="primary"]:hover {
-    background-color: #1D4ED8 !important;
+    background-color: #1E40AF !important;
 }
 
-/* Secondary Button in Clean Blue Outline */
+/* Secondary Button (Preset Queries, Chips) */
 .stButton>button[kind="secondary"] {
     background-color: #FFFFFF !important;
     color: #002D62 !important;
-    border: 1px solid #CBD5E1 !important;
+    border: 1.5px solid #CBD5E1 !important;
+}
+
+.stButton>button[kind="secondary"] p {
+    color: #002D62 !important;
+    font-weight: 700 !important;
 }
 
 .stButton>button[kind="secondary"]:hover {
-    border-color: #2563EB !important;
-    color: #2563EB !important;
+    border-color: #002D62 !important;
+    color: #002D62 !important;
     background-color: #EFF6FF !important;
 }
 
-/* Sidebar styling */
+/* Download Button */
+[data-testid="stDownloadButton"] button {
+    background-color: #FFFFFF !important;
+    color: #002D62 !important;
+    border: 2px solid #002D62 !important;
+    font-weight: 700 !important;
+}
+
+[data-testid="stDownloadButton"] button p {
+    color: #002D62 !important;
+    font-weight: 700 !important;
+}
+
+[data-testid="stDownloadButton"] button:hover {
+    background-color: #002D62 !important;
+    color: #FFFFFF !important;
+}
+
+[data-testid="stDownloadButton"] button:hover p {
+    color: #FFFFFF !important;
+}
+
+/* Sidebar Section Headers */
 .sidebar-section-title {
-    font-size: 0.78rem;
-    font-weight: 700;
+    font-size: 0.82rem;
+    font-weight: 800;
     color: #002D62;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -257,7 +310,7 @@ button[data-baseweb="tab"][aria-selected="true"] {
 </style>
 """
 
-st.markdown(PSUT_WHITE_BLUE_CSS, unsafe_allow_html=True)
+st.markdown(HIGH_CONTRAST_PSUT_CSS, unsafe_allow_html=True)
 
 # =========================================================
 # Client Initialization & Session State
@@ -293,9 +346,8 @@ def get_logo_path() -> str | None:
     """Find university logo: user upload or built-in PSUT crest."""
     candidates = [
         "assets/psut_logo.png",
-        "assets/psut_logo.svg",
         "assets/psut_logo.jpg",
-        "assets/psut_logo.jpeg",
+        "assets/psut_logo.svg",
         "assets/psut_crest.svg",
     ]
     for c in candidates:
@@ -409,38 +461,13 @@ def generate_executive_brief_export(
 
 # =========================================================
 # Sidebar: University Branding & Knowledge Base
+# (Hardware Infrastructure removed per user directive)
 # =========================================================
 
 with st.sidebar:
     logo_file = get_logo_path()
     if logo_file:
         st.image(logo_file, use_container_width=True)
-
-    st.markdown('<div class="sidebar-section-title">Hardware Infrastructure</div>', unsafe_allow_html=True)
-    
-    st.markdown(
-        """
-        <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; padding:10px; font-size:0.8rem; margin-bottom:14px;">
-            <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-                <span style="color:#64748B;">GPU Core:</span>
-                <span style="color:#002D62; font-weight:700;">RTX 3060 (CUDA)</span>
-            </div>
-            <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-                <span style="color:#64748B;">LLM Engine:</span>
-                <span style="color:#1D4ED8; font-weight:700;">Qwen 2.5 3B (Local)</span>
-            </div>
-            <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-                <span style="color:#64748B;">Vector Store:</span>
-                <span style="color:#002D62; font-weight:700;">Qdrant Embedded</span>
-            </div>
-            <div style="display:flex; justify-content:space-between;">
-                <span style="color:#64748B;">Network Policy:</span>
-                <span style="color:#047857; font-weight:700;">100% Air-Gapped</span>
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
 
     st.markdown('<div class="sidebar-section-title">Document Ingestion</div>', unsafe_allow_html=True)
 
@@ -497,17 +524,17 @@ with st.sidebar:
 
 header_logo = get_logo_path()
 if header_logo:
-    col_logo, col_head = st.columns([1, 4])
+    col_logo, col_head = st.columns([1.6, 3.4])
     with col_logo:
         st.image(header_logo, use_container_width=True)
     with col_head:
         st.markdown(
             """
-            <div style="padding-top: 6px;">
-                <h1 style="color:#002D62; font-size:1.8rem; margin:0; font-weight:800; line-height:1.2;">
-                    PSUT Sovereign Hybrid RAG
+            <div style="display:flex; flex-direction:column; justify-content:center; padding-left:16px; border-left:2.5px solid #E2E8F0; min-height:80px;">
+                <h1 style="color:#002D62; font-size:1.85rem; font-weight:800; margin:0; line-height:1.2;">
+                    Sovereign Hybrid RAG Engine
                 </h1>
-                <p style="color:#64748B; font-size:0.95rem; margin-top:4px; margin-bottom:0;">
+                <p style="color:#334155; font-size:0.98rem; margin-top:5px; margin-bottom:0; font-weight:600;">
                     King Hussein School of Computing Sciences • Grounded Air-Gapped Intelligence
                 </p>
             </div>
@@ -517,20 +544,20 @@ if header_logo:
 else:
     st.title("🏛️ PSUT Sovereign Hybrid RAG")
     st.markdown(
-        "<p style='color:#64748B; font-size:1.05rem; margin-top:-10px; margin-bottom:8px;'>"
+        "<p style='color:#334155; font-size:1.05rem; margin-top:-10px; margin-bottom:8px; font-weight:600;'>"
         "King Hussein School of Computing Sciences • Grounded Air-Gapped Intelligence Engine"
         "</p>",
         unsafe_allow_html=True,
     )
 
-# Badges
+# High-Contrast Badges
 st.markdown(
     """
     <div class="badge-row">
-        <span class="trust-badge badge-green">🔒 100% On-Premise Air-Gapped</span>
-        <span class="trust-badge badge-blue">⚡ NVIDIA RTX 3060 CUDA Active</span>
-        <span class="trust-badge badge-navy">🛡️ Zero Cloud Exfiltration (Banking Ready)</span>
-        <span class="trust-badge badge-gold">⚡ Hybrid RRF + Cross-Encoder Reranking</span>
+        <span class="trust-badge badge-green">🔒 100% ON-PREMISE AIR-GAPPED</span>
+        <span class="trust-badge badge-blue">⚡ NVIDIA RTX 3060 CUDA ACTIVE</span>
+        <span class="trust-badge badge-navy">🛡️ ZERO CLOUD EXFILTRATION (BANKING READY)</span>
+        <span class="trust-badge badge-amber">⚡ HYBRID RRF + CROSS-ENCODER RERANKING</span>
     </div>
     """,
     unsafe_allow_html=True,
@@ -542,7 +569,7 @@ st.markdown(
 # =========================================================
 
 st.markdown(
-    "<span style='font-size:0.8rem; font-weight:700; color:#002D62; text-transform:uppercase; letter-spacing:0.04em;'>"
+    "<span style='font-size:0.82rem; font-weight:800; color:#002D62; text-transform:uppercase; letter-spacing:0.04em;'>"
     "Sample Queries (Click to Test Instantly)"
     "</span>",
     unsafe_allow_html=True,
@@ -652,13 +679,13 @@ if result:
     else:
         st.markdown(
             """
-            <div style="display:flex; justify-content:space-between; align-items:center; background:#FFFFFF; border:1px solid #BFDBFE; border-left:4px solid #002D62; border-radius:8px; padding:10px 16px; margin-bottom:14px; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#FFFFFF; border:1.5px solid #BFDBFE; border-left:5px solid #002D62; border-radius:8px; padding:10px 16px; margin-bottom:14px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
                 <div style="display:flex; align-items:center; gap:8px;">
-                    <span style="color:#047857; font-size:1.1rem;">●</span>
-                    <span style="font-weight:700; color:#002D62; font-size:0.92rem;">Grounded & Evidence-Backed Intelligence</span>
+                    <span style="color:#047857; font-size:1.1rem; font-weight:800;">●</span>
+                    <span style="font-weight:800; color:#002D62; font-size:0.95rem;">Grounded & Evidence-Backed Intelligence</span>
                 </div>
                 <div>
-                    <span style="background:#EFF6FF; color:#1D4ED8; font-size:0.75rem; font-weight:600; padding:4px 10px; border-radius:6px; border:1px solid #DBEAFE;">Request ID: %s</span>
+                    <span style="background:#EFF6FF; color:#002D62; font-size:0.78rem; font-weight:700; padding:4px 10px; border-radius:6px; border:1px solid #BFDBFE;">Request ID: %s</span>
                 </div>
             </div>
             """ % result.get("request_id", "N/A")[:12],
@@ -670,7 +697,7 @@ if result:
     # =====================================================
     if citations:
         st.markdown(
-            "<span style='font-size:0.8rem; font-weight:700; color:#002D62; text-transform:uppercase; letter-spacing:0.04em;'>"
+            "<span style='font-size:0.82rem; font-weight:800; color:#002D62; text-transform:uppercase; letter-spacing:0.04em;'>"
             "Cited Primary Sources"
             "</span>",
             unsafe_allow_html=True,
@@ -681,14 +708,14 @@ if result:
             col_target = source_cols[idx % min(len(citations), 4)]
             ref = cit.get("reference")
             raw_src = cit.get("source", "Document")
-            clean_src, base_src = clean_source_name(raw_src)
+            clean_name, base_src = clean_source_name(raw_src)
             page = cit.get("page_number")
             cid = cit.get("chunk_id", "")
             heading = " → ".join(cit.get("heading_path") or [])
 
             page_str = f" • p.{page}" if page is not None else ""
             with col_target:
-                with st.expander(f"📄 [{ref}] {clean_src}{page_str}", expanded=False):
+                with st.expander(f"📄 [{ref}] {clean_name}{page_str}", expanded=False):
                     st.caption(f"**Source File:** `{base_src}`")
                     st.caption(f"**Chunk ID:** `{cid[:16]}...`")
                     if heading:
@@ -723,7 +750,7 @@ if result:
                 unsafe_allow_html=True,
             )
             st.markdown(
-                f"<div style='font-size:1.05rem; line-height:1.7; color:#0F172A;'>{result.get('answer', '')}</div>",
+                f"<div class='exec-body-text'>{result.get('answer', '')}</div>",
                 unsafe_allow_html=True,
             )
 
@@ -740,7 +767,7 @@ if result:
 
         # Smart Dynamic Follow-Up Chips
         st.markdown(
-            "<span style='font-size:0.8rem; font-weight:700; color:#002D62; text-transform:uppercase; letter-spacing:0.04em;'>"
+            "<span style='font-size:0.82rem; font-weight:800; color:#002D62; text-transform:uppercase; letter-spacing:0.04em;'>"
             "Recommended Follow-Up Inquiries"
             "</span>",
             unsafe_allow_html=True,
@@ -780,7 +807,10 @@ if result:
     with tab_evidence:
         st.subheader("Grounded Answer with In-Text Citations")
         with st.container(border=True):
-            st.markdown(result.get("answer", ""))
+            st.markdown(
+                f"<div class='exec-body-text'>{result.get('answer', '')}</div>",
+                unsafe_allow_html=True,
+            )
             st.caption(f"Request ID: {result.get('request_id')}")
 
         # Verification breakdown
@@ -800,7 +830,7 @@ if result:
         if claims:
             with st.expander(f"📑 Extracted Claims ({len(claims)})", expanded=False):
                 for c in claims:
-                    st.write(f"- {c.get('text')}")
+                    st.write(f"- **{c.get('text')}**")
                     if c.get("citations"):
                         st.caption(f"Associated Citations: {c.get('citations')}")
 
