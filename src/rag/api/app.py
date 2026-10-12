@@ -30,6 +30,12 @@ from rag.api.routes.health import (
 from rag.api.routes.source import (
     router as source_router,
 )
+from rag.api.routes.compare import (
+    router as compare_router,
+)
+from rag.api.routes.brief import (
+    router as brief_router,
+)
 from rag.observability.logging import (
     configure_logging,
 )
@@ -216,6 +222,16 @@ def create_app(
 
     application.include_router(
         source_router,
+        prefix="/v1",
+    )
+
+    application.include_router(
+        compare_router,
+        prefix="/v1",
+    )
+
+    application.include_router(
+        brief_router,
         prefix="/v1",
     )
 
