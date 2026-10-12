@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" width="360" height="90">
+  <!-- PSUT Crest & Typography Header -->
+  <g transform="translate(10, 10)">
+    <!-- Shield / Seal -->
+    <rect x="0" y="0" width="80" height="80" rx="16" fill="#002D62" />
+    <rect x="3" y="3" width="74" height="74" rx="13" fill="none" stroke="#D4AF37" stroke-width="2" />
+    
+    <!-- Technology / Academic Nodes inside Shield -->
+    <circle cx="40" cy="24" r="6" fill="#D4AF37" />
+    <circle cx="24" cy="50" r="5" fill="#38BDF8" />
+    <circle cx="56" cy="50" r="5" fill="#38BDF8" />
+    <path d="M40 24 L24 50 M40 24 L56 50 M24 50 L56 50" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" />
+    
+    <!-- Monogram PSUT -->
+    <text x="40" y="70" font-family="'Inter', -apple-system, sans-serif" font-weight="800" font-size="12" fill="#FFFFFF" text-anchor="middle" letter-spacing="1.5">PSUT</text>
+  </g>
+  
+  <!-- University Title & Department -->
+  <g transform="translate(105, 24)">
+    <text x="0" y="16" font-family="'Inter', -apple-system, sans-serif" font-weight="800" font-size="19" fill="#002D62" letter-spacing="-0.3">PRINCESS SUMAYA UNIVERSITY</text>
+    <text x="0" y="34" font-family="'Inter', -apple-system, sans-serif" font-weight="700" font-size="13" fill="#D4AF37" letter-spacing="1.8">FOR TECHNOLOGY</text>
+    <text x="0" y="50" font-family="'Inter', -apple-system, sans-serif" font-weight="500" font-size="11" fill="#64748B" letter-spacing="0.2">King Hussein School of Computing Sciences • Hybrid RAG Engine</text>
+  </g>
+</svg>

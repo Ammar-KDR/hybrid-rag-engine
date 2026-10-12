@@ -1,6 +1,7 @@
 import os
 import time
 from datetime import datetime
+from pathlib import Path
 import pandas as pd
 import streamlit as st
 from dotenv import load_dotenv
@@ -10,60 +11,93 @@ from rag.ui.client import RAGAPIClient
 load_dotenv()
 
 # =========================================================
-# Page configuration
+# Page Configuration
 # =========================================================
 
 st.set_page_config(
-    page_title="Aegis | Sovereign Hybrid RAG",
-    page_icon="🛡️",
+    page_title="PSUT | Sovereign Hybrid RAG",
+    page_icon="🎓",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
 # =========================================================
-# Custom Enterprise CSS (Slate / Obsidian / Cyan)
+# University Institutional Theme (PSUT White & Royal Navy)
 # =========================================================
 
-CUSTOM_CSS = """
+PSUT_WHITE_BLUE_CSS = """
 <style>
-/* Main typography and container spacing */
+/* Base container & typography */
 .main .block-container {
-    padding-top: 1.5rem;
+    padding-top: 1.2rem;
     padding-bottom: 3.5rem;
     max-width: 1280px;
 }
 
-/* Obsidian Slate theme background */
+/* Light institutional background */
 [data-testid="stAppViewContainer"] {
-    background: radial-gradient(circle at top left, #0e172a, #070d19 80%);
-    color: #F8FAFC;
+    background-color: #F8FAFC !important;
+    color: #0F172A !important;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
+/* Sidebar clean styling */
 [data-testid="stSidebar"] {
-    background-color: #0b1120 !important;
-    border-right: 1px solid #1e293b;
+    background-color: #FFFFFF !important;
+    border-right: 1px solid #E2E8F0 !important;
 }
 
-/* Hide Streamlit default chrome */
+/* Hide default streamlit headers and footer */
 #MainMenu {visibility: hidden;}
 footer {visibility: hidden;}
 header {visibility: hidden;}
 
-/* Headings */
+/* Typography */
 h1, h2, h3, h4 {
-    color: #F8FAFC !important;
+    color: #002D62 !important;
     font-weight: 700;
     letter-spacing: -0.025em;
 }
 
-/* Executive Trust Badges */
+p, span, label {
+    color: #1E293B;
+}
+
+/* University Header Branding */
+.uni-header-container {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 16px 20px;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    margin-bottom: 16px;
+}
+
+.uni-title-box h1 {
+    font-size: 1.55rem;
+    font-weight: 800;
+    color: #002D62 !important;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.uni-subtitle {
+    font-size: 0.88rem;
+    color: #64748B;
+    margin-top: 3px;
+    font-weight: 500;
+}
+
+/* Institutional Badges */
 .badge-row {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
     margin-top: 6px;
-    margin-bottom: 22px;
+    margin-bottom: 20px;
 }
 
 .trust-badge {
@@ -78,148 +112,143 @@ h1, h2, h3, h4 {
     text-transform: uppercase;
 }
 
-.badge-cyan {
-    background: rgba(56, 189, 248, 0.12);
-    color: #38BDF8;
-    border: 1px solid rgba(56, 189, 248, 0.35);
+.badge-navy {
+    background: #EFF6FF;
+    color: #002D62;
+    border: 1px solid #BFDBFE;
+}
+
+.badge-blue {
+    background: #EFF6FF;
+    color: #1D4ED8;
+    border: 1px solid #93C5FD;
 }
 
 .badge-green {
-    background: rgba(16, 185, 129, 0.12);
-    color: #34D399;
-    border: 1px solid rgba(16, 185, 129, 0.35);
+    background: #ECFDF5;
+    color: #047857;
+    border: 1px solid #A7F3D0;
 }
 
-.badge-purple {
-    background: rgba(168, 85, 247, 0.12);
-    color: #C084FC;
-    border: 1px solid rgba(168, 85, 247, 0.35);
-}
-
-.badge-amber {
-    background: rgba(245, 158, 11, 0.12);
-    color: #FBBF24;
-    border: 1px solid rgba(245, 158, 11, 0.35);
+.badge-gold {
+    background: #FFFBEB;
+    color: #B45309;
+    border: 1px solid #FDE68A;
 }
 
 /* Metric Cards */
 div[data-testid="stMetric"] {
-    background: #111a2e;
-    border: 1px solid #1f2f4a;
-    border-radius: 10px;
-    padding: 12px 14px;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+    background: #FFFFFF !important;
+    border: 1px solid #E2E8F0 !important;
+    border-radius: 10px !important;
+    padding: 12px 16px !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
     transition: transform 0.15s ease, border-color 0.15s ease;
 }
 
 div[data-testid="stMetric"]:hover {
-    border-color: #38BDF8;
+    border-color: #2563EB !important;
     transform: translateY(-1px);
 }
 
 div[data-testid="stMetricLabel"] {
-    color: #94A3B8 !important;
+    color: #64748B !important;
     font-size: 0.78rem !important;
-    font-weight: 600;
+    font-weight: 600 !important;
     text-transform: uppercase;
     letter-spacing: 0.04em;
 }
 
 div[data-testid="stMetricValue"] {
-    color: #38BDF8 !important;
-    font-weight: 700 !important;
+    color: #002D62 !important;
+    font-weight: 800 !important;
     font-size: 1.35rem !important;
 }
 
-/* Executive Card Box */
-.exec-brief-box {
-    background: linear-gradient(145deg, #121c33 0%, #0c1426 100%);
-    border: 1px solid rgba(56, 189, 248, 0.3);
-    border-radius: 12px;
-    padding: 24px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-    margin-bottom: 20px;
-    line-height: 1.65;
+/* Card Containers */
+div[data-testid="stVerticalBlock"] > div[data-testid="stVerticalBlockBorderWrapper"] {
+    background: #FFFFFF !important;
+    border: 1px solid #E2E8F0 !important;
+    border-radius: 12px !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
 }
 
+/* Executive takeaway header */
 .exec-takeaway-header {
     display: flex;
     align-items: center;
     gap: 8px;
     font-size: 1.05rem;
     font-weight: 700;
-    color: #38BDF8;
+    color: #002D62;
     margin-bottom: 12px;
-    border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+    border-bottom: 2px solid #EFF6FF;
     padding-bottom: 8px;
 }
 
-/* Source Pill Cards */
-.source-pill {
-    background: #131e34;
-    border: 1px solid #233550;
-    border-radius: 8px;
-    padding: 10px 14px;
-    margin-bottom: 8px;
-    transition: all 0.2s ease;
-}
-
-.source-pill:hover {
-    border-color: #38BDF8;
-    background: #182642;
-}
-
-.source-pill-title {
-    font-size: 0.88rem;
-    font-weight: 600;
-    color: #E2E8F0;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.source-pill-meta {
-    font-size: 0.75rem;
-    color: #94A3B8;
-    margin-top: 3px;
-}
-
+/* Source Pill Quotes */
 .source-pill-quote {
-    background: #090f1d;
-    border-left: 3px solid #38BDF8;
-    padding: 8px 12px;
+    background: #F1F5F9;
+    border-left: 3px solid #2563EB;
+    padding: 10px 14px;
     margin-top: 8px;
     border-radius: 0 6px 6px 0;
-    font-size: 0.82rem;
-    color: #CBD5E1;
+    font-size: 0.84rem;
+    color: #1E293B;
     font-style: italic;
+    line-height: 1.5;
 }
 
 /* Custom styled tabs */
 button[data-baseweb="tab"] {
     font-size: 0.95rem !important;
     font-weight: 600 !important;
-    color: #94A3B8 !important;
+    color: #64748B !important;
     padding: 10px 16px !important;
 }
 
 button[data-baseweb="tab"][aria-selected="true"] {
-    color: #38BDF8 !important;
-    border-bottom-color: #38BDF8 !important;
+    color: #002D62 !important;
+    border-bottom-color: #002D62 !important;
 }
 
 /* Buttons */
 .stButton>button {
-    border-radius: 8px;
-    font-weight: 600;
-    transition: all 0.2s ease;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    transition: all 0.2s ease !important;
+}
+
+/* Primary Button in PSUT Navy */
+.stButton>button[kind="primary"] {
+    background-color: #002D62 !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    box-shadow: 0 2px 4px rgba(0, 45, 98, 0.2) !important;
+}
+
+.stButton>button[kind="primary"]:hover {
+    background-color: #1D4ED8 !important;
+}
+
+/* Secondary Button in Clean Blue Outline */
+.stButton>button[kind="secondary"] {
+    background-color: #FFFFFF !important;
+    color: #002D62 !important;
+    border: 1px solid #CBD5E1 !important;
+}
+
+.stButton>button[kind="secondary"]:hover {
+    border-color: #2563EB !important;
+    color: #2563EB !important;
+    background-color: #EFF6FF !important;
 }
 
 /* Sidebar styling */
 .sidebar-section-title {
     font-size: 0.78rem;
     font-weight: 700;
-    color: #64748B;
+    color: #002D62;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     margin-top: 18px;
@@ -228,7 +257,7 @@ button[data-baseweb="tab"][aria-selected="true"] {
 </style>
 """
 
-st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
+st.markdown(PSUT_WHITE_BLUE_CSS, unsafe_allow_html=True)
 
 # =========================================================
 # Client Initialization & Session State
@@ -260,6 +289,28 @@ if "documents" not in st.session_state:
 # Helper Functions
 # =========================================================
 
+def get_logo_path() -> str | None:
+    """Find university logo: user upload or built-in PSUT crest."""
+    candidates = [
+        "assets/psut_logo.png",
+        "assets/psut_logo.svg",
+        "assets/psut_logo.jpg",
+        "assets/psut_logo.jpeg",
+        "assets/psut_crest.svg",
+    ]
+    for c in candidates:
+        if Path(c).is_file():
+            return c
+    return None
+
+
+def clean_source_name(raw_src: str) -> tuple[str, str]:
+    """Return (display_name, full_basename) removing path and hex hashes."""
+    base_src = os.path.basename(raw_src or "Document")
+    clean_src = base_src.split("_", 1)[-1] if len(base_src) > 65 and "_" in base_src else base_src
+    return clean_src, base_src
+
+
 def build_chunk_text_map(trace: dict | None) -> dict[str, str]:
     """Extract raw text mapping for chunk IDs from retrieval trace."""
     chunk_map = {}
@@ -286,7 +337,7 @@ def generate_executive_brief_export(
     result: dict,
     chunk_map: dict[str, str],
 ) -> str:
-    """Generate professional Markdown Executive Briefing for export."""
+    """Generate institutional Markdown Executive Briefing for export."""
     req_id = result.get("request_id", "N/A")
     latency = result.get("latency", {})
     answer = result.get("answer", "")
@@ -298,8 +349,9 @@ def generate_executive_brief_export(
     now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     doc = [
-        "# 🏛️ EXECUTIVE INTELLIGENCE BRIEFING",
-        f"**Generated:** {now_str} (Local Air-Gapped Workstation)",
+        "# 🏛️ PRINCESS SUMAYA UNIVERSITY FOR TECHNOLOGY",
+        "## Sovereign Hybrid RAG Intelligence Briefing",
+        f"**Generated:** {now_str} (Air-Gapped Workstation)",
         "**Classification:** Confidential / Sovereign Enterprise Intelligence",
         f"**Request Identifier:** `{req_id}`",
         f"**Audit Status:** {'⚠️ Abstained (Insufficient Evidence)' if abstained else '✅ Verified & Grounded'}",
@@ -307,7 +359,7 @@ def generate_executive_brief_export(
         "## 🎯 Executive Inquiry",
         f"> {question}",
         "\n---\n",
-        "## 📌 Key Synthesis & Findings",
+        "## 📌 Key Synthesis & Grounded Findings",
         answer,
         "\n---\n",
         "## 📑 Verified Evidence & Source Citations",
@@ -319,30 +371,30 @@ def generate_executive_brief_export(
         for cit in citations:
             ref = cit.get("reference")
             source = cit.get("source")
+            clean_name, base_name = clean_source_name(source)
             page = cit.get("page_number")
             heading = " → ".join(cit.get("heading_path") or [])
             cid = cit.get("chunk_id", "")
             raw_quote = chunk_map.get(cid, "Evidence excerpt verified in primary document.")
             
-            # Clean quote to max 250 chars for summary
             snippet = raw_quote.strip()
             if len(snippet) > 250:
                 snippet = snippet[:247] + "..."
 
             page_info = f", Page {page}" if page is not None else ""
             heading_info = f" ({heading})" if heading else ""
-            doc.append(f"### [{ref}] {source}{page_info}{heading_info}")
+            doc.append(f"### [{ref}] {clean_name}{page_info}{heading_info}")
             doc.append(f"> \"{snippet}\"\n")
-            doc.append(f"- *Chunk Identifier:* `{cid}`\n")
+            doc.append(f"- *File:* `{base_name}` | *Chunk ID:* `{cid}`\n")
 
     doc.extend([
         "\n---\n",
         "## 🛡️ Reliability & Hardware Audit",
-        f"- **Retrieval Pipeline:** Hybrid (Dense Vector + BM25 Lexical + Reciprocal Rank Fusion)",
-        f"- **Reranker:** Cross-Encoder (`BAAI/bge-reranker-base`)",
-        f"- **Local LLM Engine:** Qwen 2.5 3B (`Ollama`)",
-        f"- **Acceleration Hardware:** NVIDIA RTX 3060 Laptop GPU (CUDA Active)",
-        f"- **Vector Index:** Embedded Qdrant (Zero-Docker Local Storage)",
+        "- **Retrieval Pipeline:** Hybrid (Dense Vector + BM25 Lexical + Reciprocal Rank Fusion)",
+        "- **Reranker:** Cross-Encoder (`BAAI/bge-reranker-base`)",
+        "- **Local LLM Engine:** Qwen 2.5 3B (`Ollama`)",
+        "- **Hardware Acceleration:** NVIDIA RTX 3060 Laptop GPU (CUDA Active)",
+        "- **Vector Index:** Embedded Qdrant (Zero-Docker Local Storage)",
         f"- **Latency Breakdown:** Total {latency.get('total_ms', 0):.0f} ms (Retrieval: {latency.get('retrieval_ms', 0):.0f} ms | Rerank: {latency.get('reranking_ms', 0):.0f} ms | Gen: {latency.get('generation_ms', 0):.0f} ms)",
     ])
 
@@ -356,34 +408,34 @@ def generate_executive_brief_export(
 
 
 # =========================================================
-# Sidebar: System Diagnostics & Knowledge Base
+# Sidebar: University Branding & Knowledge Base
 # =========================================================
 
 with st.sidebar:
-    st.markdown("### 🛡️ Aegis RAG Engine")
-    st.caption("Enterprise Sovereign Grounded Intelligence")
+    logo_file = get_logo_path()
+    if logo_file:
+        st.image(logo_file, use_container_width=True)
 
-    # Architecture Diagnostics Box
-    st.markdown('<div class="sidebar-section-title">System Infrastructure</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sidebar-section-title">Hardware Infrastructure</div>', unsafe_allow_html=True)
     
     st.markdown(
         """
-        <div style="background:#0e172a; border:1px solid #1e293b; border-radius:8px; padding:10px; font-size:0.8rem; margin-bottom:14px;">
+        <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; padding:10px; font-size:0.8rem; margin-bottom:14px;">
             <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-                <span style="color:#94a3b8;">GPU Core:</span>
-                <span style="color:#38bdf8; font-weight:600;">RTX 3060 (CUDA)</span>
+                <span style="color:#64748B;">GPU Core:</span>
+                <span style="color:#002D62; font-weight:700;">RTX 3060 (CUDA)</span>
             </div>
             <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-                <span style="color:#94a3b8;">LLM Backend:</span>
-                <span style="color:#34d399; font-weight:600;">Qwen 2.5 3B (Local)</span>
+                <span style="color:#64748B;">LLM Engine:</span>
+                <span style="color:#1D4ED8; font-weight:700;">Qwen 2.5 3B (Local)</span>
             </div>
             <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-                <span style="color:#94a3b8;">Vector Store:</span>
-                <span style="color:#c084fc; font-weight:600;">Qdrant Embedded</span>
+                <span style="color:#64748B;">Vector Store:</span>
+                <span style="color:#002D62; font-weight:700;">Qdrant Embedded</span>
             </div>
             <div style="display:flex; justify-content:space-between;">
-                <span style="color:#94a3b8;">Network Policy:</span>
-                <span style="color:#38bdf8; font-weight:600;">100% Air-Gapped</span>
+                <span style="color:#64748B;">Network Policy:</span>
+                <span style="color:#047857; font-weight:700;">100% Air-Gapped</span>
             </div>
         </div>
         """,
@@ -395,13 +447,13 @@ with st.sidebar:
     uploaded_file = st.file_uploader(
         "Upload Enterprise Document",
         type=["md", "txt", "pdf", "docx", "html", "htm"],
-        help="Supports PDF, Word DOCX, Markdown, Text, and HTML.",
+        help="Upload PDF, Word DOCX, Markdown, Text, or HTML files directly into local vector storage.",
     )
 
     if uploaded_file is not None:
-        if st.button("⚡ Index Into Knowledge Base", use_container_width=True, type="primary"):
+        if st.button("⚡ Index Document", use_container_width=True, type="primary"):
             try:
-                with st.spinner("Parsing, chunking, and embedding document..."):
+                with st.spinner("Processing document chunks and embeddings..."):
                     result = client.ingest(
                         filename=uploaded_file.name,
                         content=uploaded_file.getvalue(),
@@ -411,7 +463,6 @@ with st.sidebar:
                     st.warning("⚠️ Document signature already exists in registry.")
                 else:
                     st.success(f"✅ Successfully indexed {result.get('chunks_ingested', '')} chunks!")
-                    # Refresh registry
                     st.session_state["documents"] = client.list_documents()
 
             except Exception as exc:
@@ -434,31 +485,52 @@ with st.sidebar:
     if docs:
         with st.expander(f"📁 Document Catalog ({len(docs)})", expanded=False):
             for d in docs:
-                st.markdown(f"**📄 {d.get('filename')}**")
+                clean_name, base_name = clean_source_name(d.get("filename", ""))
+                st.markdown(f"**📄 {clean_name}**")
                 st.caption(f"Type: `{d.get('file_type')}` | Chunks: `{d.get('chunk_count')}` | Strategy: `{d.get('chunking_strategy')}`")
                 st.divider()
 
 
 # =========================================================
-# Main Workspace: Header & Trust Badges
+# Main Workspace: University Header & Badges
 # =========================================================
 
-st.title("🛡️ Aegis Sovereign Hybrid RAG")
-st.markdown(
-    "<p style='color:#94A3B8; font-size:1.05rem; margin-top:-10px; margin-bottom:8px;'>"
-    "Air-Gapped Enterprise Intelligence • Cross-Encoder Reranking • Real-Time Hallucination Verification"
-    "</p>",
-    unsafe_allow_html=True,
-)
+header_logo = get_logo_path()
+if header_logo:
+    col_logo, col_head = st.columns([1, 4])
+    with col_logo:
+        st.image(header_logo, use_container_width=True)
+    with col_head:
+        st.markdown(
+            """
+            <div style="padding-top: 6px;">
+                <h1 style="color:#002D62; font-size:1.8rem; margin:0; font-weight:800; line-height:1.2;">
+                    PSUT Sovereign Hybrid RAG
+                </h1>
+                <p style="color:#64748B; font-size:0.95rem; margin-top:4px; margin-bottom:0;">
+                    King Hussein School of Computing Sciences • Grounded Air-Gapped Intelligence
+                </p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+else:
+    st.title("🏛️ PSUT Sovereign Hybrid RAG")
+    st.markdown(
+        "<p style='color:#64748B; font-size:1.05rem; margin-top:-10px; margin-bottom:8px;'>"
+        "King Hussein School of Computing Sciences • Grounded Air-Gapped Intelligence Engine"
+        "</p>",
+        unsafe_allow_html=True,
+    )
 
 # Badges
 st.markdown(
     """
     <div class="badge-row">
         <span class="trust-badge badge-green">🔒 100% On-Premise Air-Gapped</span>
-        <span class="trust-badge badge-cyan">⚡ NVIDIA RTX 3060 CUDA Active</span>
-        <span class="trust-badge badge-purple">🛡️ Zero Cloud Exfiltration (Banking Ready)</span>
-        <span class="trust-badge badge-amber">⚡ Hybrid RRF + Cross-Encoder Reranking</span>
+        <span class="trust-badge badge-blue">⚡ NVIDIA RTX 3060 CUDA Active</span>
+        <span class="trust-badge badge-navy">🛡️ Zero Cloud Exfiltration (Banking Ready)</span>
+        <span class="trust-badge badge-gold">⚡ Hybrid RRF + Cross-Encoder Reranking</span>
     </div>
     """,
     unsafe_allow_html=True,
@@ -466,19 +538,19 @@ st.markdown(
 
 
 # =========================================================
-# Preset Starter Questions (One-Click Testing for Judges)
+# Preset Starter Questions (One-Click Testing)
 # =========================================================
 
 st.markdown(
-    "<span style='font-size:0.82rem; font-weight:600; color:#64748B; text-transform:uppercase; letter-spacing:0.04em;'>"
-    "Sample Inquiries (Click to Test Instantly)"
+    "<span style='font-size:0.8rem; font-weight:700; color:#002D62; text-transform:uppercase; letter-spacing:0.04em;'>"
+    "Sample Queries (Click to Test Instantly)"
     "</span>",
     unsafe_allow_html=True,
 )
 
 preset_cols = st.columns(3)
 with preset_cols[0]:
-    if st.button("🔍 Troubleshoot Database Latency", use_container_width=True):
+    if st.button("🔍 Troubleshooting Database Timeout", use_container_width=True):
         st.session_state["question_input"] = "How do we troubleshoot and resolve database connection timeout errors?"
         st.session_state["trigger_ask"] = True
         st.rerun()
@@ -490,7 +562,7 @@ with preset_cols[1]:
         st.rerun()
 
 with preset_cols[2]:
-    if st.button("🐳 Docker Container Restart Policy", use_container_width=True):
+    if st.button("🐳 Docker Container Restart Policies", use_container_width=True):
         st.session_state["question_input"] = "What are the container restart policies and memory limit configurations in Docker?"
         st.session_state["trigger_ask"] = True
         st.rerun()
@@ -503,13 +575,13 @@ with preset_cols[2]:
 query_text = st.text_area(
     "Inquiry / Prompt",
     value=st.session_state["question_input"],
-    height=90,
+    height=85,
     placeholder="Ask any question regarding system architecture, operations, policies, or uploaded documents...",
     key="main_query_text_area",
     help="Type your question or click one of the preset inquiries above.",
 )
 
-# Action controls row
+# Controls
 action_col1, action_col2, action_col3 = st.columns([2, 1, 1])
 
 with action_col1:
@@ -534,7 +606,6 @@ with action_col3:
 should_run = ask_button or st.session_state["trigger_ask"]
 
 if should_run:
-    # Use whatever text is in query_text or session_state
     active_question = query_text.strip() or st.session_state.get("question_input", "").strip()
 
     if not active_question:
@@ -547,7 +618,6 @@ if should_run:
 
         try:
             with st.spinner("Executing Hybrid RAG: Dense Vector Search + BM25 + Cross-Encoder Reranking + Ollama CUDA..."):
-                t_start = time.perf_counter()
                 res = client.ask(
                     question=active_question,
                     include_trace=include_trace,
@@ -578,17 +648,17 @@ if result:
 
     # Top Status Bar
     if abstained:
-        st.warning("⚠️ **System Abstained**: Retrieval confidence fell below the safety threshold. To prevent hallucination, no speculative answer was generated.")
+        st.warning("⚠️ **System Abstained**: Retrieval confidence fell below safety threshold. To prevent hallucination, no speculative answer was generated.")
     else:
         st.markdown(
             """
-            <div style="display:flex; justify-content:space-between; align-items:center; background:#0e1c31; border:1px solid #1e3a5f; border-radius:8px; padding:10px 16px; margin-bottom:14px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#FFFFFF; border:1px solid #BFDBFE; border-left:4px solid #002D62; border-radius:8px; padding:10px 16px; margin-bottom:14px; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
                 <div style="display:flex; align-items:center; gap:8px;">
-                    <span style="color:#34D399; font-size:1.1rem;">●</span>
-                    <span style="font-weight:600; color:#E2E8F0; font-size:0.92rem;">Grounded & Evidence-Backed Intelligence</span>
+                    <span style="color:#047857; font-size:1.1rem;">●</span>
+                    <span style="font-weight:700; color:#002D62; font-size:0.92rem;">Grounded & Evidence-Backed Intelligence</span>
                 </div>
                 <div>
-                    <span style="background:#132540; color:#38BDF8; font-size:0.75rem; padding:4px 10px; border-radius:6px; border:1px solid #234570;">Request: %s</span>
+                    <span style="background:#EFF6FF; color:#1D4ED8; font-size:0.75rem; font-weight:600; padding:4px 10px; border-radius:6px; border:1px solid #DBEAFE;">Request ID: %s</span>
                 </div>
             </div>
             """ % result.get("request_id", "N/A")[:12],
@@ -600,7 +670,7 @@ if result:
     # =====================================================
     if citations:
         st.markdown(
-            "<span style='font-size:0.8rem; font-weight:700; color:#94A3B8; text-transform:uppercase; letter-spacing:0.04em;'>"
+            "<span style='font-size:0.8rem; font-weight:700; color:#002D62; text-transform:uppercase; letter-spacing:0.04em;'>"
             "Cited Primary Sources"
             "</span>",
             unsafe_allow_html=True,
@@ -611,9 +681,7 @@ if result:
             col_target = source_cols[idx % min(len(citations), 4)]
             ref = cit.get("reference")
             raw_src = cit.get("source", "Document")
-            # Clean display name: remove path and sha256 prefix if present
-            base_src = os.path.basename(raw_src)
-            clean_src = base_src.split("_", 1)[-1] if len(base_src) > 65 and "_" in base_src else base_src
+            clean_src, base_src = clean_source_name(raw_src)
             page = cit.get("page_number")
             cid = cit.get("chunk_id", "")
             heading = " → ".join(cit.get("heading_path") or [])
@@ -654,12 +722,15 @@ if result:
                 '<div class="exec-takeaway-header"><span>📌 Executive Synthesis & Decision Summary</span></div>',
                 unsafe_allow_html=True,
             )
-            st.markdown(result.get("answer", ""))
+            st.markdown(
+                f"<div style='font-size:1.05rem; line-height:1.7; color:#0F172A;'>{result.get('answer', '')}</div>",
+                unsafe_allow_html=True,
+            )
 
         # Strategic Confidence Rating Card
         conf_col1, conf_col2, conf_col3 = st.columns(3)
         with conf_col1:
-            st.metric("Grounded Evidence Chunks", f"{len(citations)} Primary Sources")
+            st.metric("Grounded Sources", f"{len(citations)} Primary {'Source' if len(citations) == 1 else 'Sources'}")
         with conf_col2:
             st.metric("Verification Status", "Zero Hallucination" if not abstained else "Abstained")
         with conf_col3:
@@ -669,7 +740,7 @@ if result:
 
         # Smart Dynamic Follow-Up Chips
         st.markdown(
-            "<span style='font-size:0.82rem; font-weight:700; color:#64748B; text-transform:uppercase; letter-spacing:0.04em;'>"
+            "<span style='font-size:0.8rem; font-weight:700; color:#002D62; text-transform:uppercase; letter-spacing:0.04em;'>"
             "Recommended Follow-Up Inquiries"
             "</span>",
             unsafe_allow_html=True,
@@ -677,14 +748,14 @@ if result:
 
         follow_col1, follow_col2 = st.columns(2)
         with follow_col1:
-            q_follow1 = f"What are the security and operational safeguards related to this?"
+            q_follow1 = "What are the security and operational safeguards related to this?"
             if st.button(f"👉 {q_follow1}", key="chip_follow_1", use_container_width=True):
                 st.session_state["question_input"] = q_follow1
                 st.session_state["trigger_ask"] = True
                 st.rerun()
 
         with follow_col2:
-            q_follow2 = f"What are the step-by-step diagnostic and mitigation procedures?"
+            q_follow2 = "What are the step-by-step diagnostic and mitigation procedures?"
             if st.button(f"👉 {q_follow2}", key="chip_follow_2", use_container_width=True):
                 st.session_state["question_input"] = q_follow2
                 st.session_state["trigger_ask"] = True
@@ -697,7 +768,7 @@ if result:
         st.download_button(
             label="📥 Export Executive Briefing Report (.md)",
             data=export_content,
-            file_name=f"executive_briefing_{result.get('request_id', 'audit')[:8]}.md",
+            file_name=f"psut_executive_brief_{result.get('request_id', 'audit')[:8]}.md",
             mime="text/markdown",
             use_container_width=True,
             type="secondary",
@@ -708,10 +779,9 @@ if result:
     # -----------------------------------------------------
     with tab_evidence:
         st.subheader("Grounded Answer with In-Text Citations")
-        st.markdown(result.get("answer", ""))
-        st.caption(f"Request ID: {result.get('request_id')}")
-
-        st.divider()
+        with st.container(border=True):
+            st.markdown(result.get("answer", ""))
+            st.caption(f"Request ID: {result.get('request_id')}")
 
         # Verification breakdown
         claims = verification.get("claims", [])
@@ -743,7 +813,7 @@ if result:
                     st.caption(item.get("explanation"))
 
         if faithfulness and faithfulness.get("claims"):
-            with st.expander(f"🛡️ Hallucination & Faithfulness Audit", expanded=False):
+            with st.expander("🛡️ Hallucination & Faithfulness Audit", expanded=False):
                 for item in faithfulness.get("claims", []):
                     verdict = item.get("verdict", "")
                     color = "🟢" if "support" in verdict.lower() else "🔴"
@@ -781,9 +851,10 @@ if result:
             # Final Evidence Table
             evidence_rows = []
             for chunk in trace.get("final_evidence", []):
+                clean_name, _ = clean_source_name(chunk.get("source", ""))
                 evidence_rows.append({
                     "Chunk ID": chunk.get("chunk_id", "")[:12],
-                    "Source": chunk.get("source", "Unknown"),
+                    "Source": clean_name,
                     "Retrieval Rank": chunk.get("retrieval", {}).get("rank"),
                     "Reranker Rank": chunk.get("reranker", {}).get("rank"),
                     "Final Rank": chunk.get("final", {}).get("rank"),
@@ -797,9 +868,10 @@ if result:
             # Initial Candidates Table
             candidate_rows = []
             for cand in trace.get("candidates", []):
+                clean_name, _ = clean_source_name(cand.get("source", ""))
                 candidate_rows.append({
                     "Chunk ID": cand.get("chunk_id", "")[:12],
-                    "Source": cand.get("source", "Unknown"),
+                    "Source": clean_name,
                     "RRF Rank": cand.get("rrf", {}).get("rank"),
                     "RRF Score": f"{cand.get('rrf', {}).get('score', 0):.4f}",
                     "Dense Rank": cand.get("dense", {}).get("rank") if cand.get("dense") else "-",
@@ -813,7 +885,8 @@ if result:
             # Raw Chunk Inspector
             with st.expander("🔎 Deep Evidence Text Inspector", expanded=False):
                 for cand in trace.get("candidates", []):
-                    st.markdown(f"**Source:** `{cand.get('source')}` | **Chunk ID:** `{cand.get('chunk_id')}`")
+                    clean_name, base_name = clean_source_name(cand.get("source", ""))
+                    st.markdown(f"**Source:** `{clean_name}` (`{base_name}`) | **Chunk ID:** `{cand.get('chunk_id')}`")
                     st.code(cand.get("text", ""), language="markdown")
                     st.divider()
         else:
