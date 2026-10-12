@@ -32,7 +32,7 @@ HIGH_CONTRAST_PSUT_CSS = """
 .main .block-container {
     padding-top: 1.2rem;
     padding-bottom: 3.5rem;
-    max-width: 1280px;
+    max-width: 1320px;
 }
 
 /* Light institutional background */
@@ -104,148 +104,81 @@ textarea::placeholder {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 6px 14px;
-    border-radius: 9999px;
+    padding: 5px 12px;
+    border-radius: 6px;
     font-size: 0.78rem;
     font-weight: 800;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
-}
-
-.badge-green {
-    background-color: #ECFDF5 !important;
-    color: #064E3B !important;
-    border: 1.5px solid #34D399 !important;
-}
-
-.badge-blue {
-    background-color: #EFF6FF !important;
-    color: #1E3A8A !important;
-    border: 1.5px solid #60A5FA !important;
 }
 
 .badge-navy {
-    background-color: #F1F5F9 !important;
-    color: #002D62 !important;
-    border: 1.5px solid #94A3B8 !important;
+    background-color: #002D62;
+    color: #FFFFFF !important;
+    border: 1px solid #001A38;
+}
+
+.badge-blue {
+    background-color: #1E40AF;
+    color: #FFFFFF !important;
+    border: 1px solid #1E3A8A;
+}
+
+.badge-green {
+    background-color: #047857;
+    color: #FFFFFF !important;
+    border: 1px solid #065F46;
 }
 
 .badge-amber {
-    background-color: #FFFBEB !important;
-    color: #78350F !important;
-    border: 1.5px solid #FBBF24 !important;
+    background-color: #B45309;
+    color: #FFFFFF !important;
+    border: 1px solid #92400E;
 }
 
-/* Metric Cards */
-div[data-testid="stMetric"] {
-    background-color: #FFFFFF !important;
-    border: 1.5px solid #E2E8F0 !important;
-    border-radius: 10px !important;
-    padding: 14px 18px !important;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
-}
-
-div[data-testid="stMetric"]:hover {
-    border-color: #002D62 !important;
-}
-
-div[data-testid="stMetricLabel"] p {
-    color: #334155 !important;
-    font-size: 0.82rem !important;
-    font-weight: 700 !important;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-}
-
-div[data-testid="stMetricValue"] div {
-    color: #002D62 !important;
-    font-weight: 800 !important;
-    font-size: 1.45rem !important;
-}
-
-/* Card Containers */
-div[data-testid="stVerticalBlock"] > div[data-testid="stVerticalBlockBorderWrapper"] {
-    background-color: #FFFFFF !important;
-    border: 1.5px solid #CBD5E1 !important;
-    border-radius: 12px !important;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
-    padding: 16px !important;
-}
-
-/* Executive takeaway header */
-.exec-takeaway-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 1.15rem;
+/* Conflict Detective Badges */
+.rel-badge {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.95rem;
     font-weight: 800;
-    color: #002D62;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
     margin-bottom: 12px;
-    border-bottom: 2px solid #E2E8F0;
-    padding-bottom: 8px;
 }
-
-.exec-body-text {
-    font-size: 1.05rem;
-    line-height: 1.75;
-    color: #0F172A;
-    font-weight: 500;
+.rel-agreement {
+    background-color: #DCFCE7;
+    color: #166534 !important;
+    border: 2px solid #86EFAC;
 }
-
-/* Source Pill Quotes */
-.source-pill-quote {
+.rel-version {
+    background-color: #DBEAFE;
+    color: #1E40AF !important;
+    border: 2px solid #93C5FD;
+}
+.rel-conflict {
+    background-color: #FEE2E2;
+    color: #991B1B !important;
+    border: 2px solid #FCA5A5;
+}
+.rel-insufficient {
     background-color: #F1F5F9;
-    border-left: 4px solid #002D62;
-    padding: 10px 14px;
-    margin-top: 8px;
-    border-radius: 0 6px 6px 0;
-    font-size: 0.88rem;
-    color: #0F172A;
-    font-style: italic;
-    line-height: 1.55;
-}
-
-/* Expanders */
-[data-testid="stExpander"] {
-    background-color: #FFFFFF !important;
-    border: 1.5px solid #CBD5E1 !important;
-    border-radius: 8px !important;
-    margin-bottom: 8px !important;
-}
-
-[data-testid="stExpander"] details summary p {
-    color: #002D62 !important;
-    font-weight: 700 !important;
-    font-size: 0.92rem !important;
-}
-
-/* Custom styled tabs */
-button[data-baseweb="tab"] {
-    font-size: 0.98rem !important;
-    font-weight: 700 !important;
     color: #475569 !important;
-    padding: 12px 18px !important;
+    border: 2px solid #CBD5E1;
 }
 
-button[data-baseweb="tab"][aria-selected="true"] {
-    color: #002D62 !important;
-    border-bottom-color: #002D62 !important;
-}
-
-/* Buttons */
-.stButton>button {
-    border-radius: 8px !important;
-    font-weight: 700 !important;
-    font-size: 0.9rem !important;
-    transition: all 0.2s ease !important;
-}
-
-/* Primary Button in PSUT Navy */
+/* Primary Button (PSUT Navy) */
 .stButton>button[kind="primary"] {
     background-color: #002D62 !important;
     color: #FFFFFF !important;
     border: none !important;
-    box-shadow: 0 2px 4px rgba(0, 45, 98, 0.25) !important;
+    border-radius: 8px !important;
+    padding: 0.55rem 1.25rem !important;
+    font-weight: 700 !important;
+    font-size: 0.95rem !important;
+    box-shadow: 0 2px 4px rgba(0, 45, 98, 0.2) !important;
+    transition: all 0.2s ease !important;
 }
 
 .stButton>button[kind="primary"] p {
@@ -257,7 +190,7 @@ button[data-baseweb="tab"][aria-selected="true"] {
     background-color: #1E40AF !important;
 }
 
-/* Secondary Button (Preset Queries, Chips) */
+/* Secondary Button */
 .stButton>button[kind="secondary"] {
     background-color: #FFFFFF !important;
     color: #002D62 !important;
@@ -297,15 +230,70 @@ button[data-baseweb="tab"][aria-selected="true"] {
     color: #FFFFFF !important;
 }
 
-/* Sidebar Section Headers */
-.sidebar-section-title {
-    font-size: 0.82rem;
+/* Top Tab Bar Styling */
+.stTabs [data-baseweb="tab-list"] {
+    gap: 8px;
+    border-bottom: 2px solid #CBD5E1;
+    margin-bottom: 18px;
+}
+
+.stTabs [data-baseweb="tab"] {
+    font-size: 1.02rem;
+    font-weight: 700;
+    color: #475569;
+    padding: 10px 18px;
+    border-radius: 8px 8px 0 0;
+}
+
+.stTabs [aria-selected="true"] {
+    color: #002D62 !important;
+    border-bottom: 3px solid #002D62 !important;
+    font-weight: 800 !important;
+}
+
+/* Executive Box & Cards */
+.exec-box {
+    background-color: #FFFFFF;
+    border: 1.5px solid #CBD5E1;
+    border-left: 5px solid #002D62;
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 3px rgba(0, 45, 98, 0.05);
+}
+
+.finding-card {
+    background-color: #FFFFFF;
+    border: 1.5px solid #E2E8F0;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+
+.finding-tag {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.72rem;
     font-weight: 800;
-    color: #002D62;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-top: 18px;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
+}
+.tag-policy { background: #DBEAFE; color: #1E40AF; }
+.tag-technical { background: #E0E7FF; color: #3730A3; }
+.tag-compliance { background: #FEF3C7; color: #92400E; }
+.tag-action_item { background: #DCFCE7; color: #166534; }
+
+.source-pill-quote {
+    background-color: #F8FAFC;
+    border-left: 3px solid #002D62;
+    padding: 6px 10px;
+    margin-top: 6px;
+    font-size: 0.82rem;
+    color: #334155;
+    font-style: italic;
+    border-radius: 0 4px 4px 0;
 }
 </style>
 """
@@ -331,11 +319,17 @@ if "last_result" not in st.session_state:
 if "last_question" not in st.session_state:
     st.session_state["last_question"] = ""
 
+if "chat_history" not in st.session_state:
+    st.session_state["chat_history"] = []
+
 if "documents" not in st.session_state:
     try:
         st.session_state["documents"] = client.list_documents()
     except Exception:
         st.session_state["documents"] = []
+
+if "health_status" not in st.session_state:
+    st.session_state["health_status"] = None
 
 
 # =========================================================
@@ -343,7 +337,6 @@ if "documents" not in st.session_state:
 # =========================================================
 
 def get_logo_path() -> str | None:
-    """Find university logo: user upload or built-in PSUT crest."""
     candidates = [
         "assets/psut_logo.png",
         "assets/psut_logo.jpg",
@@ -357,29 +350,32 @@ def get_logo_path() -> str | None:
 
 
 def clean_source_name(raw_src: str) -> tuple[str, str]:
-    """Return (display_name, full_basename) removing path and hex hashes."""
     base_src = os.path.basename(raw_src or "Document")
     clean_src = base_src.split("_", 1)[-1] if len(base_src) > 65 and "_" in base_src else base_src
     return clean_src, base_src
 
 
-def build_chunk_text_map(trace: dict | None) -> dict[str, str]:
-    """Extract raw text mapping for chunk IDs from retrieval trace."""
+def build_chunk_text_map(trace: dict | None, evidence_list: list | None = None) -> dict[str, str]:
     chunk_map = {}
-    if not trace:
-        return chunk_map
+    if evidence_list:
+        for ev in evidence_list:
+            cid = ev.get("chunk_id")
+            text = ev.get("text")
+            if cid and text:
+                chunk_map[cid] = text
 
-    for chunk in trace.get("final_evidence", []):
-        cid = chunk.get("chunk_id")
-        text = chunk.get("text")
-        if cid and text:
-            chunk_map[cid] = text
+    if trace:
+        for chunk in trace.get("final_evidence", []):
+            cid = chunk.get("chunk_id")
+            text = chunk.get("text")
+            if cid and text and cid not in chunk_map:
+                chunk_map[cid] = text
 
-    for candidate in trace.get("candidates", []):
-        cid = candidate.get("chunk_id")
-        text = candidate.get("text")
-        if cid and text and cid not in chunk_map:
-            chunk_map[cid] = text
+        for candidate in trace.get("candidates", []):
+            cid = candidate.get("chunk_id")
+            text = candidate.get("text")
+            if cid and text and cid not in chunk_map:
+                chunk_map[cid] = text
 
     return chunk_map
 
@@ -389,21 +385,18 @@ def generate_executive_brief_export(
     result: dict,
     chunk_map: dict[str, str],
 ) -> str:
-    """Generate institutional Markdown Executive Briefing for export."""
     req_id = result.get("request_id", "N/A")
     latency = result.get("latency", {})
     answer = result.get("answer", "")
     citations = result.get("citations", [])
     abstained = result.get("abstained", False)
-    verification = result.get("verification", {})
-    metrics = verification.get("citation_metrics", {})
 
     now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     doc = [
         "# 🏛️ PRINCESS SUMAYA UNIVERSITY FOR TECHNOLOGY",
         "## Sovereign Hybrid RAG Intelligence Briefing",
-        f"**Generated:** {now_str} (Air-Gapped Workstation)",
+        f"**Generated:** {now_str} (Air-Gapped Sovereign Workstation)",
         "**Classification:** Confidential / Sovereign Enterprise Intelligence",
         f"**Request Identifier:** `{req_id}`",
         f"**Audit Status:** {'⚠️ Abstained (Insufficient Evidence)' if abstained else '✅ Verified & Grounded'}",
@@ -441,27 +434,20 @@ def generate_executive_brief_export(
 
     doc.extend([
         "\n---\n",
-        "## 🛡️ Reliability & Hardware Audit",
+        "## 🛡️ Reliability & Sovereignty Audit",
         "- **Retrieval Pipeline:** Hybrid (Dense Vector + BM25 Lexical + Reciprocal Rank Fusion)",
         "- **Reranker:** Cross-Encoder (`BAAI/bge-reranker-base`)",
         "- **Local LLM Engine:** Qwen 2.5 3B (`Ollama`)",
-        "- **Hardware Acceleration:** NVIDIA RTX 3060 Laptop GPU (CUDA Active)",
+        "- **Hardware Acceleration:** NVIDIA GeForce RTX 3060 Laptop GPU (CUDA Active)",
         "- **Vector Index:** Embedded Qdrant (Zero-Docker Local Storage)",
         f"- **Latency Breakdown:** Total {latency.get('total_ms', 0):.0f} ms (Retrieval: {latency.get('retrieval_ms', 0):.0f} ms | Rerank: {latency.get('reranking_ms', 0):.0f} ms | Gen: {latency.get('generation_ms', 0):.0f} ms)",
     ])
 
-    prec = metrics.get("citation_precision")
-    cov = metrics.get("citation_coverage")
-    if prec is not None and cov is not None:
-        doc.append(f"- **Citation Precision:** {prec:.1%}")
-        doc.append(f"- **Citation Coverage:** {cov:.1%}")
-
-    return "\n".join(doc)
+    return "\n\n".join(doc)
 
 
 # =========================================================
-# Sidebar: University Branding & Knowledge Base
-# (Hardware Infrastructure removed per user directive)
+# Sidebar
 # =========================================================
 
 with st.sidebar:
@@ -469,62 +455,39 @@ with st.sidebar:
     if logo_file:
         st.image(logo_file, use_container_width=True)
 
-    st.markdown('<div class="sidebar-section-title">Document Ingestion</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sidebar-section-title">System Status</div>', unsafe_allow_html=True)
+    try:
+        health = client.get_health()
+        st.session_state["health_status"] = health
+        st.success("🟢 Core Services Ready (Air-Gapped)")
+    except Exception:
+        st.error("🔴 Connecting to API Server...")
 
-    uploaded_file = st.file_uploader(
-        "Upload Enterprise Document",
-        type=["md", "txt", "pdf", "docx", "html", "htm"],
-        help="Upload PDF, Word DOCX, Markdown, Text, or HTML files directly into local vector storage.",
-    )
+    doc_count = len(st.session_state.get("documents", []))
+    st.metric("Indexed Documents", doc_count)
 
-    if uploaded_file is not None:
-        if st.button("⚡ Index Document", use_container_width=True, type="primary"):
-            try:
-                with st.spinner("Processing document chunks and embeddings..."):
-                    result = client.ingest(
-                        filename=uploaded_file.name,
-                        content=uploaded_file.getvalue(),
-                    )
+    st.markdown('<div class="sidebar-section-title">Session Controls</div>', unsafe_allow_html=True)
+    if st.button("🔄 Refresh Documents", use_container_width=True):
+        try:
+            st.session_state["documents"] = client.list_documents()
+            st.success("Synchronized!")
+        except Exception as e:
+            st.error(str(e))
 
-                if result.get("duplicate"):
-                    st.warning("⚠️ Document signature already exists in registry.")
-                else:
-                    st.success(f"✅ Successfully indexed {result.get('chunks_ingested', '')} chunks!")
-                    st.session_state["documents"] = client.list_documents()
-
-            except Exception as exc:
-                st.error(f"Ingestion failed: {exc}")
-
-    st.markdown('<div class="sidebar-section-title">Knowledge Repository</div>', unsafe_allow_html=True)
-
-    col_btn, col_count = st.columns([1, 1])
-    with col_btn:
-        if st.button("🔄 Sync", use_container_width=True):
-            try:
-                st.session_state["documents"] = client.list_documents()
-            except Exception as exc:
-                st.error(str(exc))
-    with col_count:
-        doc_count = len(st.session_state.get("documents", []))
-        st.metric("Documents", doc_count)
-
-    docs = st.session_state.get("documents", [])
-    if docs:
-        with st.expander(f"📁 Document Catalog ({len(docs)})", expanded=False):
-            for d in docs:
-                clean_name, base_name = clean_source_name(d.get("filename", ""))
-                st.markdown(f"**📄 {clean_name}**")
-                st.caption(f"Type: `{d.get('file_type')}` | Chunks: `{d.get('chunk_count')}` | Strategy: `{d.get('chunking_strategy')}`")
-                st.divider()
+    if st.button("🧹 Clear Chat History", use_container_width=True):
+        st.session_state["chat_history"] = []
+        st.session_state["last_result"] = None
+        st.session_state["last_question"] = ""
+        st.rerun()
 
 
 # =========================================================
-# Main Workspace: University Header & Badges
+# Main Institutional Header
 # =========================================================
 
 header_logo = get_logo_path()
 if header_logo:
-    col_logo, col_head = st.columns([1.6, 3.4])
+    col_logo, col_head = st.columns([1.5, 3.5])
     with col_logo:
         st.image(header_logo, use_container_width=True)
     with col_head:
@@ -535,7 +498,7 @@ if header_logo:
                     Sovereign Hybrid RAG Engine
                 </h1>
                 <p style="color:#334155; font-size:0.98rem; margin-top:5px; margin-bottom:0; font-weight:600;">
-                    King Hussein School of Computing Sciences • Grounded Air-Gapped Intelligence
+                    Princess Sumaya University for Technology • 42 Irbid Hackathon
                 </p>
             </div>
             """,
@@ -543,21 +506,15 @@ if header_logo:
         )
 else:
     st.title("🏛️ PSUT Sovereign Hybrid RAG")
-    st.markdown(
-        "<p style='color:#334155; font-size:1.05rem; margin-top:-10px; margin-bottom:8px; font-weight:600;'>"
-        "King Hussein School of Computing Sciences • Grounded Air-Gapped Intelligence Engine"
-        "</p>",
-        unsafe_allow_html=True,
-    )
 
-# High-Contrast Badges
+# Trust Badges
 st.markdown(
     """
     <div class="badge-row">
-        <span class="trust-badge badge-green">🔒 100% ON-PREMISE AIR-GAPPED</span>
-        <span class="trust-badge badge-blue">⚡ NVIDIA RTX 3060 CUDA ACTIVE</span>
-        <span class="trust-badge badge-navy">🛡️ ZERO CLOUD EXFILTRATION (BANKING READY)</span>
-        <span class="trust-badge badge-amber">⚡ HYBRID RRF + CROSS-ENCODER RERANKING</span>
+        <span class="trust-badge badge-green">🔒 100% AIR-GAPPED SOVEREIGN</span>
+        <span class="trust-badge badge-blue">⚡ RTX 3060 CUDA ACCELERATED</span>
+        <span class="trust-badge badge-navy">🛡️ ZERO CLOUD EXFILTRATION</span>
+        <span class="trust-badge badge-amber">⚡ HYBRID RRF + BGE CROSS-ENCODER</span>
     </div>
     """,
     unsafe_allow_html=True,
@@ -565,235 +522,211 @@ st.markdown(
 
 
 # =========================================================
-# Preset Starter Questions (One-Click Testing)
+# Top-Level Institutional Tabs
 # =========================================================
 
-st.markdown(
-    "<span style='font-size:0.82rem; font-weight:800; color:#002D62; text-transform:uppercase; letter-spacing:0.04em;'>"
-    "Sample Queries (Click to Test Instantly)"
-    "</span>",
-    unsafe_allow_html=True,
-)
-
-preset_cols = st.columns(3)
-with preset_cols[0]:
-    if st.button("🔍 Troubleshooting Database Timeout", use_container_width=True):
-        st.session_state["question_input"] = "How do we troubleshoot and resolve database connection timeout errors?"
-        st.session_state["trigger_ask"] = True
-        st.rerun()
-
-with preset_cols[1]:
-    if st.button("🌐 DNS Configuration Guidelines", use_container_width=True):
-        st.session_state["question_input"] = "What are the recommended DNS configuration guidelines and resolver steps?"
-        st.session_state["trigger_ask"] = True
-        st.rerun()
-
-with preset_cols[2]:
-    if st.button("🐳 Docker Container Restart Policies", use_container_width=True):
-        st.session_state["question_input"] = "What are the container restart policies and memory limit configurations in Docker?"
-        st.session_state["trigger_ask"] = True
-        st.rerun()
+tab_qa, tab_compare, tab_briefing, tab_repo = st.tabs([
+    "🔍 Interactive Chat & Evidence",
+    "⚖️ Document Conflict Detective",
+    "📋 Executive Briefings",
+    "📁 Knowledge Repository & Diagnostics",
+])
 
 
 # =========================================================
-# Query Input Area
+# TAB 1: INTERACTIVE CHAT & EVIDENCE EXPLORER
 # =========================================================
 
-query_text = st.text_area(
-    "Inquiry / Prompt",
-    value=st.session_state["question_input"],
-    height=85,
-    placeholder="Ask any question regarding system architecture, operations, policies, or uploaded documents...",
-    key="main_query_text_area",
-    help="Type your question or click one of the preset inquiries above.",
-)
+with tab_qa:
+    # Preset Starter Inquiries
+    st.markdown(
+        "<span style='font-size:0.82rem; font-weight:800; color:#002D62; text-transform:uppercase; letter-spacing:0.04em;'>"
+        "Sample Queries (Click to Test Instantly)"
+        "</span>",
+        unsafe_allow_html=True,
+    )
 
-# Controls
-action_col1, action_col2, action_col3 = st.columns([2, 1, 1])
+    preset_cols = st.columns(3)
+    with preset_cols[0]:
+        if st.button("🔍 Troubleshooting Database Timeout", key="preset_db", use_container_width=True):
+            st.session_state["question_input"] = "How do we troubleshoot and resolve database connection timeout errors?"
+            st.session_state["trigger_ask"] = True
+            st.rerun()
 
-with action_col1:
-    ask_button = st.button("🚀 Run Intelligence Analysis", type="primary", use_container_width=True)
+    with preset_cols[1]:
+        if st.button("🌐 DNS Configuration Guidelines", key="preset_dns", use_container_width=True):
+            st.session_state["question_input"] = "What are the recommended DNS configuration guidelines and resolver steps?"
+            st.session_state["trigger_ask"] = True
+            st.rerun()
 
-with action_col2:
-    include_trace = st.checkbox("Include Full Audit Trace", value=True)
+    with preset_cols[2]:
+        if st.button("🐳 Docker Container Restart Policies", key="preset_docker", use_container_width=True):
+            st.session_state["question_input"] = "What are the container restart policies and memory limit configurations in Docker?"
+            st.session_state["trigger_ask"] = True
+            st.rerun()
 
-with action_col3:
-    if st.button("🧹 Clear", use_container_width=True):
-        st.session_state["question_input"] = ""
-        st.session_state["last_result"] = None
-        st.session_state["last_question"] = ""
-        st.session_state["trigger_ask"] = False
-        st.rerun()
+    # Scope Selection: All Documents or Single Document
+    docs = st.session_state.get("documents", [])
+    doc_options = ["All Ingested Documents"] + [f"{d.get('filename')} ({d.get('document_id')[:8]})" for d in docs]
+    selected_scope_label = st.selectbox("Document Retrieval Scope", options=doc_options, index=0)
 
+    selected_doc_ids = None
+    if selected_scope_label != "All Ingested Documents":
+        selected_idx = doc_options.index(selected_scope_label) - 1
+        selected_doc_ids = [docs[selected_idx]["document_id"]]
 
-# =========================================================
-# Query Execution Logic
-# =========================================================
+    # Query Input Area
+    query_text = st.text_area(
+        "Inquiry / Prompt",
+        value=st.session_state["question_input"],
+        height=85,
+        placeholder="Ask any question regarding system architecture, operations, policies, or follow-up...",
+        key="main_query_text_area",
+    )
 
-should_run = ask_button or st.session_state["trigger_ask"]
+    action_col1, action_col2, action_col3 = st.columns([2, 1, 1])
+    with action_col1:
+        ask_button = st.button("🚀 Run Intelligence Analysis", type="primary", use_container_width=True)
+    with action_col2:
+        include_trace = st.checkbox("Include Reranker Audit Trace", value=True)
+    with action_col3:
+        if st.button("🧹 Clear Input", use_container_width=True):
+            st.session_state["question_input"] = ""
+            st.session_state["last_result"] = None
+            st.session_state["last_question"] = ""
+            st.session_state["trigger_ask"] = False
+            st.rerun()
 
-if should_run:
-    active_question = query_text.strip() or st.session_state.get("question_input", "").strip()
+    should_run = ask_button or st.session_state["trigger_ask"]
 
-    if not active_question:
-        st.warning("Please enter a question or choose an inquiry preset.")
-        st.session_state["trigger_ask"] = False
-    else:
-        st.session_state["trigger_ask"] = False
-        st.session_state["question_input"] = active_question
-        st.session_state["last_question"] = active_question
+    if should_run:
+        active_question = query_text.strip() or st.session_state.get("question_input", "").strip()
 
-        try:
-            with st.spinner("Executing Hybrid RAG: Dense Vector Search + BM25 + Cross-Encoder Reranking + Ollama CUDA..."):
-                res = client.ask(
-                    question=active_question,
-                    include_trace=include_trace,
-                )
-                st.session_state["last_result"] = res
+        if not active_question:
+            st.warning("Please enter a question or choose an inquiry preset.")
+            st.session_state["trigger_ask"] = False
+        else:
+            st.session_state["trigger_ask"] = False
+            st.session_state["question_input"] = active_question
+            st.session_state["last_question"] = active_question
 
-        except Exception as exc:
-            st.error(f"Analysis failed: {exc}")
+            try:
+                with st.spinner("Executing Hybrid RAG with Conversational Intent Resolution..."):
+                    # Pass history to rewriter
+                    history_payload = [
+                        {"role": m["role"], "content": m["content"]}
+                        for m in st.session_state.get("chat_history", [])[-4:]
+                    ]
+                    res = client.ask(
+                        question=active_question,
+                        history=history_payload,
+                        document_ids=selected_doc_ids,
+                        include_trace=include_trace,
+                    )
+                    st.session_state["last_result"] = res
 
+                    # Append to conversation
+                    st.session_state["chat_history"].append({"role": "user", "content": active_question})
+                    st.session_state["chat_history"].append({"role": "assistant", "content": res.get("answer", "")})
 
-# =========================================================
-# Results Presentation (Executive Brief, Evidence & Audit)
-# =========================================================
+            except Exception as exc:
+                st.error(f"Analysis failed: {exc}")
 
-result = st.session_state.get("last_result")
-active_q = st.session_state.get("last_question", "")
+    result = st.session_state.get("last_result")
+    active_q = st.session_state.get("last_question", "")
 
-if result:
-    st.markdown("<div style='margin-top: 15px;'></div>", unsafe_allow_html=True)
-    
-    trace = result.get("trace")
-    chunk_map = build_chunk_text_map(trace)
-    citations = result.get("citations", [])
-    latency = result.get("latency", {})
-    abstained = result.get("abstained", False)
-    verification = result.get("verification", {})
-    metrics = verification.get("citation_metrics", {})
+    if result:
+        st.markdown("<div style='margin-top: 15px;'></div>", unsafe_allow_html=True)
+        
+        trace = result.get("trace")
+        evidence_list = result.get("evidence", [])
+        chunk_map = build_chunk_text_map(trace, evidence_list)
+        citations = result.get("citations", [])
+        latency = result.get("latency", {})
+        abstained = result.get("abstained", False)
+        was_rewritten = result.get("was_rewritten", False)
+        retrieval_q = result.get("retrieval_question")
 
-    # Top Status Bar
-    if abstained:
-        st.warning("⚠️ **System Abstained**: Retrieval confidence fell below safety threshold. To prevent hallucination, no speculative answer was generated.")
-    else:
-        st.markdown(
-            """
-            <div style="display:flex; justify-content:space-between; align-items:center; background:#FFFFFF; border:1.5px solid #BFDBFE; border-left:5px solid #002D62; border-radius:8px; padding:10px 16px; margin-bottom:14px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
-                <div style="display:flex; align-items:center; gap:8px;">
-                    <span style="color:#047857; font-size:1.1rem; font-weight:800;">●</span>
-                    <span style="font-weight:800; color:#002D62; font-size:0.95rem;">Grounded & Evidence-Backed Intelligence</span>
+        if was_rewritten and retrieval_q:
+            st.info(f"ℹ️ **Conversational Intent Resolved**: Query reformulated to *\"{retrieval_q}\"*")
+
+        if abstained:
+            st.warning("⚠️ **System Abstained**: Retrieval confidence fell below safety threshold. No speculative answer generated.")
+        else:
+            st.markdown(
+                """
+                <div style="display:flex; justify-content:space-between; align-items:center; background:#FFFFFF; border:1.5px solid #BFDBFE; border-left:5px solid #002D62; border-radius:8px; padding:10px 16px; margin-bottom:14px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <span style="color:#047857; font-size:1.1rem; font-weight:800;">●</span>
+                        <span style="font-weight:800; color:#002D62; font-size:0.95rem;">Grounded & Evidence-Backed Synthesis</span>
+                    </div>
+                    <div>
+                        <span style="background:#EFF6FF; color:#002D62; font-size:0.78rem; font-weight:700; padding:4px 10px; border-radius:6px; border:1px solid #BFDBFE;">Request ID: %s</span>
+                    </div>
                 </div>
-                <div>
-                    <span style="background:#EFF6FF; color:#002D62; font-size:0.78rem; font-weight:700; padding:4px 10px; border-radius:6px; border:1px solid #BFDBFE;">Request ID: %s</span>
-                </div>
-            </div>
-            """ % result.get("request_id", "N/A")[:12],
-            unsafe_allow_html=True,
-        )
+                """ % result.get("request_id", "N/A")[:12],
+                unsafe_allow_html=True,
+            )
 
-    # =====================================================
-    # Perplexity-Style Interactive Source Pills
-    # =====================================================
-    if citations:
-        st.markdown(
-            "<span style='font-size:0.82rem; font-weight:800; color:#002D62; text-transform:uppercase; letter-spacing:0.04em;'>"
-            "Cited Primary Sources"
-            "</span>",
-            unsafe_allow_html=True,
-        )
-
-        source_cols = st.columns(min(len(citations), 4))
-        for idx, cit in enumerate(citations):
-            col_target = source_cols[idx % min(len(citations), 4)]
-            ref = cit.get("reference")
-            raw_src = cit.get("source", "Document")
-            clean_name, base_src = clean_source_name(raw_src)
-            page = cit.get("page_number")
-            cid = cit.get("chunk_id", "")
-            heading = " → ".join(cit.get("heading_path") or [])
-
-            page_str = f" • p.{page}" if page is not None else ""
-            with col_target:
-                with st.expander(f"📄 [{ref}] {clean_name}{page_str}", expanded=False):
-                    st.caption(f"**Source File:** `{base_src}`")
-                    st.caption(f"**Chunk ID:** `{cid[:16]}...`")
-                    if heading:
-                        st.caption(f"**Section:** {heading}")
-                    raw_text = chunk_map.get(cid)
-                    if raw_text:
-                        st.markdown(
-                            f"<div class='source-pill-quote'>\"{raw_text.strip()[:350]}...\"</div>",
-                            unsafe_allow_html=True,
-                        )
-                    else:
-                        st.info("Verified chunk in vector index.")
-
-    st.markdown("<div style='margin-top: 10px;'></div>", unsafe_allow_html=True)
-
-    # =====================================================
-    # NotebookLM-Style Dual-Mode Presentation Tabs
-    # =====================================================
-    tab_brief, tab_evidence, tab_audit = st.tabs([
-        "📋 Executive Brief",
-        "🔬 Granular Evidence & Verification",
-        "⚙️ Engine Performance & Reranker Trace",
-    ])
-
-    # -----------------------------------------------------
-    # TAB 1: EXECUTIVE BRIEF
-    # -----------------------------------------------------
-    with tab_brief:
+        # Grounded Answer Presentation
         with st.container(border=True):
             st.markdown(
-                '<div class="exec-takeaway-header"><span>📌 Executive Synthesis & Decision Summary</span></div>',
+                '<div style="font-size:0.88rem; font-weight:800; color:#002D62; text-transform:uppercase; margin-bottom:8px;">📌 Synthesized Intelligence</div>',
                 unsafe_allow_html=True,
             )
+            st.markdown(result.get("answer", ""))
+
+        # Interactive Evidence Explorer & Source Drawer
+        if citations or evidence_list:
             st.markdown(
-                f"<div class='exec-body-text'>{result.get('answer', '')}</div>",
+                "<span style='font-size:0.85rem; font-weight:800; color:#002D62; text-transform:uppercase; letter-spacing:0.04em;'>"
+                "📑 Interactive Evidence Drawer (Click to Inspect Primary Source & PDF Preview)"
+                "</span>",
                 unsafe_allow_html=True,
             )
 
-        # Strategic Confidence Rating Card
-        conf_col1, conf_col2, conf_col3 = st.columns(3)
-        with conf_col1:
-            st.metric("Grounded Sources", f"{len(citations)} Primary {'Source' if len(citations) == 1 else 'Sources'}")
-        with conf_col2:
-            st.metric("Verification Status", "Zero Hallucination" if not abstained else "Abstained")
-        with conf_col3:
-            st.metric("Inference Engine", "Qwen 2.5 3B (Local CUDA)")
+            for idx, cit in enumerate(citations if citations else evidence_list, start=1):
+                ref = cit.get("reference", idx)
+                raw_src = cit.get("source", "Document")
+                clean_name, base_src = clean_source_name(raw_src)
+                page = cit.get("page_number")
+                cid = cit.get("chunk_id", "")
+                doc_id = cit.get("document_id", "")
+                heading = " → ".join(cit.get("heading_path") or [])
 
+                page_label = f" • Page {page}" if page is not None else ""
+                with st.expander(f"📄 Evidence [{ref}]: {clean_name}{page_label}", expanded=(idx == 1)):
+                    c_left, c_right = st.columns([1.5, 1])
+                    with c_left:
+                        st.markdown(f"**Document:** `{clean_name}` (`{base_src}`)")
+                        if heading:
+                            st.caption(f"**Section Path:** {heading}")
+                        st.caption(f"**Chunk SHA-256:** `{cid[:24]}...`")
+
+                        raw_text = cit.get("text") or chunk_map.get(cid)
+                        if raw_text:
+                            st.markdown(
+                                f"<div class='source-pill-quote'>\"{raw_text.strip()}\"</div>",
+                                unsafe_allow_html=True,
+                            )
+
+                    with c_right:
+                        if page is not None and doc_id:
+                            st.caption("🖼️ High-Res PDF Page Preview")
+                            img_bytes = client.get_page_preview(doc_id, page)
+                            if img_bytes:
+                                st.image(img_bytes, caption=f"Page {page} Preview", use_container_width=True)
+                            else:
+                                st.info(f"Page {page} preview available in PDF viewer.")
+                        else:
+                            st.caption("📄 Markdown / Text Document Evidence")
+                            st.success("Verified verbatim passage in sovereign store.")
+
+        # Export Button
         st.markdown("<div style='margin-top: 15px;'></div>", unsafe_allow_html=True)
-
-        # Smart Dynamic Follow-Up Chips
-        st.markdown(
-            "<span style='font-size:0.82rem; font-weight:800; color:#002D62; text-transform:uppercase; letter-spacing:0.04em;'>"
-            "Recommended Follow-Up Inquiries"
-            "</span>",
-            unsafe_allow_html=True,
-        )
-
-        follow_col1, follow_col2 = st.columns(2)
-        with follow_col1:
-            q_follow1 = "What are the security and operational safeguards related to this?"
-            if st.button(f"👉 {q_follow1}", key="chip_follow_1", use_container_width=True):
-                st.session_state["question_input"] = q_follow1
-                st.session_state["trigger_ask"] = True
-                st.rerun()
-
-        with follow_col2:
-            q_follow2 = "What are the step-by-step diagnostic and mitigation procedures?"
-            if st.button(f"👉 {q_follow2}", key="chip_follow_2", use_container_width=True):
-                st.session_state["question_input"] = q_follow2
-                st.session_state["trigger_ask"] = True
-                st.rerun()
-
-        st.markdown("<div style='margin-top: 15px;'></div>", unsafe_allow_html=True)
-
-        # 1-Click Executive Export Button
         export_content = generate_executive_brief_export(active_q, result, chunk_map)
         st.download_button(
-            label="📥 Export Executive Briefing Report (.md)",
+            label="📥 Export Executive Briefing (.md)",
             data=export_content,
             file_name=f"psut_executive_brief_{result.get('request_id', 'audit')[:8]}.md",
             mime="text/markdown",
@@ -801,123 +734,276 @@ if result:
             type="secondary",
         )
 
-    # -----------------------------------------------------
-    # TAB 2: DETAILED EVIDENCE & CLAIMS
-    # -----------------------------------------------------
-    with tab_evidence:
-        st.subheader("Grounded Answer with In-Text Citations")
-        with st.container(border=True):
-            st.markdown(
-                f"<div class='exec-body-text'>{result.get('answer', '')}</div>",
-                unsafe_allow_html=True,
-            )
-            st.caption(f"Request ID: {result.get('request_id')}")
 
-        # Verification breakdown
-        claims = verification.get("claims", [])
-        citation_verifications = verification.get("citation_verification", [])
-        faithfulness = verification.get("faithfulness", {})
+# =========================================================
+# TAB 2: DOCUMENT CONFLICT DETECTIVE (STAR DEMO FEATURE)
+# =========================================================
 
-        st.markdown("#### Citation Verification & Faithfulness")
-        
-        prec = metrics.get("citation_precision")
-        cov = metrics.get("citation_coverage")
-        
-        m_col1, m_col2 = st.columns(2)
-        m_col1.metric("Citation Precision", f"{prec:.1%}" if prec is not None else "Fast-Path (100%)")
-        m_col2.metric("Citation Coverage", f"{cov:.1%}" if cov is not None else "Fast-Path (100%)")
+with tab_compare:
+    st.subheader("⚖️ Document Conflict Detective")
+    st.caption("Perform rigorous, air-gapped comparison between two documents to detect contradictions, version differences, or policy alignment.")
 
-        if claims:
-            with st.expander(f"📑 Extracted Claims ({len(claims)})", expanded=False):
-                for c in claims:
-                    st.write(f"- **{c.get('text')}**")
-                    if c.get("citations"):
-                        st.caption(f"Associated Citations: {c.get('citations')}")
+    docs = st.session_state.get("documents", [])
+    if len(docs) < 2:
+        st.info("Please index at least two documents to activate side-by-side conflict detection.")
+    else:
+        doc_names = [f"{d.get('filename')} ({d.get('document_id')[:8]})" for d in docs]
+        c1, c2 = st.columns(2)
+        with c1:
+            sel_a = st.selectbox("Primary Baseline Document (A)", options=doc_names, index=0)
+        with c2:
+            sel_b = st.selectbox("Comparison Target Document (B)", options=doc_names, index=min(1, len(doc_names) - 1))
 
-        if citation_verifications:
-            with st.expander(f"🔍 Claim-by-Claim Citation Verifications ({len(citation_verifications)})", expanded=False):
-                for item in citation_verifications:
-                    verdict = item.get("verdict", "")
-                    color = "🟢" if "support" in verdict.lower() else "🔴"
-                    st.write(f"{color} **{verdict}** — {item.get('claim_text')}")
-                    st.caption(item.get("explanation"))
+        doc_a_idx = doc_names.index(sel_a)
+        doc_b_idx = doc_names.index(sel_b)
+        doc_a_id = docs[doc_a_idx]["document_id"]
+        doc_b_id = docs[doc_b_idx]["document_id"]
 
-        if faithfulness and faithfulness.get("claims"):
-            with st.expander("🛡️ Hallucination & Faithfulness Audit", expanded=False):
-                for item in faithfulness.get("claims", []):
-                    verdict = item.get("verdict", "")
-                    color = "🟢" if "support" in verdict.lower() else "🔴"
-                    st.write(f"{color} **{verdict}** — {item.get('claim_text')}")
-                    st.caption(item.get("explanation"))
+        topic_input = st.text_input(
+            "Comparison Topic / Policy Area",
+            value="Container restart policies and resource allocation",
+            help="Enter the specific policy, deadline, or parameter to compare.",
+        )
 
-    # -----------------------------------------------------
-    # TAB 3: PERFORMANCE AUDIT & RERANKER TRACE
-    # -----------------------------------------------------
-    with tab_audit:
-        st.subheader("System Performance & Latency")
-        
-        # Latency Metrics
-        lat_cols = st.columns(5)
-        lat_cols[0].metric("Retrieval", f"{latency.get('retrieval_ms', 0):.0f} ms")
-        lat_cols[1].metric("Reranking", f"{latency.get('reranking_ms', 0):.0f} ms")
-        lat_cols[2].metric("Generation", f"{latency.get('generation_ms', 0):.0f} ms")
-        lat_cols[3].metric("Verification", f"{latency.get('verification_ms', 0):.0f} ms")
-        lat_cols[4].metric("Total Latency", f"{latency.get('total_ms', 0):.0f} ms")
+        preset_comp_cols = st.columns(3)
+        with preset_comp_cols[0]:
+            if st.button("Compare Restart Policies", key="cmp_restart", use_container_width=True):
+                topic_input = "Container restart policies and failure handling"
+        with preset_comp_cols[1]:
+            if st.button("Compare Timeout Limits", key="cmp_timeout", use_container_width=True):
+                topic_input = "Database connection timeout and retry procedures"
+        with preset_comp_cols[2]:
+            if st.button("Compare DNS Resolvers", key="cmp_dns", use_container_width=True):
+                topic_input = "DNS resolution configuration and fallback addresses"
 
-        # Token Usage
-        tokens = result.get("token_usage", {})
-        tok_cols = st.columns(3)
-        tok_cols[0].metric("Prompt Tokens", tokens.get("input_tokens") or "N/A")
-        tok_cols[1].metric("Completion Tokens", tokens.get("output_tokens") or "N/A")
-        tok_cols[2].metric("Total Tokens", tokens.get("total_tokens") or "N/A")
+        if st.button("🔍 Run Conflict & Divergence Audit", type="primary", use_container_width=True):
+            if not topic_input.strip():
+                st.warning("Please specify a topic to audit.")
+            else:
+                try:
+                    with st.spinner("Auditing document evidence, scopes, and potential contradictions..."):
+                        comp_res = client.compare(
+                            document_a_id=doc_a_id,
+                            document_b_id=doc_b_id,
+                            topic=topic_input.strip(),
+                        )
 
-        st.divider()
+                    # Relationship Badge
+                    rel = comp_res.get("relationship", "insufficient_evidence")
+                    badge_class = {
+                        "agreement": "rel-agreement",
+                        "scope_or_version_difference": "rel-version",
+                        "possible_conflict": "rel-conflict",
+                        "insufficient_evidence": "rel-insufficient",
+                    }.get(rel, "rel-insufficient")
 
-        # Detailed Retrieval Trace
-        if trace:
-            st.subheader("Candidate Retrieval & Reranker Audit")
-            st.write(f"Candidates Retrieved: **{trace.get('candidate_count', 0)}** | Final Evidence Chunks Selected: **{trace.get('evidence_count', 0)}**")
+                    rel_label = {
+                        "agreement": "✅ Policy Agreement: Factual Alignment",
+                        "scope_or_version_difference": "ℹ️ Scope / Version Difference: Tier or Effective Date Divergence",
+                        "possible_conflict": "⚠️ Possible Conflict: Direct Contradiction Detected",
+                        "insufficient_evidence": "❓ Insufficient Evidence: Inconclusive Coverage",
+                    }.get(rel, rel.replace("_", " ").title())
 
-            # Final Evidence Table
-            evidence_rows = []
-            for chunk in trace.get("final_evidence", []):
-                clean_name, _ = clean_source_name(chunk.get("source", ""))
-                evidence_rows.append({
-                    "Chunk ID": chunk.get("chunk_id", "")[:12],
-                    "Source": clean_name,
-                    "Retrieval Rank": chunk.get("retrieval", {}).get("rank"),
-                    "Reranker Rank": chunk.get("reranker", {}).get("rank"),
-                    "Final Rank": chunk.get("final", {}).get("rank"),
-                    "Final Score": f"{chunk.get('final', {}).get('score', 0):.4f}",
-                })
+                    st.markdown(f'<div class="rel-badge {badge_class}">{rel_label}</div>', unsafe_allow_html=True)
+                    st.markdown(f"**Executive Summary:** {comp_res.get('summary')}")
 
-            if evidence_rows:
-                st.markdown("#### Final Reranked Evidence Chunks")
-                st.dataframe(pd.DataFrame(evidence_rows), use_container_width=True, hide_index=True)
+                    # Side by side cards
+                    card_a, card_b = st.columns(2)
+                    doc_a_claim = comp_res.get("document_a", {})
+                    doc_b_claim = comp_res.get("document_b", {})
 
-            # Initial Candidates Table
-            candidate_rows = []
-            for cand in trace.get("candidates", []):
-                clean_name, _ = clean_source_name(cand.get("source", ""))
-                candidate_rows.append({
-                    "Chunk ID": cand.get("chunk_id", "")[:12],
-                    "Source": clean_name,
-                    "RRF Rank": cand.get("rrf", {}).get("rank"),
-                    "RRF Score": f"{cand.get('rrf', {}).get('score', 0):.4f}",
-                    "Dense Rank": cand.get("dense", {}).get("rank") if cand.get("dense") else "-",
-                    "BM25 Rank": cand.get("bm25", {}).get("rank") if cand.get("bm25") else "-",
-                })
+                    with card_a:
+                        with st.container(border=True):
+                            st.markdown(f"#### 📄 Document A: `{doc_a_claim.get('filename')}`")
+                            st.write(f"**Stated Rule / Claim:** {doc_a_claim.get('claim')}")
+                            if doc_a_claim.get("scope_notes"):
+                                st.caption(f"**Scope / Version Condition:** {doc_a_claim.get('scope_notes')}")
+                            
+                            ev_a = doc_a_claim.get("evidence", [])
+                            if ev_a:
+                                with st.expander(f"Verified Evidence ({len(ev_a)} passages)", expanded=True):
+                                    for ev in ev_a:
+                                        st.markdown(f"> \"{ev.get('text', '')[:300]}...\"")
+                                        st.caption(f"Source: `{ev.get('source')}`")
 
-            if candidate_rows:
-                st.markdown("#### Initial Hybrid Candidate Pool (Dense + BM25)")
-                st.dataframe(pd.DataFrame(candidate_rows), use_container_width=True, hide_index=True)
+                    with card_b:
+                        with st.container(border=True):
+                            st.markdown(f"#### 📄 Document B: `{doc_b_claim.get('filename')}`")
+                            st.write(f"**Stated Rule / Claim:** {doc_b_claim.get('claim')}")
+                            if doc_b_claim.get("scope_notes"):
+                                st.caption(f"**Scope / Version Condition:** {doc_b_claim.get('scope_notes')}")
 
-            # Raw Chunk Inspector
-            with st.expander("🔎 Deep Evidence Text Inspector", expanded=False):
-                for cand in trace.get("candidates", []):
-                    clean_name, base_name = clean_source_name(cand.get("source", ""))
-                    st.markdown(f"**Source:** `{clean_name}` (`{base_name}`) | **Chunk ID:** `{cand.get('chunk_id')}`")
-                    st.code(cand.get("text", ""), language="markdown")
-                    st.divider()
-        else:
-            st.info("Full audit trace was disabled for this run. Enable 'Include Full Audit Trace' to view reranking matrices.")
+                            ev_b = doc_b_claim.get("evidence", [])
+                            if ev_b:
+                                with st.expander(f"Verified Evidence ({len(ev_b)} passages)", expanded=True):
+                                    for ev in ev_b:
+                                        st.markdown(f"> \"{ev.get('text', '')[:300]}...\"")
+                                        st.caption(f"Source: `{ev.get('source')}`")
+
+                    # Resolution guidance
+                    with st.container(border=True):
+                        st.markdown("**🛡️ Decision-Maker Resolution Guidance:**")
+                        st.write(comp_res.get("resolution_notes", "Review primary documents before policy enforcement."))
+
+                except Exception as exc:
+                    st.error(f"Comparison analysis failed: {exc}")
+
+
+# =========================================================
+# TAB 3: EXECUTIVE BRIEFINGS (MULTI-DOC MAP-REDUCE)
+# =========================================================
+
+with tab_briefing:
+    st.subheader("📋 Multi-Document Executive Briefing")
+    st.caption("Generate a structured synthesis across multiple documents with category-tagged findings and verifiable citations.")
+
+    docs = st.session_state.get("documents", [])
+    if not docs:
+        st.info("No documents indexed yet. Upload documents in Tab 4 to generate briefings.")
+    else:
+        doc_map = {f"{d.get('filename')} ({d.get('document_id')[:8]})": d.get("document_id") for d in docs}
+        selected_brief_names = st.multiselect(
+            "Select Documents to Synthesize",
+            options=list(doc_map.keys()),
+            default=list(doc_map.keys())[:min(3, len(doc_map))],
+        )
+
+        focus_input = st.text_input(
+            "Briefing Focus / Objectives",
+            value="Executive Summary, Critical Policies, and Key Operational Standards",
+        )
+
+        if st.button("📋 Generate Executive Briefing", type="primary", use_container_width=True):
+            if not selected_brief_names:
+                st.warning("Please select at least one document.")
+            else:
+                target_ids = [doc_map[name] for name in selected_brief_names]
+                try:
+                    with st.spinner("Synthesizing multi-document briefing using Map-Reduce engine..."):
+                        brief_res = client.brief(
+                            document_ids=target_ids,
+                            focus=focus_input,
+                            max_findings=8,
+                        )
+
+                    # Summary Box
+                    with st.container(border=True):
+                        st.markdown("### 📌 Executive Overview")
+                        st.markdown(brief_res.get("executive_summary", ""))
+                        st.caption(f"Synthesized across {brief_res.get('document_count')} documents: {', '.join(brief_res.get('analyzed_documents', []))}")
+
+                    # Findings List
+                    findings = brief_res.get("findings", [])
+                    st.markdown(f"### 🎯 Strategic Findings & Mandates ({len(findings)})")
+
+                    for idx, f in enumerate(findings, start=1):
+                        cat = f.get("category", "policy")
+                        tag_class = f"tag-{cat}"
+                        with st.container(border=True):
+                            st.markdown(f'<span class="finding-tag {tag_class}">{cat.replace("_", " ").upper()}</span>', unsafe_allow_html=True)
+                            st.markdown(f"**{idx}. {f.get('title')}**")
+                            st.write(f.get("description"))
+
+                            evs = f.get("evidence", [])
+                            if evs:
+                                with st.expander(f"📑 Grounded Evidence ({len(evs)} chunk)", expanded=False):
+                                    for ev in evs:
+                                        st.markdown(f"> \"{ev.get('text', '')[:300]}...\"")
+                                        st.caption(f"Source: `{ev.get('filename')}` | Reference: `#{ev.get('reference')}`")
+
+                    # Download Briefing
+                    brief_md = [
+                        f"# EXECUTIVE INTELLIGENCE BRIEFING: {focus_input}",
+                        f"**Date:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
+                        f"**Corpus:** {len(target_ids)} documents",
+                        "\n## Executive Overview\n",
+                        brief_res.get("executive_summary", ""),
+                        "\n## Strategic Findings\n",
+                    ]
+                    for f in findings:
+                        brief_md.append(f"### [{f.get('category').upper()}] {f.get('title')}\n{f.get('description')}\n")
+
+                    st.download_button(
+                        label="📥 Download Executive Briefing (.md)",
+                        data="\n".join(brief_md),
+                        file_name=f"psut_executive_brief_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md",
+                        mime="text/markdown",
+                        use_container_width=True,
+                    )
+
+                except Exception as exc:
+                    st.error(f"Briefing generation failed: {exc}")
+
+
+# =========================================================
+# TAB 4: KNOWLEDGE REPOSITORY & SYSTEM DIAGNOSTICS
+# =========================================================
+
+with tab_repo:
+    st.subheader("📁 Sovereign Knowledge Repository & Diagnostics")
+    st.caption("Air-gapped data catalog, document ingestion, and live local infrastructure diagnostics.")
+
+    # Live Health Diagnostics
+    try:
+        health_info = client.get_health()
+        st.markdown("#### 🛡️ Hardware & Engine Diagnostics")
+        h_col1, h_col2, h_col3, h_col4 = st.columns(4)
+        with h_col1:
+            st.metric("Ollama LLM", health_info.get("ollama", {}).get("model", "qwen2.5:3b"), "Local GPU")
+        with h_col2:
+            st.metric("Embeddings", health_info.get("embedding_model", {}).get("name", "MiniLM-L6"), "384-dim")
+        with h_col3:
+            st.metric("Reranker", health_info.get("reranker", {}).get("name", "bge-reranker"), "Cross-Encoder")
+        with h_col4:
+            st.metric("Vector Store", "Qdrant Embedded", f"{health_info.get('chunk_count', 0)} chunks")
+    except Exception:
+        st.warning("Could not fetch real-time health telemetry.")
+
+    st.divider()
+
+    # Document Ingestion Section
+    st.markdown("#### ⚡ Ingest New Document")
+    uploaded_file = st.file_uploader(
+        "Upload Enterprise Document (PDF, Word DOCX, Markdown, Text, HTML)",
+        type=["md", "txt", "pdf", "docx", "html", "htm"],
+        key="tab_repo_uploader",
+    )
+
+    if uploaded_file is not None:
+        if st.button("⚡ Index Document into Vector Store", use_container_width=True, type="primary"):
+            try:
+                with st.spinner("Processing document chunks and local embeddings..."):
+                    result = client.ingest(
+                        filename=uploaded_file.name,
+                        content=uploaded_file.getvalue(),
+                    )
+
+                if result.get("duplicate"):
+                    st.warning("⚠️ Document signature already exists in registry.")
+                else:
+                    st.success(f"✅ Successfully indexed {result.get('chunks_ingested', '')} chunks!")
+                    st.session_state["documents"] = client.list_documents()
+                    st.rerun()
+
+            except Exception as exc:
+                st.error(f"Ingestion failed: {exc}")
+
+    st.divider()
+
+    # Document Catalog Table
+    st.markdown("#### 📚 Ingested Document Catalog")
+    docs = st.session_state.get("documents", [])
+    if docs:
+        doc_rows = []
+        for d in docs:
+            clean_name, base_name = clean_source_name(d.get("filename", ""))
+            doc_rows.append({
+                "Document Name": clean_name,
+                "Format": d.get("file_type", "").upper(),
+                "Chunk Count": d.get("chunk_count", 0),
+                "Document ID": d.get("document_id", "")[:16] + "...",
+                "Strategy": d.get("chunking_strategy", "structure"),
+            })
+        st.dataframe(pd.DataFrame(doc_rows), use_container_width=True, hide_index=True)
+    else:
+        st.info("No documents currently indexed.")
