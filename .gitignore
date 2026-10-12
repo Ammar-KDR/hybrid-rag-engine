@@ -25,6 +25,7 @@ htmlcov/
 data/processed/
 data/indexes/
 data/registry.json
+data/raw/*.pdf
 
 # Vector database persistence
 chroma_data/
