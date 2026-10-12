@@ -978,10 +978,11 @@ with tab_repo:
                         content=uploaded_file.getvalue(),
                     )
 
+                chunk_cnt = result.get("chunk_count", 0)
                 if result.get("duplicate"):
-                    st.warning("⚠️ Document signature already exists in registry.")
+                    st.info(f"ℹ️ Document **{uploaded_file.name}** is already indexed ({chunk_cnt} chunks). Ready for search, conflict detection, and briefings!")
                 else:
-                    st.success(f"✅ Successfully indexed {result.get('chunks_ingested', '')} chunks!")
+                    st.success(f"✅ Successfully indexed **{uploaded_file.name}** ({chunk_cnt} chunks) into the vector store!")
                     st.session_state["documents"] = client.list_documents()
                     st.rerun()
 

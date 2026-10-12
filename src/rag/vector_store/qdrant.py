@@ -32,34 +32,51 @@ class QdrantVectorStore:
                 distance=Distance.COSINE,
             ),
         )
-    def add_point(
-    self,
-    collection_name: str,
-    chunk_id: str,
-    vector: list[float],
-    payload: dict,
-    ):
-        point_id = str(
-        uuid.uuid5(
-            uuid.NAMESPACE_URL,
-            chunk_id,
+    def add_points(
+        self,
+        collection_name: str,
+        items: list[tuple[str, list[float], dict]],
+        batch_size: int = 128,
+    ) -> list[str]:
+        point_ids = []
+        for i in range(0, len(items), batch_size):
+            batch = items[i : i + batch_size]
+            points = []
+            for chunk_id, vector, payload in batch:
+                point_id = str(
+                    uuid.uuid5(
+                        uuid.NAMESPACE_URL,
+                        chunk_id,
+                    )
+                )
+                point_ids.append(point_id)
+                points.append(
+                    PointStruct(
+                        id=point_id,
+                        vector=vector,
+                        payload={
+                            "chunk_id": chunk_id,
+                            **payload,
+                        },
+                    )
+                )
+            self.client.upsert(
+                collection_name=collection_name,
+                points=points,
             )
-        )
-        point = PointStruct(
-            id=point_id,
-            vector=vector,
-            payload={
-            "chunk_id": chunk_id,
-            **payload,
-        },
-        )
+        return point_ids
 
-        self.client.upsert(
+    def add_point(
+        self,
+        collection_name: str,
+        chunk_id: str,
+        vector: list[float],
+        payload: dict,
+    ):
+        return self.add_points(
             collection_name=collection_name,
-            points=[point],
-        )
-
-        return point.id
+            items=[(chunk_id, vector, payload)],
+        )[0]
     def search(
     self,
     collection_name: str,

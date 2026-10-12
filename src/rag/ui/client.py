@@ -112,7 +112,7 @@ class RAGAPIClient:
                     content,
                 )
             },
-            timeout=120,
+            timeout=600,
         )
         self._raise_for_api_error(response)
         return response.json()

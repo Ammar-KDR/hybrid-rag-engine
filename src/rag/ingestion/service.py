@@ -149,22 +149,24 @@ class IngestionService:
             # -------------------------------------
             # 6. Prepare embeddings first
             #
-            # Do expensive work before changing
-            # Qdrant or live BM25 state.
+            # Batched encoding is significantly faster
+            # than encoding one-by-one.
             # -------------------------------------
 
-            vectors = []
+            chunk_texts = [chunk.text for chunk in new_chunks]
+            batch_size = 64
+            all_vectors = []
+            for i in range(0, len(chunk_texts), batch_size):
+                batch_slice = chunk_texts[i : i + batch_size]
+                if hasattr(self.embedding_service, "embed_texts"):
+                    batch_vectors = self.embedding_service.embed_texts(batch_slice)
+                else:
+                    batch_vectors = [
+                        self.embedding_service.embed_text(t) for t in batch_slice
+                    ]
+                all_vectors.extend(batch_vectors)
 
-            for chunk in new_chunks:
-
-                vector = (
-                    self.embedding_service
-                    .embed_text(chunk.text)
-                )
-
-                vectors.append(
-                    (chunk, vector)
-                )
+            vectors = list(zip(new_chunks, all_vectors))
 
 
             # -------------------------------------
@@ -204,23 +206,39 @@ class IngestionService:
             # 8. Upsert ONLY new chunks to Qdrant
             # -------------------------------------
 
-            for chunk, vector in vectors:
-
-                payload = {
-                    "text": chunk.text,
-                    "source": chunk.source,
-                    "document_id": document_id,
-                    **chunk.metadata,
-                }
-
-                self.vector_store.add_point(
-                    collection_name=(
-                        self.collection_name
-                    ),
-                    chunk_id=chunk.chunk_id,
-                    vector=vector,
-                    payload=payload,
+            qdrant_items = [
+                (
+                    chunk.chunk_id,
+                    vector,
+                    {
+                        "text": chunk.text,
+                        "source": chunk.source,
+                        "document_id": document_id,
+                        **chunk.metadata,
+                    },
                 )
+                for chunk, vector in vectors
+            ]
+
+            if hasattr(self.vector_store, "add_points"):
+                self.vector_store.add_points(
+                    collection_name=self.collection_name,
+                    items=qdrant_items,
+                )
+            else:
+                for chunk, vector in vectors:
+                    payload = {
+                        "text": chunk.text,
+                        "source": chunk.source,
+                        "document_id": document_id,
+                        **chunk.metadata,
+                    }
+                    self.vector_store.add_point(
+                        collection_name=self.collection_name,
+                        chunk_id=chunk.chunk_id,
+                        vector=vector,
+                        payload=payload,
+                    )
 
 
             # -------------------------------------
