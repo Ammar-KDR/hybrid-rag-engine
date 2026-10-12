@@ -37,9 +37,30 @@ class AnswerBuilder:
 
             citations.append(citation)
 
+        answer_text = generation.text.strip()
+        is_insufficient = (
+            "insufficient" in answer_text.lower()
+            or "available evidence" in answer_text.lower()
+            or "not enough evidence" in answer_text.lower()
+        )
+
+        # Fallback: If model generated an answer based on evidence but omitted brackets
+        if not citations and context.blocks and not is_insufficient:
+            top_block = context.blocks[0]
+            citation = Citation(
+                reference=top_block.reference,
+                chunk_id=top_block.chunk_id,
+                source=top_block.source,
+                page_number=top_block.page_number,
+                heading_path=top_block.heading_path,
+            )
+            citations.append(citation)
+            if f"[{top_block.reference}]" not in answer_text:
+                answer_text = f"{answer_text} [{top_block.reference}]"
+
         return GeneratedAnswer(
             question=question,
-            answer=generation.text,
+            answer=answer_text,
             citations=citations,
             unresolved_references=unresolved_references,
             evidence=context.blocks,

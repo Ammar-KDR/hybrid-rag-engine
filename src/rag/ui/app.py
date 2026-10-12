@@ -610,14 +610,18 @@ if result:
         for idx, cit in enumerate(citations):
             col_target = source_cols[idx % min(len(citations), 4)]
             ref = cit.get("reference")
-            src = cit.get("source", "Document")
+            raw_src = cit.get("source", "Document")
+            # Clean display name: remove path and sha256 prefix if present
+            base_src = os.path.basename(raw_src)
+            clean_src = base_src.split("_", 1)[-1] if len(base_src) > 65 and "_" in base_src else base_src
             page = cit.get("page_number")
             cid = cit.get("chunk_id", "")
             heading = " → ".join(cit.get("heading_path") or [])
 
             page_str = f" • p.{page}" if page is not None else ""
             with col_target:
-                with st.expander(f"📄 [{ref}] {src}{page_str}", expanded=False):
+                with st.expander(f"📄 [{ref}] {clean_src}{page_str}", expanded=False):
+                    st.caption(f"**Source File:** `{base_src}`")
                     st.caption(f"**Chunk ID:** `{cid[:16]}...`")
                     if heading:
                         st.caption(f"**Section:** {heading}")
@@ -645,14 +649,12 @@ if result:
     # TAB 1: EXECUTIVE BRIEF
     # -----------------------------------------------------
     with tab_brief:
-        # Styled Brief Card
-        st.markdown('<div class="exec-brief-box">', unsafe_allow_html=True)
-        st.markdown(
-            '<div class="exec-takeaway-header"><span>📌 Executive Synthesis & Decision Summary</span></div>',
-            unsafe_allow_html=True,
-        )
-        st.markdown(result.get("answer", ""))
-        st.markdown('</div>', unsafe_allow_html=True)
+        with st.container(border=True):
+            st.markdown(
+                '<div class="exec-takeaway-header"><span>📌 Executive Synthesis & Decision Summary</span></div>',
+                unsafe_allow_html=True,
+            )
+            st.markdown(result.get("answer", ""))
 
         # Strategic Confidence Rating Card
         conf_col1, conf_col2, conf_col3 = st.columns(3)

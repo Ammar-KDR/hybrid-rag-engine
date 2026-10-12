@@ -1,23 +1,37 @@
 import re
 
 
-CITATION_PATTERN = re.compile(r"\[(\d+)\]")
+# Matches [1], [1, 2], [Source 1], [Ref: 2], [Doc 1], etc.
+BRACKET_CITATION_PATTERN = re.compile(
+    r"\[(?:source|doc|document|ref|reference)?\s*:?\s*(\d+(?:\s*[,;\-]\s*\d+)*)\]",
+    re.IGNORECASE,
+)
+
+# Fallback for parenthesized citations like (Source 1), (Ref 2)
+PAREN_CITATION_PATTERN = re.compile(
+    r"\((?:source|doc|document|ref|reference)\s*:?\s*(\d+)\)",
+    re.IGNORECASE,
+)
 
 
 def extract_references(
     text: str,
 ) -> list[int]:
-
-    matches = CITATION_PATTERN.findall(text)
-
     references = []
     seen = set()
 
-    for match in matches:
-        reference = int(match)
+    for match in BRACKET_CITATION_PATTERN.finditer(text):
+        for num in re.findall(r"\d+", match.group(1)):
+            reference = int(num)
+            if reference not in seen:
+                references.append(reference)
+                seen.add(reference)
 
-        if reference not in seen:
-            references.append(reference)
-            seen.add(reference)
+    if not references:
+        for match in PAREN_CITATION_PATTERN.finditer(text):
+            reference = int(match.group(1))
+            if reference not in seen:
+                references.append(reference)
+                seen.add(reference)
 
     return references

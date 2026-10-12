@@ -57,7 +57,10 @@ Question:
 Evidence:
 {context.text if context.text else "[NO EVIDENCE PROVIDED]"}
 
-Answer the question according to the system instructions.
+Instructions:
+- Answer the question concisely using ONLY the provided evidence above.
+- You MUST cite every factual claim with its evidence reference number in square brackets (e.g. [1] or [1][2]).
+- Do not provide an answer without citation brackets.
 """.strip()
 
         return GenerationPrompt(
