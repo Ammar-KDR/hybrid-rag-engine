@@ -207,6 +207,30 @@
       "chunk_count": 3,
       "ingested_at": "2026-10-10T08:16:57.380302+00:00",
       "chunking_strategy": "semantic"
+    },
+    {
+      "document_id": "f2c47ff602c37219673d8f6f42dd0c2591454a5a56a160b971d279d8e1a56148",
+      "filename": "The_Laws_of_Human_Nature_by_Robert_Greene_2018.pdf",
+      "file_type": "pdf",
+      "chunk_count": 718,
+      "ingested_at": "2026-10-12T19:24:50.284237+00:00",
+      "chunking_strategy": "semantic"
+    },
+    {
+      "document_id": "2e78549df6f03223715a5cec2c459059fe87c1cd94be7e658023aa5ff8435243",
+      "filename": "passport_service_guide.md",
+      "file_type": "md",
+      "chunk_count": 7,
+      "ingested_at": "2026-10-13T15:34:23.237591+00:00",
+      "chunking_strategy": "arabic_government_structure"
+    },
+    {
+      "document_id": "f8ed280a9a3d33f662a533fe0eb61dbb7e6310dfb392f6ef0228cfdb26cbe6d8",
+      "filename": "passport_urgent_instructions_2026.md",
+      "file_type": "md",
+      "chunk_count": 6,
+      "ingested_at": "2026-10-13T15:34:23.806316+00:00",
+      "chunking_strategy": "arabic_government_structure"
     }
   ]
 }
