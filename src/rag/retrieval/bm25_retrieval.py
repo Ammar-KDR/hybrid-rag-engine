@@ -1,9 +1,12 @@
+import re
 from rank_bm25 import BM25Okapi
 from rag.retrieval.model import RetrievedChunk
+from rag.nlp.arabic import is_arabic_text, tokenize_arabic
 
-import re
 
 def tokenize(text: str) -> list[str]:
+    if is_arabic_text(text):
+        return tokenize_arabic(text)
     return re.findall(
         r"\b[\w\-]+\b",
         text.lower()

@@ -52,3 +52,16 @@ def test_rewriter_ollama_call_mock():
         rewritten, was_rewritten = rewriter.rewrite("How do you backup it?", history)
         assert was_rewritten is True
         assert rewritten == "How do you backup docker compose volumes?"
+
+
+def test_rewriter_arabic_triggers():
+    rewriter = QueryRewriter()
+    history = [
+        ChatMessage(role="user", content="ما هي شروط تجديد جواز السفر؟"),
+        ChatMessage(role="assistant", content="شروط تجديد الجواز هي إحضار الهوية ودفع الرسوم."),
+    ]
+
+    # Arabic pronoun / elliptical triggers
+    assert rewriter.should_rewrite("وماذا عن رسومه؟", history) is True
+    assert rewriter.should_rewrite("هل توجد استثناءات فيها؟", history) is True
+    assert rewriter.should_rewrite("ما هي؟", history) is True

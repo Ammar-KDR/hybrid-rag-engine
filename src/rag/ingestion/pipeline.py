@@ -6,13 +6,16 @@ from rag.ingestion.loader import (
 )
 from rag.chunking.structure_chunking import MarkdownStructureChunker
 from rag.chunking.semantic_chunking import SemanticChunker
+from rag.chunking.arabic_chunker import ArabicGovernmentChunker
+from rag.nlp.arabic import is_arabic_text
 from rag.config import settings
 
 
 DATA_PATH = settings.DATA_PATH
 
 def build_chunks_for_file(file_path: str | Path,
-                          semantic_chunker: SemanticChunker | None = None):
+                          semantic_chunker: SemanticChunker | None = None,
+                          arabic_chunker: ArabicGovernmentChunker | None = None):
     
     path = Path(file_path)
 
@@ -22,6 +25,13 @@ def build_chunks_for_file(file_path: str | Path,
         max_chunk_chars=2000,
         overlap=200,
     )
+
+    if arabic_chunker is None:
+        arabic_chunker = ArabicGovernmentChunker(
+            max_chunk_chars=1200,
+            overlap=200,
+            inject_heading_context=True,
+        )
 
     if semantic_chunker is None:
         semantic_chunker = SemanticChunker(
@@ -34,11 +44,11 @@ def build_chunks_for_file(file_path: str | Path,
 
     for document in documents:
 
-        if document.file_type == "md":
-            
+        if is_arabic_text(document.text):
+            chunks = arabic_chunker.chunk(document)
+        elif document.file_type == "md":
             chunks = markdown_chunker.chunk(document)
         else:
-            
             chunks = semantic_chunker.chunk(document)
 
         all_chunks.extend(chunks)
@@ -47,6 +57,7 @@ def build_chunks_for_file(file_path: str | Path,
 
 def build_chunks(
     semantic_chunker: SemanticChunker | None = None,
+    arabic_chunker: ArabicGovernmentChunker | None = None,
     data_path: Path | None = None,
 ):
 
@@ -54,6 +65,13 @@ def build_chunks(
         max_chunk_chars=2000,
         overlap=200,
     )
+
+    if arabic_chunker is None:
+        arabic_chunker = ArabicGovernmentChunker(
+            max_chunk_chars=1200,
+            overlap=200,
+            inject_heading_context=True,
+        )
 
     if semantic_chunker is None:
         semantic_chunker = SemanticChunker(
@@ -77,7 +95,9 @@ def build_chunks(
 
         for document in documents:
 
-            if document.file_type == "md":
+            if is_arabic_text(document.text):
+                chunks = arabic_chunker.chunk(document)
+            elif document.file_type == "md":
                 chunks = markdown_chunker.chunk(document)
             else:
                 chunks = semantic_chunker.chunk(document)

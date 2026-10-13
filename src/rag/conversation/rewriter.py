@@ -8,7 +8,8 @@ from rag.config import settings
 
 
 PRONOUN_PATTERN = re.compile(
-    r"\b(it|its|they|them|their|theirs|this|that|these|those)\b",
+    r"\b(it|its|they|them|their|theirs|this|that|these|those)\b"
+    r"|(\b(هو|هي|هما|هم|هن|هذا|هذه|ذلك|تلك|هؤلاء|هنا|هناك|عنها|منها|لها|به|بها|فيه|فيها)\b)",
     re.IGNORECASE,
 )
 
@@ -23,6 +24,18 @@ ELLIPTICAL_PATTERNS = [
     r"\bwho did that\b",
     r"\bany other\b",
     r"\bwhat else\b",
+    # Arabic elliptical patterns
+    r"ماذا عن",
+    r"وماذا عن",
+    r"كيف عن",
+    r"هل يوجد استثناء",
+    r"هل هناك استثناء",
+    r"ما هي رسومه",
+    r"ما هي شروطه",
+    r"وما هي",
+    r"وهل يمكن",
+    r"وهل يجوز",
+    r"اي شروط اخرى",
 ]
 
 

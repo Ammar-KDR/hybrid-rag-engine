@@ -13,6 +13,7 @@ PyYAML
 # ============================================================
 
 pypdf
+pymupdf
 beautifulsoup4
 lxml
 markdown-it-py

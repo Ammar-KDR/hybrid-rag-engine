@@ -298,6 +298,38 @@ textarea::placeholder {
 </style>
 """
 
+ARABIC_RTL_CSS = """
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');
+
+html, body, [data-testid="stAppViewContainer"], .main, .block-container, p, span, label, div, li, h1, h2, h3, h4, h5, h6, input, textarea {
+    direction: rtl !important;
+    text-align: right !important;
+    font-family: 'Cairo', 'Segoe UI', Tahoma, -apple-system, sans-serif !important;
+}
+
+[data-testid="stSidebar"] {
+    direction: rtl !important;
+    text-align: right !important;
+}
+
+.trust-badge {
+    direction: rtl !important;
+}
+
+.exec-box {
+    border-left: 1.5px solid #CBD5E1 !important;
+    border-right: 5px solid #002D62 !important;
+}
+
+.source-pill-quote {
+    border-left: none !important;
+    border-right: 3px solid #002D62 !important;
+    border-radius: 4px 0 0 4px !important;
+}
+</style>
+"""
+
 st.markdown(HIGH_CONTRAST_PSUT_CSS, unsafe_allow_html=True)
 
 # =========================================================
@@ -455,26 +487,44 @@ with st.sidebar:
     if logo_file:
         st.image(logo_file, use_container_width=True)
 
-    st.markdown('<div class="sidebar-section-title">System Status</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sidebar-section-title">Language / لغة الواجهة</div>', unsafe_allow_html=True)
+    ui_lang = st.radio(
+        "اختر لغة الواجهة / Select Language",
+        ["🇸🇦 العربية (Arabic)", "🇬🇧 English"],
+        index=0,
+        label_visibility="collapsed",
+    )
+    is_ar = ui_lang.startswith("🇸🇦")
+
+    if is_ar:
+        st.markdown(ARABIC_RTL_CSS, unsafe_allow_html=True)
+
+    st.markdown(
+        f'<div class="sidebar-section-title">{"حالة الأنظمة السيادية" if is_ar else "System Status"}</div>',
+        unsafe_allow_html=True,
+    )
     try:
         health = client.get_health()
         st.session_state["health_status"] = health
-        st.success("🟢 Core Services Ready (Air-Gapped)")
+        st.success("🟢 الأنظمة تعمل محلياً (Air-Gapped)" if is_ar else "🟢 Core Services Ready (Air-Gapped)")
     except Exception:
-        st.error("🔴 Connecting to API Server...")
+        st.error("🔴 جاري الاتصال بالخادم..." if is_ar else "🔴 Connecting to API Server...")
 
     doc_count = len(st.session_state.get("documents", []))
-    st.metric("Indexed Documents", doc_count)
+    st.metric("الوثائق المفهرسة" if is_ar else "Indexed Documents", doc_count)
 
-    st.markdown('<div class="sidebar-section-title">Session Controls</div>', unsafe_allow_html=True)
-    if st.button("🔄 Refresh Documents", use_container_width=True):
+    st.markdown(
+        f'<div class="sidebar-section-title">{"إدارة الجلسة" if is_ar else "Session Controls"}</div>',
+        unsafe_allow_html=True,
+    )
+    if st.button("🔄 تحديث الوثائق" if is_ar else "🔄 Refresh Documents", use_container_width=True):
         try:
             st.session_state["documents"] = client.list_documents()
-            st.success("Synchronized!")
+            st.success("تم التحديث بنجاح!" if is_ar else "Synchronized!")
         except Exception as e:
             st.error(str(e))
 
-    if st.button("🧹 Clear Chat History", use_container_width=True):
+    if st.button("🧹 مسح سجل المحادثة" if is_ar else "🧹 Clear Chat History", use_container_width=True):
         st.session_state["chat_history"] = []
         st.session_state["last_result"] = None
         st.session_state["last_question"] = ""
@@ -491,46 +541,76 @@ if header_logo:
     with col_logo:
         st.image(header_logo, use_container_width=True)
     with col_head:
-        st.markdown(
-            """
-            <div style="display:flex; flex-direction:column; justify-content:center; padding-left:16px; border-left:2.5px solid #E2E8F0; min-height:80px;">
-                <h1 style="color:#002D62; font-size:1.85rem; font-weight:800; margin:0; line-height:1.2;">
-                    Sovereign Hybrid RAG Engine
-                </h1>
-                <p style="color:#334155; font-size:0.98rem; margin-top:5px; margin-bottom:0; font-weight:600;">
-                    Princess Sumaya University for Technology • 42 Irbid Hackathon
-                </p>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+        if is_ar:
+            st.markdown(
+                """
+                <div style="display:flex; flex-direction:column; justify-content:center; padding-right:16px; border-right:2.5px solid #E2E8F0; min-height:80px;">
+                    <h1 style="color:#002D62; font-size:1.85rem; font-weight:800; margin:0; line-height:1.2;">
+                        نظام الاسترجاع الهجين والذكاء الاصطناعي السيادي
+                    </h1>
+                    <p style="color:#334155; font-size:0.98rem; margin-top:5px; margin-bottom:0; font-weight:600;">
+                        جامعة الأميرة سمية للتكنولوجيا • هاكاثون 42 إربد • قطاع الخدمات الحكومية
+                    </p>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+        else:
+            st.markdown(
+                """
+                <div style="display:flex; flex-direction:column; justify-content:center; padding-left:16px; border-left:2.5px solid #E2E8F0; min-height:80px;">
+                    <h1 style="color:#002D62; font-size:1.85rem; font-weight:800; margin:0; line-height:1.2;">
+                        Sovereign Hybrid RAG Engine
+                    </h1>
+                    <p style="color:#334155; font-size:0.98rem; margin-top:5px; margin-bottom:0; font-weight:600;">
+                        Princess Sumaya University for Technology • 42 Irbid Hackathon
+                    </p>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
 else:
-    st.title("🏛️ PSUT Sovereign Hybrid RAG")
+    st.title("🏛️ جامعة الأميرة سمية للتكنولوجيا - الذكاء الاصطناعي السيادي" if is_ar else "🏛️ PSUT Sovereign Hybrid RAG")
 
 # Trust Badges
-st.markdown(
-    """
-    <div class="badge-row">
-        <span class="trust-badge badge-green">🔒 100% AIR-GAPPED SOVEREIGN</span>
-        <span class="trust-badge badge-blue">⚡ RTX 3060 CUDA ACCELERATED</span>
-        <span class="trust-badge badge-navy">🛡️ ZERO CLOUD EXFILTRATION</span>
-        <span class="trust-badge badge-amber">⚡ HYBRID RRF + BGE CROSS-ENCODER</span>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
+if is_ar:
+    st.markdown(
+        """
+        <div class="badge-row">
+            <span class="trust-badge badge-green">🔒 بيئة سيادية معزولة 100% (AIR-GAPPED)</span>
+            <span class="trust-badge badge-blue">⚡ تسريع محلي كارت الشاشة RTX 3060 CUDA</span>
+            <span class="trust-badge badge-navy">🛡️ صفر تسريب سحابي (ZERO EXFILTRATION)</span>
+            <span class="trust-badge badge-amber">⚡ استرجاع هجين + معيد ترتيب BGE MULTILINGUAL</span>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+else:
+    st.markdown(
+        """
+        <div class="badge-row">
+            <span class="trust-badge badge-green">🔒 100% AIR-GAPPED SOVEREIGN</span>
+            <span class="trust-badge badge-blue">⚡ RTX 3060 CUDA ACCELERATED</span>
+            <span class="trust-badge badge-navy">🛡️ ZERO CLOUD EXFILTRATION</span>
+            <span class="trust-badge badge-amber">⚡ HYBRID RRF + BGE CROSS-ENCODER</span>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 # =========================================================
 # Top-Level Institutional Tabs
 # =========================================================
 
-tab_qa, tab_compare, tab_briefing, tab_repo = st.tabs([
-    "🔍 Interactive Chat & Evidence",
-    "⚖️ Document Conflict Detective",
-    "📋 Executive Briefings",
-    "📁 Knowledge Repository & Diagnostics",
-])
+tab_titles = [
+    "🔍 المحادثة التفاعلية ومستكشف الأدلة" if is_ar else "🔍 Interactive Chat & Evidence",
+    "⚖️ محقق تعارض وتناقض الوثائق" if is_ar else "⚖️ Document Conflict Detective",
+    "📋 الإيجازات والتقارير التنفيذية" if is_ar else "📋 Executive Briefings",
+    "📁 مستودع المعرفة والتشخيص الفني" if is_ar else "📁 Knowledge Repository & Diagnostics",
+]
+
+tab_qa, tab_compare, tab_briefing, tab_repo = st.tabs(tab_titles)
 
 
 # =========================================================
@@ -539,45 +619,72 @@ tab_qa, tab_compare, tab_briefing, tab_repo = st.tabs([
 
 with tab_qa:
     # Preset Starter Inquiries
-    st.markdown(
-        "<span style='font-size:0.82rem; font-weight:800; color:#002D62; text-transform:uppercase; letter-spacing:0.04em;'>"
-        "Sample Queries (Click to Test Instantly)"
-        "</span>",
-        unsafe_allow_html=True,
-    )
+    if is_ar:
+        st.markdown(
+            "<span style='font-size:0.82rem; font-weight:800; color:#002D62; text-transform:uppercase; letter-spacing:0.04em;'>"
+            "نماذج أسئلة الخدمات الحكومية (انقر للاختبار الفوري)"
+            "</span>",
+            unsafe_allow_html=True,
+        )
+        preset_cols = st.columns(3)
+        with preset_cols[0]:
+            if st.button("🛂 وثائق ورسوم تجديد جواز السفر", key="preset_gov_1", use_container_width=True):
+                st.session_state["question_input"] = "ما هي الوثائق المطلوبة والرسوم المقررة لإصدار أو تجديد جواز السفر الأردني؟"
+                st.session_state["trigger_ask"] = True
+                st.rerun()
 
-    preset_cols = st.columns(3)
-    with preset_cols[0]:
-        if st.button("🔍 Troubleshooting Database Timeout", key="preset_db", use_container_width=True):
-            st.session_state["question_input"] = "How do we troubleshoot and resolve database connection timeout errors?"
-            st.session_state["trigger_ask"] = True
-            st.rerun()
+        with preset_cols[1]:
+            if st.button("⚡ رسوم وإجراءات المعاملة المستعجلة", key="preset_gov_2", use_container_width=True):
+                st.session_state["question_input"] = "ما هي رسوم إصدار جواز السفر المستعجل وما هي المدة الزمنية لإنجازه ومواقع الخدمة؟"
+                st.session_state["trigger_ask"] = True
+                st.rerun()
 
-    with preset_cols[1]:
-        if st.button("🌐 DNS Configuration Guidelines", key="preset_dns", use_container_width=True):
-            st.session_state["question_input"] = "What are the recommended DNS configuration guidelines and resolver steps?"
-            st.session_state["trigger_ask"] = True
-            st.rerun()
+        with preset_cols[2]:
+            if st.button("📱 اعتماد الهوية الرقمية عبر تطبيق سند", key="preset_gov_3", use_container_width=True):
+                st.session_state["question_input"] = "هل تقبل الهوية الرقمية الصادرة عبر تطبيق سند رسمياً كإثبات شخصية لفتح المعاملة المستعجلة؟"
+                st.session_state["trigger_ask"] = True
+                st.rerun()
+    else:
+        st.markdown(
+            "<span style='font-size:0.82rem; font-weight:800; color:#002D62; text-transform:uppercase; letter-spacing:0.04em;'>"
+            "Sample Queries (Click to Test Instantly)"
+            "</span>",
+            unsafe_allow_html=True,
+        )
+        preset_cols = st.columns(3)
+        with preset_cols[0]:
+            if st.button("🔍 Troubleshooting Database Timeout", key="preset_db", use_container_width=True):
+                st.session_state["question_input"] = "How do we troubleshoot and resolve database connection timeout errors?"
+                st.session_state["trigger_ask"] = True
+                st.rerun()
 
-    with preset_cols[2]:
-        if st.button("🐳 Docker Container Restart Policies", key="preset_docker", use_container_width=True):
-            st.session_state["question_input"] = "What are the container restart policies and memory limit configurations in Docker?"
-            st.session_state["trigger_ask"] = True
-            st.rerun()
+        with preset_cols[1]:
+            if st.button("🌐 DNS Configuration Guidelines", key="preset_dns", use_container_width=True):
+                st.session_state["question_input"] = "What are the recommended DNS configuration guidelines and resolver steps?"
+                st.session_state["trigger_ask"] = True
+                st.rerun()
+
+        with preset_cols[2]:
+            if st.button("🐳 Docker Container Restart Policies", key="preset_docker", use_container_width=True):
+                st.session_state["question_input"] = "What are the container restart policies and memory limit configurations in Docker?"
+                st.session_state["trigger_ask"] = True
+                st.rerun()
 
     # Scope Selection: All Documents or Single Document
     docs = st.session_state.get("documents", [])
-    doc_options = ["All Ingested Documents"] + [f"{d.get('filename')} ({d.get('document_id')[:8]})" for d in docs]
-    selected_scope_label = st.selectbox("Document Retrieval Scope", options=doc_options, index=0)
+    all_label = "جميع الوثائق المفهرسة" if is_ar else "All Ingested Documents"
+    doc_options = [all_label] + [f"{d.get('filename')} ({d.get('document_id')[:8]})" for d in docs]
+    scope_prompt = "نطاق البحث واسترجاع الوثائق" if is_ar else "Document Retrieval Scope"
+    selected_scope_label = st.selectbox(scope_prompt, options=doc_options, index=0)
 
     selected_doc_ids = None
-    if selected_scope_label != "All Ingested Documents":
+    if selected_scope_label != all_label:
         selected_idx = doc_options.index(selected_scope_label) - 1
         selected_doc_ids = [docs[selected_idx]["document_id"]]
 
     # Query Input Area
     query_text = st.text_area(
-        "Inquiry / Prompt",
+        "الاستفسار / السؤال المطلوب تحليله:" if is_ar else "Inquiry / Prompt",
         value=st.session_state["question_input"],
         height=85,
         placeholder="Ask any question regarding system architecture, operations, policies, or follow-up...",
@@ -740,52 +847,84 @@ with tab_qa:
 # =========================================================
 
 with tab_compare:
-    st.subheader("⚖️ Document Conflict Detective")
-    st.caption("Perform rigorous, air-gapped comparison between two documents to detect contradictions, version differences, or policy alignment.")
+    st.subheader("⚖️ محقق تعارض وتناقض الوثائق والسياسات" if is_ar else "⚖️ Document Conflict Detective")
+    st.caption(
+        "مقارنة دقيقة ومعزولة بين وثيقتين لاكتشاف التناقضات أو الفروقات الإجرائية أو التوافق التام."
+        if is_ar
+        else "Perform rigorous, air-gapped comparison between two documents to detect contradictions, version differences, or policy alignment."
+    )
 
     docs = st.session_state.get("documents", [])
     if len(docs) < 2:
-        st.info("Please index at least two documents to activate side-by-side conflict detection.")
+        st.info("يرجى فهرسة وثيقتين على الأقل لتفعيل خاصية كشف التعارض والتناقض." if is_ar else "Please index at least two documents to activate side-by-side conflict detection.")
     else:
         doc_names = [f"{d.get('filename')} ({d.get('document_id')[:8]})" for d in docs]
         c1, c2 = st.columns(2)
         with c1:
-            sel_a = st.selectbox("Primary Baseline Document (A)", options=doc_names, index=0)
+            sel_a = st.selectbox("الوثيقة المرجعية الأساسية (أ)" if is_ar else "Primary Baseline Document (A)", options=doc_names, index=0)
         with c2:
-            sel_b = st.selectbox("Comparison Target Document (B)", options=doc_names, index=min(1, len(doc_names) - 1))
+            sel_b = st.selectbox("وثيقة المقارنة والتحقق (ب)" if is_ar else "Comparison Target Document (B)", options=doc_names, index=min(1, len(doc_names) - 1))
 
         doc_a_idx = doc_names.index(sel_a)
         doc_b_idx = doc_names.index(sel_b)
         doc_a_id = docs[doc_a_idx]["document_id"]
         doc_b_id = docs[doc_b_idx]["document_id"]
 
-        topic_input = st.text_input(
-            "Comparison Topic / Policy Area",
-            value="Container restart policies and resource allocation",
-            help="Enter the specific policy, deadline, or parameter to compare.",
+        default_topic = (
+            "رسوم المعاملة المستعجلة وزمن الإنجاز واعتماد تطبيق سند"
+            if is_ar
+            else "Container restart policies and resource allocation"
+        )
+        if "topic_input" not in st.session_state:
+            st.session_state["topic_input"] = default_topic
+
+        topic_val = st.text_input(
+            "موضوع المقارنة / البند الإجرائي أو القانوني:" if is_ar else "Comparison Topic / Policy Area",
+            value=st.session_state["topic_input"],
+            help="حدد البند أو المسألة الإجرائية المراد تدقيقها بدقة بين الوثيقتين.",
         )
 
         preset_comp_cols = st.columns(3)
-        with preset_comp_cols[0]:
-            if st.button("Compare Restart Policies", key="cmp_restart", use_container_width=True):
-                topic_input = "Container restart policies and failure handling"
-        with preset_comp_cols[1]:
-            if st.button("Compare Timeout Limits", key="cmp_timeout", use_container_width=True):
-                topic_input = "Database connection timeout and retry procedures"
-        with preset_comp_cols[2]:
-            if st.button("Compare DNS Resolvers", key="cmp_dns", use_container_width=True):
-                topic_input = "DNS resolution configuration and fallback addresses"
+        if is_ar:
+            with preset_comp_cols[0]:
+                if st.button("🛂 مقارنة الرسوم وزمن الإنجاز", key="cmp_ar_fees", use_container_width=True):
+                    st.session_state["topic_input"] = "رسوم المعاملة المستعجلة والمدة الزمنية لإنجاز الجواز"
+                    st.rerun()
+            with preset_comp_cols[1]:
+                if st.button("📱 مقارنة إثبات الهوية وسند", key="cmp_ar_id", use_container_width=True):
+                    st.session_state["topic_input"] = "اشتراط بطاقة الأحوال الذكية واعتماد الهوية الرقمية عبر تطبيق سند"
+                    st.rerun()
+            with preset_comp_cols[2]:
+                if st.button("⚠️ مقارنة الشروط والاستثناءات", key="cmp_ar_cond", use_container_width=True):
+                    st.session_state["topic_input"] = "شروط حالة الاستعجال والفئات المستثناة وموافقة ولي الأمر"
+                    st.rerun()
+        else:
+            with preset_comp_cols[0]:
+                if st.button("Compare Restart Policies", key="cmp_restart", use_container_width=True):
+                    st.session_state["topic_input"] = "Container restart policies and failure handling"
+                    st.rerun()
+            with preset_comp_cols[1]:
+                if st.button("Compare Timeout Limits", key="cmp_timeout", use_container_width=True):
+                    st.session_state["topic_input"] = "Database connection timeout and retry procedures"
+                    st.rerun()
+            with preset_comp_cols[2]:
+                if st.button("Compare DNS Resolvers", key="cmp_dns", use_container_width=True):
+                    st.session_state["topic_input"] = "DNS resolution configuration and fallback addresses"
+                    st.rerun()
 
-        if st.button("🔍 Run Conflict & Divergence Audit", type="primary", use_container_width=True):
-            if not topic_input.strip():
-                st.warning("Please specify a topic to audit.")
+        run_cmp_btn = st.button("⚖️ تشغيل تدقيق التعارض والتطابق" if is_ar else "🔍 Run Conflict & Divergence Audit", type="primary", use_container_width=True)
+
+        if run_cmp_btn:
+            active_topic = topic_val.strip() or st.session_state.get("topic_input", "").strip()
+            if not active_topic:
+                st.warning("يرجى تحديد موضوع للمقارنة." if is_ar else "Please specify a topic to audit.")
             else:
                 try:
-                    with st.spinner("Auditing document evidence, scopes, and potential contradictions..."):
+                    with st.spinner("جاري تدقيق أدلة الوثيقتين واكتشاف الفروقات والتناقضات..." if is_ar else "Auditing document evidence, scopes, and potential contradictions..."):
                         comp_res = client.compare(
                             document_a_id=doc_a_id,
                             document_b_id=doc_b_id,
-                            topic=topic_input.strip(),
+                            topic=active_topic,
                         )
 
                     # Relationship Badge
@@ -797,15 +936,23 @@ with tab_compare:
                         "insufficient_evidence": "rel-insufficient",
                     }.get(rel, "rel-insufficient")
 
-                    rel_label = {
-                        "agreement": "✅ Policy Agreement: Factual Alignment",
-                        "scope_or_version_difference": "ℹ️ Scope / Version Difference: Tier or Effective Date Divergence",
-                        "possible_conflict": "⚠️ Possible Conflict: Direct Contradiction Detected",
-                        "insufficient_evidence": "❓ Insufficient Evidence: Inconclusive Coverage",
-                    }.get(rel, rel.replace("_", " ").title())
+                    if is_ar:
+                        rel_label = {
+                            "agreement": "✅ توافق في السياسات: تطابق تام في الأحكام والشروط",
+                            "scope_or_version_difference": "ℹ️ اختلاف في النطاق أو الإصدار: تباين إجرائي أو تحديث رسمي",
+                            "possible_conflict": "⚠️ تعارض وتناقض محتمل: تضارب مباشر بين نصوص الوثيقتين",
+                            "insufficient_evidence": "❓ أدلة غير كافية: لا تتوفر تفاصيل كافية للمقارنة",
+                        }.get(rel, rel)
+                    else:
+                        rel_label = {
+                            "agreement": "✅ Policy Agreement: Factual Alignment",
+                            "scope_or_version_difference": "ℹ️ Scope / Version Difference: Tier or Effective Date Divergence",
+                            "possible_conflict": "⚠️ Possible Conflict: Direct Contradiction Detected",
+                            "insufficient_evidence": "❓ Insufficient Evidence: Inconclusive Coverage",
+                        }.get(rel, rel.replace("_", " ").title())
 
                     st.markdown(f'<div class="rel-badge {badge_class}">{rel_label}</div>', unsafe_allow_html=True)
-                    st.markdown(f"**Executive Summary:** {comp_res.get('summary')}")
+                    st.markdown(f"**{'الملخص التنفيذي للنتيجة:' if is_ar else 'Executive Summary:'}** {comp_res.get('summary')}")
 
                     # Side by side cards
                     card_a, card_b = st.columns(2)
@@ -854,32 +1001,43 @@ with tab_compare:
 # =========================================================
 
 with tab_briefing:
-    st.subheader("📋 Multi-Document Executive Briefing")
-    st.caption("Generate a structured synthesis across multiple documents with category-tagged findings and verifiable citations.")
+    st.subheader("📋 الإيجاز والتقارير التنفيذية متعددة الوثائق" if is_ar else "📋 Multi-Document Executive Briefing")
+    st.caption(
+        "توليد إيجاز تركيبي استراتيجي يغطي عدة وثائق حكومية مع تصنيف النتائج وتوثيق المراجع."
+        if is_ar
+        else "Generate a structured synthesis across multiple documents with category-tagged findings and verifiable citations."
+    )
 
     docs = st.session_state.get("documents", [])
     if not docs:
-        st.info("No documents indexed yet. Upload documents in Tab 4 to generate briefings.")
+        st.info("لا توجد وثائق مفهرسة حالياً. يرجى رفع الوثائق في التبويب الرابع لتوليد الإيجاز." if is_ar else "No documents indexed yet. Upload documents in Tab 4 to generate briefings.")
     else:
         doc_map = {f"{d.get('filename')} ({d.get('document_id')[:8]})": d.get("document_id") for d in docs}
         selected_brief_names = st.multiselect(
-            "Select Documents to Synthesize",
+            "اختر الوثائق الحكومية المراد تلخيصها ودمجها:" if is_ar else "Select Documents to Synthesize",
             options=list(doc_map.keys()),
             default=list(doc_map.keys())[:min(3, len(doc_map))],
         )
 
+        default_brief_focus = (
+            "الملخص التنفيذي، شروط المعاملات، الرسوم والمدد الزمنية، والامتثال القانوني"
+            if is_ar
+            else "Executive Summary, Critical Policies, and Key Operational Standards"
+        )
         focus_input = st.text_input(
-            "Briefing Focus / Objectives",
-            value="Executive Summary, Critical Policies, and Key Operational Standards",
+            "محور التركيز وأهداف الإيجاز التنفيذي:" if is_ar else "Briefing Focus / Objectives",
+            value=default_brief_focus,
         )
 
-        if st.button("📋 Generate Executive Briefing", type="primary", use_container_width=True):
+        run_brief_btn = st.button("📋 توليد الإيجاز التنفيذي" if is_ar else "📋 Generate Executive Briefing", type="primary", use_container_width=True)
+
+        if run_brief_btn:
             if not selected_brief_names:
-                st.warning("Please select at least one document.")
+                st.warning("يرجى اختيار وثيقة واحدة على الأقل." if is_ar else "Please select at least one document.")
             else:
                 target_ids = [doc_map[name] for name in selected_brief_names]
                 try:
-                    with st.spinner("Synthesizing multi-document briefing using Map-Reduce engine..."):
+                    with st.spinner("جاري تلخيص ودمج الوثائق باستخدام محرك Map-Reduce السيادي..." if is_ar else "Synthesizing multi-document briefing using Map-Reduce engine..."):
                         brief_res = client.brief(
                             document_ids=target_ids,
                             focus=focus_input,
@@ -888,25 +1046,33 @@ with tab_briefing:
 
                     # Summary Box
                     with st.container(border=True):
-                        st.markdown("### 📌 Executive Overview")
+                        st.markdown("### 📌 " + ("نظرة عامة تنفيذية" if is_ar else "Executive Overview"))
                         st.markdown(brief_res.get("executive_summary", ""))
-                        st.caption(f"Synthesized across {brief_res.get('document_count')} documents: {', '.join(brief_res.get('analyzed_documents', []))}")
+                        st.caption(f"تم التحليل عبر {brief_res.get('document_count')} وثائق: {', '.join(brief_res.get('analyzed_documents', []))}")
 
                     # Findings List
                     findings = brief_res.get("findings", [])
-                    st.markdown(f"### 🎯 Strategic Findings & Mandates ({len(findings)})")
+                    st.markdown(f"### 🎯 {'النتائج والقرارات الاستراتيجية' if is_ar else 'Strategic Findings & Mandates'} ({len(findings)})")
+
+                    cat_labels_ar = {
+                        "policy": "🏛️ السياسات والأنظمة",
+                        "technical": "⚙️ المتطلبات التقنية",
+                        "compliance": "⚖️ الشروط والامتثال",
+                        "action_item": "✅ الإجراءات التنفيذية",
+                    }
 
                     for idx, f in enumerate(findings, start=1):
                         cat = f.get("category", "policy")
                         tag_class = f"tag-{cat}"
+                        tag_text = cat_labels_ar.get(cat, cat.upper()) if is_ar else cat.replace("_", " ").upper()
                         with st.container(border=True):
-                            st.markdown(f'<span class="finding-tag {tag_class}">{cat.replace("_", " ").upper()}</span>', unsafe_allow_html=True)
+                            st.markdown(f'<span class="finding-tag {tag_class}">{tag_text}</span>', unsafe_allow_html=True)
                             st.markdown(f"**{idx}. {f.get('title')}**")
                             st.write(f.get("description"))
 
                             evs = f.get("evidence", [])
                             if evs:
-                                with st.expander(f"📑 Grounded Evidence ({len(evs)} chunk)", expanded=False):
+                                with st.expander(f"📑 {'الأدلة الموثقة' if is_ar else 'Grounded Evidence'} ({len(evs)} {'مقطع' if is_ar else 'chunk'})", expanded=False):
                                     for ev in evs:
                                         st.markdown(f"> \"{ev.get('text', '')[:300]}...\"")
                                         st.caption(f"Source: `{ev.get('filename')}` | Reference: `#{ev.get('reference')}`")
@@ -924,7 +1090,7 @@ with tab_briefing:
                         brief_md.append(f"### [{f.get('category').upper()}] {f.get('title')}\n{f.get('description')}\n")
 
                     st.download_button(
-                        label="📥 Download Executive Briefing (.md)",
+                        label="📥 تحميل التقرير التنفيذي (.md)" if is_ar else "📥 Download Executive Briefing (.md)",
                         data="\n".join(brief_md),
                         file_name=f"psut_executive_brief_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md",
                         mime="text/markdown",
@@ -940,39 +1106,40 @@ with tab_briefing:
 # =========================================================
 
 with tab_repo:
-    st.subheader("📁 Sovereign Knowledge Repository & Diagnostics")
-    st.caption("Air-gapped data catalog, document ingestion, and live local infrastructure diagnostics.")
+    st.subheader("📁 مستودع المعرفة السيادي والتشخيص الفني" if is_ar else "📁 Sovereign Knowledge Repository & Diagnostics")
+    st.caption("دليل البيانات المحلي المعزول، وفهرسة الوثائق، وتتبع سلامة البنية التحتية المحلية." if is_ar else "Air-gapped data catalog, document ingestion, and live local infrastructure diagnostics.")
 
     # Live Health Diagnostics
     try:
         health_info = client.get_health()
-        st.markdown("#### 🛡️ Hardware & Engine Diagnostics")
+        st.markdown("#### 🛡️ " + ("تشخيص العتاد والمحركات الذكية" if is_ar else "Hardware & Engine Diagnostics"))
         h_col1, h_col2, h_col3, h_col4 = st.columns(4)
         with h_col1:
-            st.metric("Ollama LLM", health_info.get("ollama", {}).get("model", "qwen2.5:3b"), "Local GPU")
+            st.metric("Ollama LLM", health_info.get("ollama", {}).get("model", "qwen3.5:4b"), "Local GPU")
         with h_col2:
-            st.metric("Embeddings", health_info.get("embedding_model", {}).get("name", "MiniLM-L6"), "384-dim")
+            st.metric("Embeddings", "MiniLM-Multilingual", "384-dim Arabic")
         with h_col3:
-            st.metric("Reranker", health_info.get("reranker", {}).get("name", "bge-reranker"), "Cross-Encoder")
+            st.metric("Reranker", "BGE-Reranker-v2-m3", "Cross-Encoder Multilingual")
         with h_col4:
             st.metric("Vector Store", "Qdrant Embedded", f"{health_info.get('chunk_count', 0)} chunks")
     except Exception:
-        st.warning("Could not fetch real-time health telemetry.")
+        st.warning("تعذر جلب بيانات التشخيص الفني في الوقت الفعلي." if is_ar else "Could not fetch real-time health telemetry.")
 
     st.divider()
 
     # Document Ingestion Section
-    st.markdown("#### ⚡ Ingest New Document")
+    st.markdown("#### ⚡ " + ("فهرسة وثيقة رسمية جديدة" if is_ar else "Ingest New Document"))
     uploaded_file = st.file_uploader(
-        "Upload Enterprise Document (PDF, Word DOCX, Markdown, Text, HTML)",
+        "رفع وثيقة رسمية (PDF, Word DOCX, Markdown, Text, HTML)" if is_ar else "Upload Enterprise Document (PDF, Word DOCX, Markdown, Text, HTML)",
         type=["md", "txt", "pdf", "docx", "html", "htm"],
         key="tab_repo_uploader",
     )
 
     if uploaded_file is not None:
-        if st.button("⚡ Index Document into Vector Store", use_container_width=True, type="primary"):
+        idx_btn_label = "⚡ بدء فهرسة وتضمين الوثيقة" if is_ar else "⚡ Index Document into Vector Store"
+        if st.button(idx_btn_label, use_container_width=True, type="primary"):
             try:
-                with st.spinner("Processing document chunks and local embeddings..."):
+                with st.spinner("جاري استخراج المقاطع وبناء التضمينات المتجهة محلياً..." if is_ar else "Processing document chunks and local embeddings..."):
                     result = client.ingest(
                         filename=uploaded_file.name,
                         content=uploaded_file.getvalue(),
@@ -980,9 +1147,9 @@ with tab_repo:
 
                 chunk_cnt = result.get("chunk_count", 0)
                 if result.get("duplicate"):
-                    st.info(f"ℹ️ Document **{uploaded_file.name}** is already indexed ({chunk_cnt} chunks). Ready for search, conflict detection, and briefings!")
+                    st.info(f"ℹ️ الوثيقة **{uploaded_file.name}** مفهرسة مسبقاً ({chunk_cnt} مقطع). جاهزة للبحث والمقارنة والإيجاز!" if is_ar else f"ℹ️ Document **{uploaded_file.name}** is already indexed ({chunk_cnt} chunks). Ready for search, conflict detection, and briefings!")
                 else:
-                    st.success(f"✅ Successfully indexed **{uploaded_file.name}** ({chunk_cnt} chunks) into the vector store!")
+                    st.success(f"✅ تمت فهرسة وثيقة **{uploaded_file.name}** بنجاح بعدد ({chunk_cnt} مقطع)!" if is_ar else f"✅ Successfully indexed **{uploaded_file.name}** ({chunk_cnt} chunks) into the vector store!")
                     st.session_state["documents"] = client.list_documents()
                     st.rerun()
 
@@ -992,19 +1159,19 @@ with tab_repo:
     st.divider()
 
     # Document Catalog Table
-    st.markdown("#### 📚 Ingested Document Catalog")
+    st.markdown("#### 📚 " + ("كتالوج الوثائق الرسمية المفهرسة" if is_ar else "Ingested Document Catalog"))
     docs = st.session_state.get("documents", [])
     if docs:
         doc_rows = []
         for d in docs:
             clean_name, base_name = clean_source_name(d.get("filename", ""))
             doc_rows.append({
-                "Document Name": clean_name,
-                "Format": d.get("file_type", "").upper(),
-                "Chunk Count": d.get("chunk_count", 0),
-                "Document ID": d.get("document_id", "")[:16] + "...",
-                "Strategy": d.get("chunking_strategy", "structure"),
+                "اسم الوثيقة" if is_ar else "Document Name": clean_name,
+                "الصيغة" if is_ar else "Format": d.get("file_type", "").upper(),
+                "عدد المقاطع" if is_ar else "Chunk Count": d.get("chunk_count", 0),
+                "المعرف الرقمي" if is_ar else "Document ID": d.get("document_id", "")[:16] + "...",
+                "استراتيجية التقسيم" if is_ar else "Strategy": d.get("chunking_strategy", "structure"),
             })
         st.dataframe(pd.DataFrame(doc_rows), use_container_width=True, hide_index=True)
     else:
-        st.info("No documents currently indexed.")
+        st.info("لا توجد وثائق مفهرسة حالياً." if is_ar else "No documents currently indexed.")

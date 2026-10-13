@@ -40,7 +40,7 @@ class Settings:
 
     OLLAMA_MODEL = os.getenv(
         "OLLAMA_MODEL",
-        "qwen2.5:3b",
+        "qwen3.5:4b",
     )
 
     ENABLE_VERIFICATION = os.getenv(
@@ -70,12 +70,12 @@ class Settings:
 
     EMBEDDING_MODEL_NAME = os.getenv(
         "EMBEDDING_MODEL_NAME",
-        "sentence-transformers/all-MiniLM-L6-v2",
+        "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
     )
 
     RERANKER_MODEL_NAME = os.getenv(
         "RERANKER_MODEL_NAME",
-        "BAAI/bge-reranker-base",
+        "BAAI/bge-reranker-v2-m3",
     )
 
     DATA_PATH = Path(
