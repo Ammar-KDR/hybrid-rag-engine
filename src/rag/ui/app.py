@@ -1,3 +1,4 @@
+import base64
 import os
 import time
 from datetime import datetime
@@ -65,7 +66,7 @@ p, span, label, div, li {
     color: #0F172A;
 }
 
-/* Form inputs & text areas */
+/* Form inputs & text areas with Emil focus ring */
 textarea, input[type="text"] {
     color: #0F172A !important;
     background-color: #FFFFFF !important;
@@ -73,11 +74,12 @@ textarea, input[type="text"] {
     border-radius: 8px !important;
     font-size: 1rem !important;
     font-weight: 500 !important;
+    transition: border-color 140ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 140ms ease !important;
 }
 
 textarea:focus, input[type="text"]:focus {
     border-color: #002D62 !important;
-    box-shadow: 0 0 0 2px rgba(0, 45, 98, 0.2) !important;
+    box-shadow: 0 0 0 3px rgba(0, 45, 98, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05) !important;
 }
 
 textarea::placeholder {
@@ -90,6 +92,36 @@ textarea::placeholder {
     color: #002D62 !important;
     font-weight: 700 !important;
     font-size: 0.92rem !important;
+}
+
+/* Hardware Telemetry Metric Cards - Emil Layered Elevation */
+[data-testid="stMetric"] {
+    background: #FFFFFF !important;
+    border: 1.5px solid #E2E8F0 !important;
+    border-radius: 10px !important;
+    padding: 12px 16px !important;
+    box-shadow: 0 1px 3px rgba(0, 45, 98, 0.04), 0 4px 10px rgba(0, 45, 98, 0.02) !important;
+    transition: transform 140ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 140ms ease, border-color 140ms ease !important;
+}
+
+[data-testid="stMetric"]:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 14px rgba(0, 45, 98, 0.08) !important;
+    border-color: #BFDBFE !important;
+}
+
+[data-testid="stMetricLabel"] p {
+    font-size: 0.82rem !important;
+    font-weight: 700 !important;
+    color: #64748B !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.02em !important;
+}
+
+[data-testid="stMetricValue"] {
+    color: #002D62 !important;
+    font-weight: 800 !important;
+    font-size: 1.35rem !important;
 }
 
 /* Badges - Maximum Contrast & Legibility */
@@ -105,12 +137,19 @@ textarea::placeholder {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 5px 12px;
-    border-radius: 6px;
+    padding: 6px 14px;
+    border-radius: 8px;
     font-size: 0.78rem;
     font-weight: 800;
     letter-spacing: 0.04em;
     text-transform: uppercase;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+    transition: transform 140ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 140ms ease !important;
+}
+
+.trust-badge:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
 }
 
 .badge-navy {
@@ -287,10 +326,17 @@ textarea::placeholder {
 .finding-card {
     background-color: #FFFFFF;
     border: 1.5px solid #E2E8F0;
-    border-radius: 8px;
-    padding: 14px 18px;
-    margin-bottom: 12px;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+    transition: transform 140ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 140ms ease, border-color 140ms ease !important;
+}
+
+.finding-card:hover {
+    transform: translateY(-2px) !important;
+    border-color: #BFDBFE !important;
+    box-shadow: 0 4px 14px rgba(0, 45, 98, 0.08) !important;
 }
 
 .finding-tag {
@@ -310,12 +356,161 @@ textarea::placeholder {
 .source-pill-quote {
     background-color: #F8FAFC;
     border-left: 3px solid #002D62;
-    padding: 6px 10px;
-    margin-top: 6px;
-    font-size: 0.82rem;
+    padding: 8px 12px;
+    margin-top: 8px;
+    font-size: 0.88rem;
+    line-height: 1.6;
     color: #334155;
     font-style: italic;
-    border-radius: 0 4px 4px 0;
+    border-radius: 0 6px 6px 0;
+}
+
+/* Emil Kowalski Hero Institutional Card */
+.hero-institution-card {
+    background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);
+    border: 1.5px solid #E2E8F0;
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-bottom: 18px;
+    box-shadow: 0 1px 3px rgba(0, 45, 98, 0.04), 0 6px 18px rgba(0, 45, 98, 0.02);
+    transition: border-color 140ms ease, box-shadow 140ms ease;
+}
+
+.hero-institution-card:hover {
+    border-color: #CBD5E1;
+    box-shadow: 0 4px 16px rgba(0, 45, 98, 0.06);
+}
+
+/* Grounded Result Card */
+.grounded-result-card {
+    background: #FFFFFF;
+    border: 1.5px solid #BFDBFE;
+    border-radius: 12px;
+    padding: 20px 24px;
+    box-shadow: 0 2px 8px rgba(0, 45, 98, 0.05);
+    margin-bottom: 16px;
+    transition: border-color 140ms ease, box-shadow 140ms ease;
+}
+
+.grounded-result-card:hover {
+    border-color: #93C5FD;
+    box-shadow: 0 4px 14px rgba(0, 45, 98, 0.08);
+}
+
+/* Conflict Detective Cards */
+.conflict-card-a {
+    background: #FFFFFF;
+    border: 1.5px solid #CBD5E1;
+    border-top: 5px solid #002D62;
+    border-radius: 10px;
+    padding: 18px 20px;
+    box-shadow: 0 2px 6px rgba(0, 45, 98, 0.04);
+    margin-bottom: 12px;
+    transition: transform 140ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 140ms ease;
+}
+
+.conflict-card-a:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 45, 98, 0.08);
+}
+
+.conflict-card-b {
+    background: #FFFFFF;
+    border: 1.5px solid #CBD5E1;
+    border-top: 5px solid #2563EB;
+    border-radius: 10px;
+    padding: 18px 20px;
+    box-shadow: 0 2px 6px rgba(37, 99, 235, 0.04);
+    margin-bottom: 12px;
+    transition: transform 140ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 140ms ease;
+}
+
+.conflict-card-b:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
+}
+
+.conflict-summary-banner {
+    background: #F8FAFC;
+    border: 1.5px solid #E2E8F0;
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.conflict-guidance-card {
+    background: #FFFDF5;
+    border: 1.5px solid #FDE68A;
+    border-left: 5px solid #D97706;
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin-top: 16px;
+    box-shadow: 0 1px 3px rgba(217, 119, 6, 0.06);
+}
+
+/* Executive Briefing Overview Card */
+.brief-overview-card {
+    background: #FFFFFF;
+    border: 1.5px solid #CBD5E1;
+    border-left: 5px solid #002D62;
+    border-radius: 10px;
+    padding: 20px 24px;
+    box-shadow: 0 2px 8px rgba(0, 45, 98, 0.04);
+    margin-bottom: 18px;
+}
+
+/* Streamlit Expander Polish */
+[data-testid="stExpander"] {
+    background: #FFFFFF !important;
+    border: 1.5px solid #E2E8F0 !important;
+    border-radius: 10px !important;
+    margin-bottom: 12px !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
+    transition: border-color 140ms ease, box-shadow 140ms ease !important;
+}
+
+[data-testid="stExpander"]:hover {
+    border-color: #CBD5E1 !important;
+    box-shadow: 0 3px 8px rgba(0, 45, 98, 0.05) !important;
+}
+
+[data-testid="stExpander"] summary {
+    font-weight: 700 !important;
+    color: #002D62 !important;
+    padding: 10px 14px !important;
+}
+
+/* File Uploader Polish */
+[data-testid="stFileUploader"] {
+    background: #FFFFFF !important;
+    border: 1.5px dashed #94A3B8 !important;
+    border-radius: 12px !important;
+    padding: 20px !important;
+    transition: border-color 140ms ease, background-color 140ms ease !important;
+}
+
+[data-testid="stFileUploader"]:hover {
+    border-color: #002D62 !important;
+    background-color: #F8FAFC !important;
+}
+
+/* Entry Animation - Emil Kowalski 180ms ease-out */
+@keyframes emilFadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(6px) scale(0.99);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .hero-institution-card, .grounded-result-card, .conflict-card-a, .conflict-card-b, .conflict-guidance-card, .brief-overview-card, .finding-card {
+        animation: emilFadeInUp 180ms cubic-bezier(0.23, 1, 0.32, 1) both;
+    }
 }
 
 /* Streamlit 1.61.1 MultiSelect Tag / Pill Styling - Absolute White Contrast */
@@ -560,6 +755,43 @@ textarea, input[type="text"] {
     fill: #FFFFFF !important;
     stroke: #FFFFFF !important;
 }
+
+/* Emil Kowalski Card Directional Overrides in RTL */
+.hero-institution-card [style*="border-left"] {
+    border-left: none !important;
+    border-right: 2.5px solid #E2E8F0 !important;
+    padding-left: 0 !important;
+    padding-right: 20px !important;
+}
+
+.grounded-result-card {
+    border-right: 5px solid #002D62 !important;
+    direction: rtl !important;
+    text-align: right !important;
+}
+
+.conflict-card-a, .conflict-card-b {
+    direction: rtl !important;
+    text-align: right !important;
+}
+
+.conflict-guidance-card {
+    border-left: 1.5px solid #FDE68A !important;
+    border-right: 5px solid #D97706 !important;
+    direction: rtl !important;
+    text-align: right !important;
+}
+
+.brief-overview-card {
+    border-left: 1.5px solid #CBD5E1 !important;
+    border-right: 5px solid #002D62 !important;
+    direction: rtl !important;
+    text-align: right !important;
+}
+
+.bidi-text {
+    line-height: 1.85 !important;
+}
 </style>
 """
 
@@ -611,6 +843,19 @@ def get_logo_path() -> str | None:
     for c in candidates:
         if Path(c).is_file():
             return c
+    return None
+
+
+def get_logo_base64() -> str | None:
+    path = get_logo_path()
+    if path and Path(path).is_file():
+        try:
+            with open(path, "rb") as f:
+                encoded = base64.b64encode(f.read()).decode("utf-8")
+                mime = "image/svg+xml" if path.endswith(".svg") else "image/png"
+                return f"data:{mime};base64,{encoded}"
+        except Exception:
+            pass
     return None
 
 
@@ -821,39 +1066,72 @@ with st.sidebar:
 # =========================================================
 
 header_logo = get_logo_path()
-if header_logo:
-    col_logo, col_head = st.columns([1.5, 3.5])
-    with col_logo:
-        st.image(header_logo, use_container_width=True)
-    with col_head:
-        if is_ar:
-            st.markdown(
-                """
-                <div style="display:flex; flex-direction:column; justify-content:center; padding-right:16px; border-right:2.5px solid #E2E8F0; min-height:80px;">
-                    <h1 style="color:#002D62; font-size:1.85rem; font-weight:800; margin:0; line-height:1.2;">
-                        نظام الاسترجاع الهجين والذكاء الاصطناعي السيادي
-                    </h1>
-                    <p style="color:#334155; font-size:0.98rem; margin-top:5px; margin-bottom:0; font-weight:600;">
-                        جامعة الأميرة سمية للتكنولوجيا • هاكاثون 42 إربد • قطاع الخدمات الحكومية
-                    </p>
+logo_b64 = get_logo_base64()
+if logo_b64:
+    if is_ar:
+        st.markdown(
+            f"""
+            <div class="hero-institution-card">
+                <div style="display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap;">
+                    <div style="display:flex; align-items:center; gap:20px;">
+                        <img src="{logo_b64}" style="height:74px; max-width:180px; object-fit:contain; filter:drop-shadow(0 2px 4px rgba(0,45,98,0.06));" alt="PSUT Logo" />
+                        <div style="border-right:2.5px solid #E2E8F0; padding-right:20px;">
+                            <div style="font-size:0.8rem; font-weight:800; color:#1E40AF; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:2px;">
+                                جامعة الأميرة سمية للتكنولوجيا • هاكاثون 42 إربد
+                            </div>
+                            <h1 style="color:#002D62; font-size:1.75rem; font-weight:800; margin:0; line-height:1.25;">
+                                نظام الاسترجاع الهجين والذكاء الاصطناعي السيادي
+                            </h1>
+                            <div style="color:#475569; font-size:0.9rem; margin-top:4px; font-weight:600;">
+                                بنية تحتية محلية معزولة 100% • قطاع الخدمات الحكومية والسيادية • استرجاع موثق ومطابق للأصل
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display:flex; flex-direction:column; align-items:flex-start; gap:6px;">
+                        <span style="background:#ECFDF5; color:#047857; font-size:0.75rem; font-weight:800; padding:5px 12px; border-radius:6px; border:1px solid #A7F3D0; letter-spacing:0.03em;">
+                            🔒 بيئة سيادية معزولة 100% (AIR-GAPPED)
+                        </span>
+                        <span style="background:#EFF6FF; color:#1E40AF; font-size:0.75rem; font-weight:700; padding:5px 12px; border-radius:6px; border:1px solid #BFDBFE;">
+                            ⚡ تسريع محلي كارت الشاشة RTX 3060 CUDA
+                        </span>
+                    </div>
                 </div>
-                """,
-                unsafe_allow_html=True,
-            )
-        else:
-            st.markdown(
-                """
-                <div style="display:flex; flex-direction:column; justify-content:center; padding-left:16px; border-left:2.5px solid #E2E8F0; min-height:80px;">
-                    <h1 style="color:#002D62; font-size:1.85rem; font-weight:800; margin:0; line-height:1.2;">
-                        Sovereign Hybrid RAG Engine
-                    </h1>
-                    <p style="color:#334155; font-size:0.98rem; margin-top:5px; margin-bottom:0; font-weight:600;">
-                        Princess Sumaya University for Technology • 42 Irbid Hackathon
-                    </p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+    else:
+        st.markdown(
+            f"""
+            <div class="hero-institution-card">
+                <div style="display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap;">
+                    <div style="display:flex; align-items:center; gap:20px;">
+                        <img src="{logo_b64}" style="height:74px; max-width:180px; object-fit:contain; filter:drop-shadow(0 2px 4px rgba(0,45,98,0.06));" alt="PSUT Logo" />
+                        <div style="border-left:2.5px solid #E2E8F0; padding-left:20px;">
+                            <div style="font-size:0.8rem; font-weight:800; color:#1E40AF; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:2px;">
+                                Princess Sumaya University for Technology • 42 Irbid
+                            </div>
+                            <h1 style="color:#002D62; font-size:1.75rem; font-weight:800; margin:0; line-height:1.25;">
+                                Sovereign Hybrid RAG Engine
+                            </h1>
+                            <div style="color:#475569; font-size:0.9rem; margin-top:4px; font-weight:600;">
+                                100% Air-Gapped Local Infrastructure • Sovereign Public Services • Verifiable Evidence
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px;">
+                        <span style="background:#ECFDF5; color:#047857; font-size:0.75rem; font-weight:800; padding:5px 12px; border-radius:6px; border:1px solid #A7F3D0; letter-spacing:0.03em;">
+                            🔒 100% AIR-GAPPED SOVEREIGN
+                        </span>
+                        <span style="background:#EFF6FF; color:#1E40AF; font-size:0.75rem; font-weight:700; padding:5px 12px; border-radius:6px; border:1px solid #BFDBFE;">
+                            ⚡ RTX 3060 CUDA ACCELERATED
+                        </span>
+                    </div>
                 </div>
-                """,
-                unsafe_allow_html=True,
-            )
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 else:
     st.title("🏛️ جامعة الأميرة سمية للتكنولوجيا - الذكاء الاصطناعي السيادي" if is_ar else "🏛️ PSUT Sovereign Hybrid RAG")
 
@@ -862,10 +1140,10 @@ if is_ar:
     st.markdown(
         """
         <div class="badge-row">
-            <span class="trust-badge badge-green">🔒 بيئة سيادية معزولة 100% (AIR-GAPPED)</span>
-            <span class="trust-badge badge-blue">⚡ تسريع محلي كارت الشاشة RTX 3060 CUDA</span>
-            <span class="trust-badge badge-navy">🛡️ صفر تسريب سحابي (ZERO EXFILTRATION)</span>
-            <span class="trust-badge badge-amber">⚡ استرجاع هجين + معيد ترتيب BGE MULTILINGUAL</span>
+            <span class="trust-badge badge-green">🛡️ صفر تسريب سحابي (ZERO EXFILTRATION)</span>
+            <span class="trust-badge badge-navy">🏛️ معايير الحوكمة والامتثال الحكومي</span>
+            <span class="trust-badge badge-blue">⚡ استرجاع هجين RRF + معيد ترتيب BGE</span>
+            <span class="trust-badge badge-amber">🧠 توليد محلي عالي الدقة QWEN 3.5 4B</span>
         </div>
         """,
         unsafe_allow_html=True,
@@ -874,10 +1152,10 @@ else:
     st.markdown(
         """
         <div class="badge-row">
-            <span class="trust-badge badge-green">🔒 100% AIR-GAPPED SOVEREIGN</span>
-            <span class="trust-badge badge-blue">⚡ RTX 3060 CUDA ACCELERATED</span>
-            <span class="trust-badge badge-navy">🛡️ ZERO CLOUD EXFILTRATION</span>
-            <span class="trust-badge badge-amber">⚡ HYBRID RRF + BGE CROSS-ENCODER</span>
+            <span class="trust-badge badge-green">🛡️ ZERO CLOUD EXFILTRATION</span>
+            <span class="trust-badge badge-navy">🏛️ GOVERNMENT COMPLIANCE & AUDIT</span>
+            <span class="trust-badge badge-blue">⚡ HYBRID RRF + BGE CROSS-ENCODER</span>
+            <span class="trust-badge badge-amber">🧠 LOCAL HIGH-PRECISION QWEN 3.5 4B</span>
         </div>
         """,
         unsafe_allow_html=True,
@@ -1074,29 +1352,27 @@ with tab_qa:
             badge_title = "إجابة موثقة ومدعومة بالأدلة الرسمية المعتمدة" if is_ar else "Grounded & Evidence-Backed Synthesis"
             req_label = "معرف الطلب:" if is_ar else "Request ID:"
             req_id_short = result.get("request_id", "N/A")[:12]
-            border_side = "border-right:5px solid #002D62;" if is_ar else "border-left:5px solid #002D62;"
+            verified_pill = "✅ مطابقة كاملة للأصل" if is_ar else "✅ 100% Grounded"
+            result_header = "📌 النتيجة والاستخلاص الذكي الموثق" if is_ar else "📌 Synthesized Intelligence & Verifiable Findings"
             st.markdown(
                 f"""
-                <div style="display:flex; justify-content:space-between; align-items:center; background:#FFFFFF; border:1.5px solid #BFDBFE; {border_side} border-radius:8px; padding:10px 16px; margin-bottom:14px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
-                    <div style="display:flex; align-items:center; gap:8px;">
-                        <span style="color:#047857; font-size:1.1rem; font-weight:800;">●</span>
-                        <span style="font-weight:800; color:#002D62; font-size:0.95rem;">{badge_title}</span>
+                <div class="grounded-result-card">
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1.5px solid #E2E8F0; padding-bottom:12px; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <span style="color:#047857; font-size:1.1rem; font-weight:800;">●</span>
+                            <span style="font-weight:800; color:#002D62; font-size:0.98rem;">{badge_title}</span>
+                            <span style="background:#ECFDF5; color:#047857; font-size:0.75rem; font-weight:800; padding:3px 8px; border-radius:4px; border:1px solid #A7F3D0;">{verified_pill}</span>
+                        </div>
+                        <div>
+                            <span style="background:#EFF6FF; color:#002D62; font-size:0.78rem; font-weight:700; padding:4px 10px; border-radius:6px; border:1px solid #BFDBFE;" dir="ltr">{req_label} {req_id_short}</span>
+                        </div>
                     </div>
-                    <div>
-                        <span style="background:#EFF6FF; color:#002D62; font-size:0.78rem; font-weight:700; padding:4px 10px; border-radius:6px; border:1px solid #BFDBFE;" dir="ltr">{req_label} {req_id_short}</span>
-                    </div>
+                    <div style="font-size:0.86rem; font-weight:800; color:#002D62; text-transform:uppercase; margin-bottom:8px;">{result_header}</div>
+                    <div class='bidi-text' dir='auto' style='font-size:1.02rem; line-height:1.85; color:#0F172A;'>{result.get('answer', '')}</div>
                 </div>
                 """,
                 unsafe_allow_html=True,
             )
-
-        # Grounded Answer Presentation
-        with st.container(border=True):
-            st.markdown(
-                f'<div style="font-size:0.88rem; font-weight:800; color:#002D62; text-transform:uppercase; margin-bottom:10px;">📌 {"النتيجة والاستخلاص الذكي الموثق" if is_ar else "Synthesized Intelligence"}</div>',
-                unsafe_allow_html=True,
-            )
-            st.markdown(f"<div class='bidi-text' dir='auto'>{result.get('answer', '')}</div>", unsafe_allow_html=True)
 
         # Latency & Pipeline Metrics Bar
         if latency:
@@ -1312,8 +1588,20 @@ with tab_compare:
                         }.get(rel, rel.replace("_", " ").title())
 
                     st.markdown(f'<div class="rel-badge {badge_class}">{rel_label}</div>', unsafe_allow_html=True)
+                    
+                    # Summary Banner
+                    sum_label = "الملخص التنفيذي للنتيجة والتدقيق:" if is_ar else "Executive Divergence Summary:"
                     st.markdown(
-                        f"<div class='bidi-text'><strong>{'الملخص التنفيذي للنتيجة:' if is_ar else 'Executive Summary:'}</strong> <span dir='auto'>{comp_res.get('summary')}</span></div>",
+                        f"""
+                        <div class="conflict-summary-banner">
+                            <div style="font-size:0.82rem; font-weight:800; color:#002D62; text-transform:uppercase; margin-bottom:4px;">
+                                📌 {sum_label}
+                            </div>
+                            <div class="bidi-text" dir="auto" style="font-size:1.02rem; font-weight:600; color:#0F172A; line-height:1.7;">
+                                {comp_res.get('summary')}
+                            </div>
+                        </div>
+                        """,
                         unsafe_allow_html=True,
                     )
 
@@ -1323,59 +1611,95 @@ with tab_compare:
                     doc_b_claim = comp_res.get("document_b", {})
 
                     with card_a:
-                        with st.container(border=True):
-                            fname_a = doc_a_claim.get("filename", "")
-                            st.markdown(
-                                f"#### 📄 {'الوثيقة (أ):' if is_ar else 'Document A:'} <code dir='ltr'>{fname_a}</code>",
-                                unsafe_allow_html=True,
-                            )
-                            st.markdown(
-                                f"**{'الحكم أو النص النظامي الوارد:' if is_ar else 'Stated Rule / Claim:'}** <span dir='auto'>{doc_a_claim.get('claim')}</span>",
-                                unsafe_allow_html=True,
-                            )
-                            if doc_a_claim.get("scope_notes"):
-                                st.caption(f"**{'نطاق التطبيق أو شرط الإصدار:' if is_ar else 'Scope / Version Condition:'}** {doc_a_claim.get('scope_notes')}")
-                            
-                            ev_a = doc_a_claim.get("evidence", [])
-                            if ev_a:
-                                exp_label = f"📑 {'الأدلة والفقرات الموثقة' if is_ar else 'Verified Evidence'} ({len(ev_a)} {'فقرات' if is_ar else 'passages'})"
-                                with st.expander(exp_label, expanded=True):
-                                    for ev in ev_a:
-                                        st.markdown(f"> \"<span dir='auto'>{ev.get('text', '')[:300]}...</span>\"", unsafe_allow_html=True)
-                                        st.caption(f"{'المصدر:' if is_ar else 'Source:'} <code dir='ltr'>{ev.get('source')}</code>", unsafe_allow_html=True)
+                        fname_a = doc_a_claim.get("filename", "")
+                        clean_a, _ = clean_source_name(fname_a)
+                        scope_a = doc_a_claim.get("scope_notes")
+                        scope_html_a = f"<div style='font-size:0.82rem; color:#475569; margin-top:8px;'><b>{'نطاق التطبيق أو شرط الإصدار:' if is_ar else 'Scope / Version Condition:'}</b> <span dir='auto'>{scope_a}</span></div>" if scope_a else ""
+                        st.markdown(
+                            f"""
+                            <div class="conflict-card-a">
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                                    <span style="font-size:0.78rem; font-weight:800; color:#002D62; text-transform:uppercase; background:#EFF6FF; padding:3px 8px; border-radius:4px; border:1px solid #BFDBFE;">
+                                        📄 {'الوثيقة المرجعية (أ)' if is_ar else 'Reference Baseline (A)'}
+                                    </span>
+                                    <code dir="ltr" style="font-size:0.82rem; font-weight:700;">{clean_a}</code>
+                                </div>
+                                <div style="font-size:0.88rem; font-weight:800; color:#002D62; margin-top:8px; margin-bottom:4px;">
+                                    {'الحكم أو النص النظامي الوارد:' if is_ar else 'Stated Rule / Claim:'}
+                                </div>
+                                <div class="bidi-text" dir="auto" style="font-size:0.98rem; line-height:1.7; color:#0F172A;">
+                                    {doc_a_claim.get('claim')}
+                                </div>
+                                {scope_html_a}
+                            </div>
+                            """,
+                            unsafe_allow_html=True,
+                        )
+                        ev_a = doc_a_claim.get("evidence", [])
+                        if ev_a:
+                            exp_label = f"📑 {'الأدلة والفقرات الموثقة (أ)' if is_ar else 'Verified Evidence (A)'} ({len(ev_a)} {'فقرات' if is_ar else 'passages'})"
+                            with st.expander(exp_label, expanded=True):
+                                for ev in ev_a:
+                                    st.markdown(f"> \"<span dir='auto'>{ev.get('text', '')[:300]}...</span>\"", unsafe_allow_html=True)
+                                    st.caption(f"{'المصدر:' if is_ar else 'Source:'} <code dir='ltr'>{clean_source_name(ev.get('source'))[0]}</code>", unsafe_allow_html=True)
 
                     with card_b:
-                        with st.container(border=True):
-                            fname_b = doc_b_claim.get("filename", "")
-                            st.markdown(
-                                f"#### 📄 {'الوثيقة (ب):' if is_ar else 'Document B:'} <code dir='ltr'>{fname_b}</code>",
-                                unsafe_allow_html=True,
-                            )
-                            st.markdown(
-                                f"**{'الحكم أو النص النظامي الوارد:' if is_ar else 'Stated Rule / Claim:'}** <span dir='auto'>{doc_b_claim.get('claim')}</span>",
-                                unsafe_allow_html=True,
-                            )
-                            if doc_b_claim.get("scope_notes"):
-                                st.caption(f"**{'نطاق التطبيق أو شرط الإصدار:' if is_ar else 'Scope / Version Condition:'}** {doc_b_claim.get('scope_notes')}")
-
-                            ev_b = doc_b_claim.get("evidence", [])
-                            if ev_b:
-                                exp_label = f"📑 {'الأدلة والفقرات الموثقة' if is_ar else 'Verified Evidence'} ({len(ev_b)} {'فقرات' if is_ar else 'passages'})"
-                                with st.expander(exp_label, expanded=True):
-                                    for ev in ev_b:
-                                        st.markdown(f"> \"<span dir='auto'>{ev.get('text', '')[:300]}...</span>\"", unsafe_allow_html=True)
-                                        st.caption(f"{'المصدر:' if is_ar else 'Source:'} <code dir='ltr'>{ev.get('source')}</code>", unsafe_allow_html=True)
+                        fname_b = doc_b_claim.get("filename", "")
+                        clean_b, _ = clean_source_name(fname_b)
+                        scope_b = doc_b_claim.get("scope_notes")
+                        scope_html_b = f"<div style='font-size:0.82rem; color:#475569; margin-top:8px;'><b>{'نطاق التطبيق أو شرط الإصدار:' if is_ar else 'Scope / Version Condition:'}</b> <span dir='auto'>{scope_b}</span></div>" if scope_b else ""
+                        st.markdown(
+                            f"""
+                            <div class="conflict-card-b">
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                                    <span style="font-size:0.78rem; font-weight:800; color:#1E40AF; text-transform:uppercase; background:#EFF6FF; padding:3px 8px; border-radius:4px; border:1px solid #93C5FD;">
+                                        📄 {'وثيقة المقارنة والتحقق (ب)' if is_ar else 'Comparison Target (B)'}
+                                    </span>
+                                    <code dir="ltr" style="font-size:0.82rem; font-weight:700;">{clean_b}</code>
+                                </div>
+                                <div style="font-size:0.88rem; font-weight:800; color:#1E40AF; margin-top:8px; margin-bottom:4px;">
+                                    {'الحكم أو النص النظامي الوارد:' if is_ar else 'Stated Rule / Claim:'}
+                                </div>
+                                <div class="bidi-text" dir="auto" style="font-size:0.98rem; line-height:1.7; color:#0F172A;">
+                                    {doc_b_claim.get('claim')}
+                                </div>
+                                {scope_html_b}
+                            </div>
+                            """,
+                            unsafe_allow_html=True,
+                        )
+                        ev_b = doc_b_claim.get("evidence", [])
+                        if ev_b:
+                            exp_label = f"📑 {'الأدلة والفقرات الموثقة (ب)' if is_ar else 'Verified Evidence (B)'} ({len(ev_b)} {'فقرات' if is_ar else 'passages'})"
+                            with st.expander(exp_label, expanded=True):
+                                for ev in ev_b:
+                                    st.markdown(f"> \"<span dir='auto'>{ev.get('text', '')[:300]}...</span>\"", unsafe_allow_html=True)
+                                    st.caption(f"{'المصدر:' if is_ar else 'Source:'} <code dir='ltr'>{clean_source_name(ev.get('source'))[0]}</code>", unsafe_allow_html=True)
 
                     # Resolution guidance
-                    with st.container(border=True):
-                        st.markdown(f"**🛡️ {'توجيهات وتوصيات صانع القرار:' if is_ar else 'Decision-Maker Resolution Guidance:'}**")
-                        default_guidance = (
-                            "يوصى بالرجوع إلى الوثائق المرجعية الأصلية قبل اعتماد القرار الإجرائي."
-                            if is_ar
-                            else "Review primary documents before policy enforcement."
-                        )
-                        res_guidance = comp_res.get("resolution_notes") or default_guidance
-                        st.markdown(f"<div class='bidi-text' dir='auto'>{res_guidance}</div>", unsafe_allow_html=True)
+                    default_guidance = (
+                        "يوصى بالرجوع إلى الوثائق المرجعية الأصلية قبل اعتماد القرار الإجرائي."
+                        if is_ar
+                        else "Review primary documents before policy enforcement."
+                    )
+                    res_guidance = comp_res.get("resolution_notes") or default_guidance
+                    guidance_title = "توجيهات وتوصيات صانع القرار الرسمية" if is_ar else "Official Decision-Maker Resolution Guidance"
+                    st.markdown(
+                        f"""
+                        <div class="conflict-guidance-card">
+                            <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+                                <span style="font-size:1.1rem;">🛡️</span>
+                                <span style="font-size:0.88rem; font-weight:800; color:#92400E; text-transform:uppercase; letter-spacing:0.04em;">
+                                    {guidance_title}
+                                </span>
+                            </div>
+                            <div class="bidi-text" dir="auto" style="font-size:0.98rem; font-weight:500; color:#78350F; line-height:1.75;">
+                                {res_guidance}
+                            </div>
+                        </div>
+                        """,
+                        unsafe_allow_html=True,
+                    )
 
                 except Exception as exc:
                     st.error(f"Comparison analysis failed: {exc}")
@@ -1430,19 +1754,28 @@ with tab_briefing:
                         )
 
                     # Summary Box
-                    with st.container(border=True):
-                        st.markdown("### 📌 " + ("نظرة عامة تنفيذية" if is_ar else "Executive Overview"))
-                        st.markdown(
-                            f"<div class='bidi-text' dir='auto'>{brief_res.get('executive_summary', '')}</div>",
-                            unsafe_allow_html=True,
-                        )
-                        analyzed_docs = brief_res.get("analyzed_documents", [])
-                        analyzed_docs_str = ", ".join([f"<code dir='ltr'>{clean_source_name(d)[0]}</code>" for d in analyzed_docs])
-                        st.caption(
-                            f"{'تم التحليل عبر' if is_ar else 'Analyzed across'} {brief_res.get('document_count')} "
-                            f"{'وثائق رسمية:' if is_ar else 'documents:'} {analyzed_docs_str}",
-                            unsafe_allow_html=True,
-                        )
+                    analyzed_docs = brief_res.get("analyzed_documents", [])
+                    analyzed_docs_str = ", ".join([f"<code dir='ltr'>{clean_source_name(d)[0]}</code>" for d in analyzed_docs])
+                    overview_title = "نظرة عامة وتنفيذية استراتيجية" if is_ar else "Executive Overview & Strategic Mandates"
+                    analyzed_label = "تم التحليل عبر" if is_ar else "Analyzed across"
+                    docs_label = "وثائق رسمية:" if is_ar else "documents:"
+
+                    st.markdown(
+                        f"""
+                        <div class="brief-overview-card">
+                            <div style="font-size:0.88rem; font-weight:800; color:#002D62; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:10px;">
+                                📌 {overview_title}
+                            </div>
+                            <div class="bidi-text" dir="auto" style="font-size:1.02rem; line-height:1.85; color:#0F172A; margin-bottom:14px;">
+                                {brief_res.get('executive_summary', '')}
+                            </div>
+                            <div style="font-size:0.82rem; color:#64748B; border-top:1px solid #E2E8F0; padding-top:10px;">
+                                {analyzed_label} {brief_res.get('document_count')} {docs_label} {analyzed_docs_str}
+                            </div>
+                        </div>
+                        """,
+                        unsafe_allow_html=True,
+                    )
 
                     # Findings List
                     findings = brief_res.get("findings", [])
@@ -1459,25 +1792,37 @@ with tab_briefing:
                         cat = f.get("category", "policy")
                         tag_class = f"tag-{cat}"
                         tag_text = cat_labels_ar.get(cat, cat.upper()) if is_ar else cat.replace("_", " ").upper()
-                        with st.container(border=True):
-                            st.markdown(f'<span class="finding-tag {tag_class}">{tag_text}</span>', unsafe_allow_html=True)
-                            st.markdown(f"**{idx}. <span dir='auto'>{f.get('title')}</span>**", unsafe_allow_html=True)
-                            st.markdown(f"<div class='bidi-text' dir='auto'>{f.get('description')}</div>", unsafe_allow_html=True)
-
-                            evs = f.get("evidence", [])
-                            if evs:
-                                with st.expander(
-                                    f"📑 {'الأدلة الموثقة' if is_ar else 'Grounded Evidence'} ({len(evs)} {'مقطع' if is_ar else 'chunk'})",
-                                    expanded=False,
-                                ):
-                                    for ev in evs:
-                                        ev_clean, _ = clean_source_name(ev.get("filename", ""))
-                                        st.markdown(f"> \"<span dir='auto'>{ev.get('text', '')[:300]}...</span>\"", unsafe_allow_html=True)
-                                        st.caption(
-                                            f"{'المصدر:' if is_ar else 'Source:'} <code dir='ltr'>{ev_clean}</code> | "
-                                            f"{'المرجع:' if is_ar else 'Reference:'} `#{ev.get('reference')}`",
-                                            unsafe_allow_html=True,
-                                        )
+                        evs = f.get("evidence", [])
+                        st.markdown(
+                            f"""
+                            <div class="finding-card">
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                                    <span class="finding-tag {tag_class}">{tag_text}</span>
+                                    <span style="font-size:0.78rem; font-weight:800; color:#64748B;">#{idx}</span>
+                                </div>
+                                <h4 style="margin:0 0 6px 0; color:#002D62; font-size:1.05rem; font-weight:800;">
+                                    <span dir="auto">{f.get('title')}</span>
+                                </h4>
+                                <div class="bidi-text" dir="auto" style="font-size:0.95rem; line-height:1.75; color:#334155;">
+                                    {f.get('description')}
+                                </div>
+                            </div>
+                            """,
+                            unsafe_allow_html=True,
+                        )
+                        if evs:
+                            with st.expander(
+                                f"📑 {'الأدلة الموثقة للنتيجة' if is_ar else 'Grounded Evidence for Finding'} #{idx} ({len(evs)} {'مقطع' if is_ar else 'chunk'})",
+                                expanded=False,
+                            ):
+                                for ev in evs:
+                                    ev_clean, _ = clean_source_name(ev.get("filename", ""))
+                                    st.markdown(f"> \"<span dir='auto'>{ev.get('text', '')[:300]}...</span>\"", unsafe_allow_html=True)
+                                    st.caption(
+                                        f"{'المصدر:' if is_ar else 'Source:'} <code dir='ltr'>{ev_clean}</code> | "
+                                        f"{'المرجع:' if is_ar else 'Reference:'} `#{ev.get('reference')}`",
+                                        unsafe_allow_html=True,
+                                    )
 
                     # Download Briefing
                     if is_ar:

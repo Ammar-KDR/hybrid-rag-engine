@@ -144,9 +144,8 @@ class MultiDocumentBriefingService:
                 clean_url = clean_url[:-3]
 
             raw_json = ""
-            # Try native Ollama /api/chat first with think=False
+            # Try native Ollama /api/chat first with think=False via urllib.request
             try:
-                import requests
                 native_payload = {
                     "model": self.model,
                     "messages": [
@@ -161,9 +160,17 @@ class MultiDocumentBriefingService:
                     "keep_alive": -1,
                     "stream": False,
                 }
-                resp = requests.post(f"{clean_url}/api/chat", json=native_payload, timeout=45)
-                if resp.status_code == 200:
-                    raw_json = resp.json().get("message", {}).get("content", "").strip()
+                req_native = urllib.request.Request(
+                    f"{clean_url}/api/chat",
+                    data=json.dumps(native_payload).encode("utf-8"),
+                    headers={"Content-Type": "application/json", "User-Agent": "ExecutiveBriefing"},
+                )
+                with urllib.request.urlopen(req_native, timeout=45.0) as resp:
+                    resp_data = json.loads(resp.read().decode("utf-8"))
+                    if "message" in resp_data:
+                        raw_json = resp_data["message"].get("content", "").strip()
+                    elif "choices" in resp_data:
+                        raw_json = resp_data["choices"][0]["message"].get("content", "").strip()
             except Exception:
                 pass
 
@@ -185,7 +192,10 @@ class MultiDocumentBriefingService:
                 )
                 with urllib.request.urlopen(req, timeout=30.0) as resp:
                     data = json.loads(resp.read().decode("utf-8"))
-                    raw_json = data["choices"][0]["message"]["content"].strip()
+                    if "choices" in data:
+                        raw_json = data["choices"][0]["message"]["content"].strip()
+                    elif "message" in data:
+                        raw_json = data["message"]["content"].strip()
 
             # Clean <think> tags if present
             raw_json = re.sub(r"<think>.*?</think>", "", raw_json, flags=re.DOTALL).strip()
