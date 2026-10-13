@@ -1273,22 +1273,28 @@ with tab_qa:
             "</span>",
             unsafe_allow_html=True,
         )
-        preset_cols = st.columns(3)
+        preset_cols = st.columns(4)
         with preset_cols[0]:
-            if st.button("🛂 وثائق ورسوم تجديد جواز السفر", key="preset_gov_1", use_container_width=True):
+            if st.button("🛂 وثائق ورسوم الجواز", key="preset_gov_1", use_container_width=True):
                 st.session_state["question_input"] = "ما هي الوثائق المطلوبة والرسوم المقررة لإصدار أو تجديد جواز السفر الأردني؟"
                 st.session_state["trigger_ask"] = True
                 st.rerun()
 
         with preset_cols[1]:
-            if st.button("⚡ رسوم وإجراءات المعاملة المستعجلة", key="preset_gov_2", use_container_width=True):
+            if st.button("⚡ المعاملة المستعجلة", key="preset_gov_2", use_container_width=True):
                 st.session_state["question_input"] = "ما هي رسوم إصدار جواز السفر المستعجل وما هي المدة الزمنية لإنجازه ومواقع الخدمة؟"
                 st.session_state["trigger_ask"] = True
                 st.rerun()
 
         with preset_cols[2]:
-            if st.button("📱 اعتماد الهوية الرقمية عبر تطبيق سند", key="preset_gov_3", use_container_width=True):
+            if st.button("📱 الهوية الرقمية وسند", key="preset_gov_3", use_container_width=True):
                 st.session_state["question_input"] = "هل تقبل الهوية الرقمية الصادرة عبر تطبيق سند رسمياً كإثبات شخصية لفتح المعاملة المستعجلة؟"
+                st.session_state["trigger_ask"] = True
+                st.rerun()
+
+        with preset_cols[3]:
+            if st.button("📊 مقارنة الرسوم والمدد", key="preset_gov_4", use_container_width=True):
+                st.session_state["question_input"] = "قارن في جدول ورسم بياني بين رسوم المسار العادي والمسار المستعجل ومدة إنجاز كل منهما"
                 st.session_state["trigger_ask"] = True
                 st.rerun()
     else:
@@ -1298,22 +1304,28 @@ with tab_qa:
             "</span>",
             unsafe_allow_html=True,
         )
-        preset_cols = st.columns(3)
+        preset_cols = st.columns(4)
         with preset_cols[0]:
-            if st.button("🔍 Troubleshooting Database Timeout", key="preset_db", use_container_width=True):
+            if st.button("🔍 DB Timeout Issue", key="preset_db", use_container_width=True):
                 st.session_state["question_input"] = "How do we troubleshoot and resolve database connection timeout errors?"
                 st.session_state["trigger_ask"] = True
                 st.rerun()
 
         with preset_cols[1]:
-            if st.button("🌐 DNS Configuration Guidelines", key="preset_dns", use_container_width=True):
+            if st.button("🌐 DNS Guidelines", key="preset_dns", use_container_width=True):
                 st.session_state["question_input"] = "What are the recommended DNS configuration guidelines and resolver steps?"
                 st.session_state["trigger_ask"] = True
                 st.rerun()
 
         with preset_cols[2]:
-            if st.button("🐳 Docker Container Restart Policies", key="preset_docker", use_container_width=True):
+            if st.button("🐳 Docker Restarts", key="preset_docker", use_container_width=True):
                 st.session_state["question_input"] = "What are the container restart policies and memory limit configurations in Docker?"
+                st.session_state["trigger_ask"] = True
+                st.rerun()
+
+        with preset_cols[3]:
+            if st.button("📊 Fees & SLA Chart", key="preset_chart", use_container_width=True):
+                st.session_state["question_input"] = "Compare normal and expedited passport renewal fees and processing timelines in a table and chart"
                 st.session_state["trigger_ask"] = True
                 st.rerun()
 
@@ -1997,8 +2009,15 @@ with tab_briefing:
                             f"**نطاق الوثائق:** {len(target_ids)} وثائق رسمية",
                             "\n## نظرة عامة تنفيذية\n",
                             brief_res.get("executive_summary", ""),
-                            "\n## النتائج والقرارات الاستراتيجية\n",
+                            "\n## مصفوفة القرارات التنفيذية المعتمدة\n",
+                            "| # | البند / القرار الاستراتيجي | التصنيف | المرجع الأساسي |",
+                            "|---|---|---|---|",
                         ]
+                        for m_i, f in enumerate(findings, start=1):
+                            c_name = cat_labels_ar.get(f.get("category"), f.get("category", "").upper())
+                            brief_md.append(f"| {m_i} | {f.get('title')} | {c_name} | #{f.get('primary_ref', 1)} |")
+
+                        brief_md.append("\n## تفاصيل النتائج والقرارات الاستراتيجية\n")
                         for f in findings:
                             cat_name = cat_labels_ar.get(f.get("category"), f.get("category", "").upper())
                             brief_md.append(f"### [{cat_name}] {f.get('title')}\n{f.get('description')}\n")
@@ -2009,8 +2028,14 @@ with tab_briefing:
                             f"**Corpus:** {len(target_ids)} documents",
                             "\n## Executive Overview\n",
                             brief_res.get("executive_summary", ""),
-                            "\n## Strategic Findings\n",
+                            "\n## Executive Decision Matrix\n",
+                            "| # | Finding / Directive | Category | Primary Reference |",
+                            "|---|---|---|---|",
                         ]
+                        for m_i, f in enumerate(findings, start=1):
+                            brief_md.append(f"| {m_i} | {f.get('title')} | {f.get('category').upper()} | #{f.get('primary_ref', 1)} |")
+
+                        brief_md.append("\n## Detailed Strategic Findings\n")
                         for f in findings:
                             brief_md.append(f"### [{f.get('category').upper()}] {f.get('title')}\n{f.get('description')}\n")
 
