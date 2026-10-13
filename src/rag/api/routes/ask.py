@@ -417,6 +417,7 @@ def ask(
                 page_number=block.page_number,
                 heading_path=block.heading_path,
                 final_score=getattr(block, "final_score", None),
+                reranker_score=getattr(block, "reranker_score", None),
             )
         )
 

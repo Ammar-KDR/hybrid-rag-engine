@@ -42,6 +42,10 @@ class AnswerBuilder:
             "insufficient" in answer_text.lower()
             or "available evidence" in answer_text.lower()
             or "not enough evidence" in answer_text.lower()
+            or "غير كافية" in answer_text
+            or "غير كافٍ" in answer_text
+            or "لا توجد أدلة" in answer_text
+            or "لا توجد معلومات" in answer_text
         )
 
         # Fallback: If model generated an answer based on evidence but omitted brackets

@@ -13,6 +13,7 @@ class ContextBlock:
     document_id: Optional[str] = None
     filename: Optional[str] = None
     final_score: Optional[float] = None
+    reranker_score: Optional[float] = None
 
 
 @dataclass
@@ -27,6 +28,7 @@ class EvidenceRef:
     page_number: Optional[int] = None
     heading_path: Optional[list[str]] = None
     final_score: Optional[float] = None
+    reranker_score: Optional[float] = None
 
 
 @dataclass

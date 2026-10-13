@@ -18,6 +18,7 @@ class EvidenceRef(BaseModel):
     page_number: int | None = None
     heading_path: list[str] | None = None
     final_score: float | None = None
+    reranker_score: float | None = None
 
 
 class AskRequest(BaseModel):

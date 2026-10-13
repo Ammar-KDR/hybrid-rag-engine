@@ -269,9 +269,22 @@ class RAGPipeline:
             unsupported_claims=0,
             contradicted_claims=0,
         )
+        ans_lower = generated_answer.answer.lower()
+        is_insufficient = (
+            "insufficient" in ans_lower
+            or "available evidence" in ans_lower
+            or "not enough evidence" in ans_lower
+            or "غير كافية" in generated_answer.answer
+            or "غير كافٍ" in generated_answer.answer
+            or "لا توجد أدلة" in generated_answer.answer
+            or "لا توجد معلومات" in generated_answer.answer
+            or "empty or contains no relevant documents" in ans_lower
+        )
+        should_abstain = is_insufficient
+
         abstention = AbstentionDecision(
-            should_abstain=False,
-            reasons=[],
+            should_abstain=should_abstain,
+            reasons=["Insufficient evidence to answer question."] if should_abstain else [],
             signals=AbstentionSignals(
                 total_claims=0,
                 supported_claims=0,
@@ -288,7 +301,7 @@ class RAGPipeline:
                 unsupported_ratio=0.0,
                 contradicted_ratio=0.0,
             ),
-            decision=AbstentionDecisionType.ACCEPT,
+            decision=AbstentionDecisionType.ABSTAIN if should_abstain else AbstentionDecisionType.ACCEPT,
         )
         return VerifiedAnswer(
             generated_answer=generated_answer,
