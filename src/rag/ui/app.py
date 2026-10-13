@@ -296,6 +296,80 @@ textarea::placeholder {
     font-style: italic;
     border-radius: 0 4px 4px 0;
 }
+
+/* BaseWeb Multiselect Tag / Pill Styling - Absolute Legibility */
+[data-baseweb="tag"],
+[data-testid="stMultiSelect"] [data-baseweb="tag"],
+.stMultiSelect [data-baseweb="tag"] {
+    background-color: #002D62 !important;
+    border: 1.5px solid #1E40AF !important;
+    border-radius: 6px !important;
+    padding: 3px 10px !important;
+    margin: 3px 4px !important;
+}
+
+[data-baseweb="tag"] *,
+[data-baseweb="tag"] span,
+[data-baseweb="tag"] div,
+[data-baseweb="tag"] p,
+[data-testid="stMultiSelect"] [data-baseweb="tag"] *,
+[data-testid="stMultiSelect"] [data-baseweb="tag"] span {
+    color: #FFFFFF !important;
+    fill: #FFFFFF !important;
+    font-weight: 700 !important;
+    font-size: 0.88rem !important;
+    letter-spacing: 0.02em !important;
+}
+
+[data-baseweb="tag"] svg,
+[data-baseweb="tag"] path,
+[data-testid="stMultiSelect"] [data-baseweb="tag"] svg {
+    color: #FFFFFF !important;
+    fill: #FFFFFF !important;
+    stroke: #FFFFFF !important;
+}
+
+[data-baseweb="tag"]:hover,
+[data-testid="stMultiSelect"] [data-baseweb="tag"]:hover {
+    background-color: #1E40AF !important;
+}
+
+/* Multiselect and Selectbox input containers */
+[data-baseweb="select"] > div:first-child {
+    background-color: #FFFFFF !important;
+    border: 1.5px solid #94A3B8 !important;
+    border-radius: 8px !important;
+}
+
+[data-baseweb="select"] input {
+    color: #0F172A !important;
+}
+
+/* Dropdown menu items when open */
+[data-baseweb="popover"],
+[data-baseweb="menu"],
+ul[role="listbox"] {
+    background-color: #FFFFFF !important;
+    border: 1.5px solid #CBD5E1 !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+li[role="option"],
+[data-baseweb="menu"] [role="option"] {
+    background-color: #FFFFFF !important;
+    color: #0F172A !important;
+    font-weight: 600 !important;
+    padding: 8px 12px !important;
+}
+
+li[role="option"]:hover,
+li[role="option"][aria-selected="true"],
+[data-baseweb="menu"] [role="option"]:hover,
+[data-baseweb="menu"] [role="option"][aria-selected="true"] {
+    background-color: #EFF6FF !important;
+    color: #002D62 !important;
+}
 </style>
 """
 
@@ -404,10 +478,27 @@ textarea, input[type="text"] {
     text-align: right !important;
 }
 
-/* Metric numerical values */
-[data-testid="stMetricValue"] {
+/* BaseWeb Multiselect Tag in RTL - Force LTR text and white color */
+[data-baseweb="tag"],
+[data-testid="stMultiSelect"] [data-baseweb="tag"] {
+    background-color: #002D62 !important;
+    border: 1.5px solid #1E40AF !important;
+    border-radius: 6px !important;
     direction: ltr !important;
-    display: inline-block !important;
+}
+
+[data-baseweb="tag"] *,
+[data-baseweb="tag"] span,
+[data-testid="stMultiSelect"] [data-baseweb="tag"] * {
+    color: #FFFFFF !important;
+    fill: #FFFFFF !important;
+    direction: ltr !important;
+}
+
+[data-baseweb="tag"] svg {
+    color: #FFFFFF !important;
+    fill: #FFFFFF !important;
+    stroke: #FFFFFF !important;
 }
 </style>
 """
@@ -807,7 +898,7 @@ with tab_qa:
     # Scope Selection: All Documents or Single Document
     docs = st.session_state.get("documents", [])
     all_label = "جميع الوثائق المفهرسة" if is_ar else "All Ingested Documents"
-    doc_options = [all_label] + [f"{d.get('filename')} ({d.get('document_id')[:8]})" for d in docs]
+    doc_options = [all_label] + [f"{clean_source_name(d.get('filename'))[0]} ({d.get('document_id')[:8]})" for d in docs]
     scope_prompt = "نطاق البحث واسترجاع الوثائق" if is_ar else "Document Retrieval Scope"
     selected_scope_label = st.selectbox(scope_prompt, options=doc_options, index=0)
 
@@ -1067,7 +1158,7 @@ with tab_compare:
     if len(docs) < 2:
         st.info("يرجى فهرسة وثيقتين على الأقل لتفعيل خاصية كشف التعارض والتناقض." if is_ar else "Please index at least two documents to activate side-by-side conflict detection.")
     else:
-        doc_names = [f"{d.get('filename')} ({d.get('document_id')[:8]})" for d in docs]
+        doc_names = [f"{clean_source_name(d.get('filename'))[0]} ({d.get('document_id')[:8]})" for d in docs]
         c1, c2 = st.columns(2)
         with c1:
             sel_a = st.selectbox("الوثيقة المرجعية الأساسية (أ)" if is_ar else "Primary Baseline Document (A)", options=doc_names, index=0)
@@ -1246,7 +1337,7 @@ with tab_briefing:
     if not docs:
         st.info("لا توجد وثائق مفهرسة حالياً. يرجى رفع الوثائق في التبويب الرابع لتوليد الإيجاز." if is_ar else "No documents indexed yet. Upload documents in Tab 4 to generate briefings.")
     else:
-        doc_map = {f"{d.get('filename')} ({d.get('document_id')[:8]})": d.get("document_id") for d in docs}
+        doc_map = {f"{clean_source_name(d.get('filename'))[0]} ({d.get('document_id')[:8]})": d.get("document_id") for d in docs}
         selected_brief_names = st.multiselect(
             "اختر الوثائق الحكومية المراد تلخيصها ودمجها:" if is_ar else "Select Documents to Synthesize",
             options=list(doc_map.keys()),
