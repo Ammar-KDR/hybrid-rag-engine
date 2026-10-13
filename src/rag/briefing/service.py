@@ -12,6 +12,7 @@ from rag.config import settings
 from rag.ingestion.registry import DocumentRegistry
 from rag.pipeline import RAGPipeline
 from rag.retrieval.model import RetrievalFilter
+from rag.nlp.arabic import is_arabic_text
 
 
 class MultiDocumentBriefingService:
@@ -76,11 +77,18 @@ class MultiDocumentBriefingService:
 
             doc_evidence_map[doc_id] = doc_evidence_list
 
+        is_ar_focus = is_arabic_text(focus) or any(is_arabic_text(f) for f in analyzed_filenames)
+
         if not all_evidence:
+            empty_summary = (
+                "لم يتم العثور على مقاطع أو أدلة وثيقة الصلة بمحور التركيز المطلوب عبر الوثائق المحددة."
+                if is_ar_focus
+                else "No relevant evidence passages found for the requested focus across the selected documents."
+            )
             return BriefResponse(
                 focus=focus,
                 document_count=len(document_ids),
-                executive_summary="No relevant evidence passages found for the requested focus across the selected documents.",
+                executive_summary=empty_summary,
                 findings=[],
                 analyzed_documents=analyzed_filenames,
             )
@@ -115,6 +123,14 @@ class MultiDocumentBriefingService:
             "}"
         )
 
+        if is_ar_focus:
+            system_prompt += (
+                "\n\nCRITICAL LANGUAGE INSTRUCTION:\n"
+                "The focus and documents are in Arabic. You MUST generate all text content in the JSON "
+                "('executive_summary', 'title', 'description') in formal, authoritative Arabic (لغة عربية فصحى رسمية). "
+                "The JSON keys and 'category' enum values must remain in standard English."
+            )
+
         user_content = (
             f"Focus: {focus}\n"
             f"Target Document Count: {len(document_ids)}\n\n"
@@ -123,33 +139,67 @@ class MultiDocumentBriefingService:
         )
 
         try:
-            chat_url = f"{self.base_url}/chat/completions"
-            payload = {
-                "model": self.model,
-                "messages": [
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": user_content},
-                ],
-                "temperature": 0.0,
-                "max_tokens": 600,
-            }
+            clean_url = self.base_url.rstrip("/")
+            if clean_url.endswith("/v1"):
+                clean_url = clean_url[:-3]
 
-            req = urllib.request.Request(
-                chat_url,
-                data=json.dumps(payload).encode("utf-8"),
-                headers={"Content-Type": "application/json", "User-Agent": "ExecutiveBriefing"},
-            )
+            raw_json = ""
+            # Try native Ollama /api/chat first with think=False
+            try:
+                import requests
+                native_payload = {
+                    "model": self.model,
+                    "messages": [
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": user_content},
+                    ],
+                    "think": False,
+                    "options": {
+                        "temperature": 0.0,
+                        "num_predict": 1024,
+                    },
+                    "keep_alive": -1,
+                    "stream": False,
+                }
+                resp = requests.post(f"{clean_url}/api/chat", json=native_payload, timeout=45)
+                if resp.status_code == 200:
+                    raw_json = resp.json().get("message", {}).get("content", "").strip()
+            except Exception:
+                pass
 
-            with urllib.request.urlopen(req, timeout=12.0) as resp:
-                data = json.loads(resp.read().decode("utf-8"))
-                raw_json = data["choices"][0]["message"]["content"].strip()
+            if not raw_json:
+                chat_url = f"{self.base_url}/chat/completions"
+                payload = {
+                    "model": self.model,
+                    "messages": [
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": user_content},
+                    ],
+                    "temperature": 0.0,
+                    "max_tokens": 1024,
+                }
+                req = urllib.request.Request(
+                    chat_url,
+                    data=json.dumps(payload).encode("utf-8"),
+                    headers={"Content-Type": "application/json", "User-Agent": "ExecutiveBriefing"},
+                )
+                with urllib.request.urlopen(req, timeout=30.0) as resp:
+                    data = json.loads(resp.read().decode("utf-8"))
+                    raw_json = data["choices"][0]["message"]["content"].strip()
 
+            # Clean <think> tags if present
+            raw_json = re.sub(r"<think>.*?</think>", "", raw_json, flags=re.DOTALL).strip()
             raw_json = re.sub(r"^```(?:json)?\s*", "", raw_json, flags=re.MULTILINE)
             raw_json = re.sub(r"```$", "", raw_json, flags=re.MULTILINE).strip()
 
             parsed = json.loads(raw_json)
 
-            exec_summary = parsed.get("executive_summary", "Executive briefing generated.")
+            default_exec = (
+                f"تم تلخيص وتركيب الإيجاز التنفيذي حول '{focus}' استناداً إلى الوثائق المحددة."
+                if is_ar_focus
+                else "Executive briefing generated."
+            )
+            exec_summary = parsed.get("executive_summary", default_exec)
             raw_findings = parsed.get("findings", [])[:max_findings]
 
             ref_to_ev = {ev.reference: ev for ev in all_evidence}
@@ -169,7 +219,7 @@ class MultiDocumentBriefingService:
 
                 findings.append(
                     BriefFinding(
-                        title=f.get("title", "Key Finding"),
+                        title=f.get("title", "نتيجة رئيسية" if is_ar_focus else "Key Finding"),
                         description=f.get("description", ""),
                         category=cat,
                         evidence=ev_list,
@@ -190,17 +240,23 @@ class MultiDocumentBriefingService:
             for ev in all_evidence[:max_findings]:
                 fallback_findings.append(
                     BriefFinding(
-                        title=f"Finding from {ev.filename}",
+                        title=f"مستخلص من {ev.filename}" if is_ar_focus else f"Finding from {ev.filename}",
                         description=ev.text[:250] + ("..." if len(ev.text) > 250 else ""),
                         category="policy",
                         evidence=[ev],
                     )
                 )
 
+            fb_summary = (
+                f"تم تركيب وتحليل {len(document_ids)} وثائق بالتركيز على محور '{focus}'."
+                if is_ar_focus
+                else f"Synthesized analysis of {len(document_ids)} documents focusing on '{focus}'."
+            )
+
             return BriefResponse(
                 focus=focus,
                 document_count=len(document_ids),
-                executive_summary=f"Synthesized analysis of {len(document_ids)} documents focusing on '{focus}'.",
+                executive_summary=fb_summary,
                 findings=fallback_findings,
                 analyzed_documents=analyzed_filenames,
             )

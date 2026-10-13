@@ -7,6 +7,7 @@ import streamlit as st
 from dotenv import load_dotenv
 
 from rag.ui.client import RAGAPIClient
+from rag.utils.arabic import is_arabic_text
 
 load_dotenv()
 
@@ -300,32 +301,113 @@ textarea::placeholder {
 
 ARABIC_RTL_CSS = """
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap');
 
-html, body, [data-testid="stAppViewContainer"], .main, .block-container, p, span, label, div, li, h1, h2, h3, h4, h5, h6, input, textarea {
-    direction: rtl !important;
-    text-align: right !important;
+/* Clean, directional RTL setup on container level */
+.block-container, [data-testid="stSidebarContent"], [data-testid="stMarkdownContainer"] {
+    direction: rtl;
+    text-align: right;
     font-family: 'Cairo', 'Segoe UI', Tahoma, -apple-system, sans-serif !important;
 }
 
+h1, h2, h3, h4, h5, h6, p, label, li {
+    font-family: 'Cairo', 'Segoe UI', Tahoma, -apple-system, sans-serif !important;
+    text-align: right;
+    direction: rtl;
+}
+
+/* CRITICAL FIX: Explicitly preserve Material Symbols icon fonts so they NEVER render as raw ligature text (e.g. keyboard_ar) */
+[data-testid="stIconMaterial"], 
+.material-symbols-rounded, 
+.material-symbols-outlined, 
+.material-icons,
+[class*="material-symbols"],
+[data-testid="stExpanderToggleIcon"],
+[data-testid="stExpander"] summary span svg,
+[data-testid="stExpander"] summary [data-testid="stIconMaterial"] {
+    font-family: "Material Symbols Rounded", "Material Symbols Outlined", "Material Icons" !important;
+    direction: ltr !important;
+    text-align: center !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+}
+
+/* Preserve code blocks and technical identifiers from RTL distortion */
+code, kbd, samp, pre, [data-testid="stCodeBlock"], .en-code {
+    font-family: "Consolas", "Monaco", "Courier New", monospace !important;
+    direction: ltr !important;
+    text-align: left !important;
+    display: inline-block !important;
+    unicode-bidi: embed !important;
+}
+
+/* BiDi Isolation utilities */
+.bidi-text, [dir="auto"] {
+    unicode-bidi: plaintext !important;
+    text-align: right !important;
+}
+
+.ltr-isolate, [dir="ltr"] {
+    direction: ltr !important;
+    text-align: left !important;
+    display: inline-block !important;
+    unicode-bidi: isolate !important;
+}
+
+/* Streamlit Expander styling in RTL */
+[data-testid="stExpander"] summary {
+    direction: rtl !important;
+    text-align: right !important;
+}
+
+[data-testid="stExpander"] summary [data-testid="stMarkdownContainer"] {
+    margin-right: 8px !important;
+    margin-left: 0 !important;
+    text-align: right !important;
+}
+
+/* Streamlit Tabs in RTL */
+.stTabs [data-baseweb="tab-list"] {
+    direction: rtl !important;
+}
+
+/* Sidebar styling in RTL */
 [data-testid="stSidebar"] {
     direction: rtl !important;
     text-align: right !important;
 }
 
+/* Form inputs */
+textarea, input[type="text"] {
+    direction: rtl !important;
+    text-align: right !important;
+    font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif !important;
+}
+
 .trust-badge {
     direction: rtl !important;
+    font-family: 'Cairo', sans-serif !important;
 }
 
 .exec-box {
     border-left: 1.5px solid #CBD5E1 !important;
     border-right: 5px solid #002D62 !important;
+    direction: rtl !important;
+    text-align: right !important;
 }
 
 .source-pill-quote {
     border-left: none !important;
     border-right: 3px solid #002D62 !important;
     border-radius: 4px 0 0 4px !important;
+    direction: rtl !important;
+    text-align: right !important;
+}
+
+/* Metric numerical values */
+[data-testid="stMetricValue"] {
+    direction: ltr !important;
+    display: inline-block !important;
 }
 </style>
 """
@@ -416,6 +498,7 @@ def generate_executive_brief_export(
     question: str,
     result: dict,
     chunk_map: dict[str, str],
+    is_ar: bool = False,
 ) -> str:
     req_id = result.get("request_id", "N/A")
     latency = result.get("latency", {})
@@ -425,55 +508,106 @@ def generate_executive_brief_export(
 
     now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    doc = [
-        "# 🏛️ PRINCESS SUMAYA UNIVERSITY FOR TECHNOLOGY",
-        "## Sovereign Hybrid RAG Intelligence Briefing",
-        f"**Generated:** {now_str} (Air-Gapped Sovereign Workstation)",
-        "**Classification:** Confidential / Sovereign Enterprise Intelligence",
-        f"**Request Identifier:** `{req_id}`",
-        f"**Audit Status:** {'⚠️ Abstained (Insufficient Evidence)' if abstained else '✅ Verified & Grounded'}",
-        "\n---\n",
-        "## 🎯 Executive Inquiry",
-        f"> {question}",
-        "\n---\n",
-        "## 📌 Key Synthesis & Grounded Findings",
-        answer,
-        "\n---\n",
-        "## 📑 Verified Evidence & Source Citations",
-    ]
+    if is_ar or is_arabic_text(question):
+        doc = [
+            "# 🏛️ جامعة الأميرة سمية للتكنولوجيا",
+            "## تقرير الإيجاز والاستخلاص الذكي السيادي",
+            f"**تاريخ التوليد:** {now_str} (بيئة عمل سيادية معزولة محلياً)",
+            "**التصنيف:** سري / استخبارات حكومية سيادية",
+            f"**معرف الطلب:** `{req_id}`",
+            f"**حالة التدقيق:** {'⚠️ اعتذار (أدلة غير كافية للتحقق)' if abstained else '✅ موثق ومطابق للأدلة الرسمية'}",
+            "\n---\n",
+            "## 🎯 الاستفسار الإجرائي / التنفيذي",
+            f"> {question}",
+            "\n---\n",
+            "## 📌 الاستخلاص الذكي والنتائج المعتمدة",
+            answer,
+            "\n---\n",
+            "## 📑 الأدلة الموثقة وتوثيق المراجع الرسمية",
+        ]
 
-    if not citations:
-        doc.append("_No direct citations recorded._")
+        if not citations:
+            doc.append("_لا توجد مراجع مباشرة مسجلة._")
+        else:
+            for cit in citations:
+                ref = cit.get("reference")
+                source = cit.get("source")
+                clean_name, base_name = clean_source_name(source)
+                page = cit.get("page_number")
+                heading = " ← ".join(cit.get("heading_path") or [])
+                cid = cit.get("chunk_id", "")
+                raw_quote = chunk_map.get(cid, "فقرة نصية موثقة من أصل الوثيقة الرسمية.")
+                
+                snippet = raw_quote.strip()
+                if len(snippet) > 250:
+                    snippet = snippet[:247] + "..."
+
+                page_info = f"، صفحة {page}" if page is not None else ""
+                heading_info = f" ({heading})" if heading else ""
+                doc.append(f"### [مرجع {ref}] {clean_name}{page_info}{heading_info}")
+                doc.append(f"> \"{snippet}\"\n")
+                doc.append(f"- *الملف:* `{base_name}` | *معرف المقطع:* `{cid}`\n")
+
+        doc.extend([
+            "\n---\n",
+            "## 🛡️ سجل التدقيق والموثوقية السيادية",
+            "- **محرك الاسترجاع:** هجين (تضمين كثيف Dense + معجمي BM25 + دمج تراتبي RRF)",
+            "- **معيد الترتيب:** Cross-Encoder (`BAAI/bge-reranker-base`) متعدد اللغات",
+            "- **محرك التوليد المحلي:** Qwen 3.5 4B (`Ollama`)",
+            "- **التسريع العتادي:** NVIDIA GeForce RTX 3060 Laptop GPU (CUDA مفعّل)",
+            "- **قاعدة المتجهات:** Qdrant مدمجة ومحلية بالكامل",
+            f"- **تفصيل زمن الاستجابة:** إجمالي {latency.get('total_ms', 0):.0f} مللي ثانية (الاسترجاع: {latency.get('retrieval_ms', 0):.0f} مللي ثانية | إعادة الترتيب: {latency.get('reranking_ms', 0):.0f} مللي ثانية | التوليد: {latency.get('generation_ms', 0):.0f} مللي ثانية)",
+        ])
     else:
-        for cit in citations:
-            ref = cit.get("reference")
-            source = cit.get("source")
-            clean_name, base_name = clean_source_name(source)
-            page = cit.get("page_number")
-            heading = " → ".join(cit.get("heading_path") or [])
-            cid = cit.get("chunk_id", "")
-            raw_quote = chunk_map.get(cid, "Evidence excerpt verified in primary document.")
-            
-            snippet = raw_quote.strip()
-            if len(snippet) > 250:
-                snippet = snippet[:247] + "..."
+        doc = [
+            "# 🏛️ PRINCESS SUMAYA UNIVERSITY FOR TECHNOLOGY",
+            "## Sovereign Hybrid RAG Intelligence Briefing",
+            f"**Generated:** {now_str} (Air-Gapped Sovereign Workstation)",
+            "**Classification:** Confidential / Sovereign Enterprise Intelligence",
+            f"**Request Identifier:** `{req_id}`",
+            f"**Audit Status:** {'⚠️ Abstained (Insufficient Evidence)' if abstained else '✅ Verified & Grounded'}",
+            "\n---\n",
+            "## 🎯 Executive Inquiry",
+            f"> {question}",
+            "\n---\n",
+            "## 📌 Key Synthesis & Grounded Findings",
+            answer,
+            "\n---\n",
+            "## 📑 Verified Evidence & Source Citations",
+        ]
 
-            page_info = f", Page {page}" if page is not None else ""
-            heading_info = f" ({heading})" if heading else ""
-            doc.append(f"### [{ref}] {clean_name}{page_info}{heading_info}")
-            doc.append(f"> \"{snippet}\"\n")
-            doc.append(f"- *File:* `{base_name}` | *Chunk ID:* `{cid}`\n")
+        if not citations:
+            doc.append("_No direct citations recorded._")
+        else:
+            for cit in citations:
+                ref = cit.get("reference")
+                source = cit.get("source")
+                clean_name, base_name = clean_source_name(source)
+                page = cit.get("page_number")
+                heading = " → ".join(cit.get("heading_path") or [])
+                cid = cit.get("chunk_id", "")
+                raw_quote = chunk_map.get(cid, "Evidence excerpt verified in primary document.")
+                
+                snippet = raw_quote.strip()
+                if len(snippet) > 250:
+                    snippet = snippet[:247] + "..."
 
-    doc.extend([
-        "\n---\n",
-        "## 🛡️ Reliability & Sovereignty Audit",
-        "- **Retrieval Pipeline:** Hybrid (Dense Vector + BM25 Lexical + Reciprocal Rank Fusion)",
-        "- **Reranker:** Cross-Encoder (`BAAI/bge-reranker-base`)",
-        "- **Local LLM Engine:** Qwen 2.5 3B (`Ollama`)",
-        "- **Hardware Acceleration:** NVIDIA GeForce RTX 3060 Laptop GPU (CUDA Active)",
-        "- **Vector Index:** Embedded Qdrant (Zero-Docker Local Storage)",
-        f"- **Latency Breakdown:** Total {latency.get('total_ms', 0):.0f} ms (Retrieval: {latency.get('retrieval_ms', 0):.0f} ms | Rerank: {latency.get('reranking_ms', 0):.0f} ms | Gen: {latency.get('generation_ms', 0):.0f} ms)",
-    ])
+                page_info = f", Page {page}" if page is not None else ""
+                heading_info = f" ({heading})" if heading else ""
+                doc.append(f"### [{ref}] {clean_name}{page_info}{heading_info}")
+                doc.append(f"> \"{snippet}\"\n")
+                doc.append(f"- *File:* `{base_name}` | *Chunk ID:* `{cid}`\n")
+
+        doc.extend([
+            "\n---\n",
+            "## 🛡️ Reliability & Sovereignty Audit",
+            "- **Retrieval Pipeline:** Hybrid (Dense Vector + BM25 Lexical + Reciprocal Rank Fusion)",
+            "- **Reranker:** Cross-Encoder (`BAAI/bge-reranker-base`)",
+            "- **Local LLM Engine:** Qwen 3.5 4B (`Ollama`)",
+            "- **Hardware Acceleration:** NVIDIA GeForce RTX 3060 Laptop GPU (CUDA Active)",
+            "- **Vector Index:** Embedded Qdrant (Zero-Docker Local Storage)",
+            f"- **Latency Breakdown:** Total {latency.get('total_ms', 0):.0f} ms (Retrieval: {latency.get('retrieval_ms', 0):.0f} ms | Rerank: {latency.get('reranking_ms', 0):.0f} ms | Gen: {latency.get('generation_ms', 0):.0f} ms)",
+        ])
 
     return "\n\n".join(doc)
 
@@ -687,17 +821,28 @@ with tab_qa:
         "الاستفسار / السؤال المطلوب تحليله:" if is_ar else "Inquiry / Prompt",
         value=st.session_state["question_input"],
         height=85,
-        placeholder="Ask any question regarding system architecture, operations, policies, or follow-up...",
+        placeholder=(
+            "اطرح استفسارك حول شروط المعاملات الحكومية، الوثائق المطلوبة، الرسوم، أو الإجراءات الرسمية..."
+            if is_ar
+            else "Ask any question regarding system architecture, operations, policies, or follow-up..."
+        ),
         key="main_query_text_area",
     )
 
     action_col1, action_col2, action_col3 = st.columns([2, 1, 1])
     with action_col1:
-        ask_button = st.button("🚀 Run Intelligence Analysis", type="primary", use_container_width=True)
+        ask_button = st.button(
+            "🚀 تشغيل التحليل والاسترجاع السيادي" if is_ar else "🚀 Run Intelligence Analysis",
+            type="primary",
+            use_container_width=True,
+        )
     with action_col2:
-        include_trace = st.checkbox("Include Reranker Audit Trace", value=True)
+        include_trace = st.checkbox(
+            "تضمين سجل تدقيق معيد الترتيب" if is_ar else "Include Reranker Audit Trace",
+            value=True,
+        )
     with action_col3:
-        if st.button("🧹 Clear Input", use_container_width=True):
+        if st.button("🧹 مسح المدخلات" if is_ar else "🧹 Clear Input", use_container_width=True):
             st.session_state["question_input"] = ""
             st.session_state["last_result"] = None
             st.session_state["last_question"] = ""
@@ -710,7 +855,11 @@ with tab_qa:
         active_question = query_text.strip() or st.session_state.get("question_input", "").strip()
 
         if not active_question:
-            st.warning("Please enter a question or choose an inquiry preset.")
+            st.warning(
+                "يرجى إدخال استفسار أو اختيار أحد النماذج المقترحة."
+                if is_ar
+                else "Please enter a question or choose an inquiry preset."
+            )
             st.session_state["trigger_ask"] = False
         else:
             st.session_state["trigger_ask"] = False
@@ -718,7 +867,11 @@ with tab_qa:
             st.session_state["last_question"] = active_question
 
             try:
-                with st.spinner("Executing Hybrid RAG with Conversational Intent Resolution..."):
+                with st.spinner(
+                    "جاري تنفيذ الاسترجاع الهجين والتحليل السيادي المقيد بالأدلة..."
+                    if is_ar
+                    else "Executing Hybrid RAG with Conversational Intent Resolution..."
+                ):
                     # Pass history to rewriter
                     history_payload = [
                         {"role": m["role"], "content": m["content"]}
@@ -737,7 +890,7 @@ with tab_qa:
                     st.session_state["chat_history"].append({"role": "assistant", "content": res.get("answer", "")})
 
             except Exception as exc:
-                st.error(f"Analysis failed: {exc}")
+                st.error(f"{'فشل التحليل والاسترجاع:' if is_ar else 'Analysis failed:'} {exc}")
 
     result = st.session_state.get("last_result")
     active_q = st.session_state.get("last_question", "")
@@ -755,40 +908,68 @@ with tab_qa:
         retrieval_q = result.get("retrieval_question")
 
         if was_rewritten and retrieval_q:
-            st.info(f"ℹ️ **Conversational Intent Resolved**: Query reformulated to *\"{retrieval_q}\"*")
+            st.info(
+                f"ℹ️ **{'إعادة صياغة السؤال لسياق المحادثة:' if is_ar else 'Conversational Intent Resolved:'}** "
+                f"{'تم تحسين الاستفسار إلى' if is_ar else 'Query reformulated to'} *\"{retrieval_q}\"*"
+            )
 
         if abstained:
-            st.warning("⚠️ **System Abstained**: Retrieval confidence fell below safety threshold. No speculative answer generated.")
+            st.warning(
+                "⚠️ **اعتذار النظام (امتناع آمن)**: انخفضت درجة الثقة ومطابقة الأدلة عن الحد الأدنى للأمان والامتثال. لم يتم توليد أي إجابة تكهنية غير مدعومة بوثائق رسمية."
+                if is_ar
+                else "⚠️ **System Abstained**: Retrieval confidence fell below safety threshold. No speculative answer generated."
+            )
         else:
+            badge_title = "إجابة موثقة ومدعومة بالأدلة الرسمية المعتمدة" if is_ar else "Grounded & Evidence-Backed Synthesis"
+            req_label = "معرف الطلب:" if is_ar else "Request ID:"
+            req_id_short = result.get("request_id", "N/A")[:12]
+            border_side = "border-right:5px solid #002D62;" if is_ar else "border-left:5px solid #002D62;"
             st.markdown(
-                """
-                <div style="display:flex; justify-content:space-between; align-items:center; background:#FFFFFF; border:1.5px solid #BFDBFE; border-left:5px solid #002D62; border-radius:8px; padding:10px 16px; margin-bottom:14px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                f"""
+                <div style="display:flex; justify-content:space-between; align-items:center; background:#FFFFFF; border:1.5px solid #BFDBFE; {border_side} border-radius:8px; padding:10px 16px; margin-bottom:14px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
                     <div style="display:flex; align-items:center; gap:8px;">
                         <span style="color:#047857; font-size:1.1rem; font-weight:800;">●</span>
-                        <span style="font-weight:800; color:#002D62; font-size:0.95rem;">Grounded & Evidence-Backed Synthesis</span>
+                        <span style="font-weight:800; color:#002D62; font-size:0.95rem;">{badge_title}</span>
                     </div>
                     <div>
-                        <span style="background:#EFF6FF; color:#002D62; font-size:0.78rem; font-weight:700; padding:4px 10px; border-radius:6px; border:1px solid #BFDBFE;">Request ID: %s</span>
+                        <span style="background:#EFF6FF; color:#002D62; font-size:0.78rem; font-weight:700; padding:4px 10px; border-radius:6px; border:1px solid #BFDBFE;" dir="ltr">{req_label} {req_id_short}</span>
                     </div>
                 </div>
-                """ % result.get("request_id", "N/A")[:12],
+                """,
                 unsafe_allow_html=True,
             )
 
         # Grounded Answer Presentation
         with st.container(border=True):
             st.markdown(
-                '<div style="font-size:0.88rem; font-weight:800; color:#002D62; text-transform:uppercase; margin-bottom:8px;">📌 Synthesized Intelligence</div>',
+                f'<div style="font-size:0.88rem; font-weight:800; color:#002D62; text-transform:uppercase; margin-bottom:10px;">📌 {"النتيجة والاستخلاص الذكي الموثق" if is_ar else "Synthesized Intelligence"}</div>',
                 unsafe_allow_html=True,
             )
-            st.markdown(result.get("answer", ""))
+            st.markdown(f"<div class='bidi-text' dir='auto'>{result.get('answer', '')}</div>", unsafe_allow_html=True)
+
+        # Latency & Pipeline Metrics Bar
+        if latency:
+            l_col1, l_col2, l_col3, l_col4 = st.columns(4)
+            with l_col1:
+                st.metric("الزمن الإجمالي" if is_ar else "Total Latency", f"{latency.get('total_ms', 0):.0f} ms")
+            with l_col2:
+                st.metric("استرجاع هجين" if is_ar else "Hybrid Retrieval", f"{latency.get('retrieval_ms', 0):.0f} ms")
+            with l_col3:
+                st.metric("إعادة ترتيب BGE" if is_ar else "BGE Reranking", f"{latency.get('reranking_ms', 0):.0f} ms")
+            with l_col4:
+                st.metric("توليد محلي Ollama" if is_ar else "Local LLM Gen", f"{latency.get('generation_ms', 0):.0f} ms")
 
         # Interactive Evidence Explorer & Source Drawer
         if citations or evidence_list:
+            drawer_title = (
+                "📑 مستعرض الأدلة التفاعلي (انقر لمعاينة المصدر الأصلي وصفحة PDF)"
+                if is_ar
+                else "📑 Interactive Evidence Drawer (Click to Inspect Primary Source & PDF Preview)"
+            )
             st.markdown(
-                "<span style='font-size:0.85rem; font-weight:800; color:#002D62; text-transform:uppercase; letter-spacing:0.04em;'>"
-                "📑 Interactive Evidence Drawer (Click to Inspect Primary Source & PDF Preview)"
-                "</span>",
+                f"<div style='font-size:0.85rem; font-weight:800; color:#002D62; text-transform:uppercase; letter-spacing:0.04em; margin-top:14px; margin-bottom:8px;'>"
+                f"{drawer_title}"
+                f"</div>",
                 unsafe_allow_html=True,
             )
 
@@ -801,39 +982,67 @@ with tab_qa:
                 doc_id = cit.get("document_id", "")
                 heading = " → ".join(cit.get("heading_path") or [])
 
-                page_label = f" • Page {page}" if page is not None else ""
-                with st.expander(f"📄 Evidence [{ref}]: {clean_name}{page_label}", expanded=(idx == 1)):
+                page_label = f" • {'صفحة' if is_ar else 'Page'} {page}" if page is not None else ""
+                exp_header = f"📄 {'الدليل' if is_ar else 'Evidence'} [{ref}]: {clean_name}{page_label}"
+                with st.expander(exp_header, expanded=(idx == 1)):
                     c_left, c_right = st.columns([1.5, 1])
                     with c_left:
-                        st.markdown(f"**Document:** `{clean_name}` (`{base_src}`)")
+                        st.markdown(
+                            f"**{'الوثيقة:' if is_ar else 'Document:'}** <code dir='ltr'>{clean_name}</code> (<code dir='ltr'>{base_src}</code>)",
+                            unsafe_allow_html=True,
+                        )
                         if heading:
-                            st.caption(f"**Section Path:** {heading}")
-                        st.caption(f"**Chunk SHA-256:** `{cid[:24]}...`")
+                            st.caption(f"**{'المسار / القسم:' if is_ar else 'Section Path:'}** {heading}")
+                        st.caption(
+                            f"**{'البصمة الرقمية للمقطع:' if is_ar else 'Chunk SHA-256:'}** <code dir='ltr'>{cid[:24]}...</code>",
+                            unsafe_allow_html=True,
+                        )
 
                         raw_text = cit.get("text") or chunk_map.get(cid)
                         if raw_text:
                             st.markdown(
-                                f"<div class='source-pill-quote'>\"{raw_text.strip()}\"</div>",
+                                f"<div class='source-pill-quote' dir='auto'>\"{raw_text.strip()}\"</div>",
                                 unsafe_allow_html=True,
                             )
 
                     with c_right:
                         if page is not None and doc_id:
-                            st.caption("🖼️ High-Res PDF Page Preview")
+                            st.caption("🖼️ " + ("معاينة صفحة PDF الرسمية" if is_ar else "High-Res PDF Page Preview"))
                             img_bytes = client.get_page_preview(doc_id, page)
                             if img_bytes:
-                                st.image(img_bytes, caption=f"Page {page} Preview", use_container_width=True)
+                                st.image(img_bytes, caption=f"{'صفحة' if is_ar else 'Page'} {page}", use_container_width=True)
                             else:
-                                st.info(f"Page {page} preview available in PDF viewer.")
+                                st.info("معاينة الصفحة متاحة في مستعرض PDF." if is_ar else f"Page {page} preview available in PDF viewer.")
                         else:
-                            st.caption("📄 Markdown / Text Document Evidence")
-                            st.success("Verified verbatim passage in sovereign store.")
+                            st.caption("📄 " + ("مستند نصي / ماركداون معتمد" if is_ar else "Markdown / Text Document Evidence"))
+                            st.success("مقطع موثق ومطابق للأصل في المستودع السيادي." if is_ar else "Verified verbatim passage in sovereign store.")
+
+        # Optional Reranker Audit Trace Expander
+        if include_trace and trace:
+            trace_header = "🔍 سجل تدقيق معيد الترتيب والمسار التشخيصي الكامل (Reranker Audit Trace)" if is_ar else "🔍 Reranker Audit Trace & Stage Telemetry"
+            with st.expander(trace_header, expanded=False):
+                cand_list = trace.get("candidates", [])
+                if cand_list:
+                    st.caption(
+                        f"{'المرشحات المسترجعة قبل وبعد إعادة الترتيب:' if is_ar else 'Candidates retrieved and scored across pipeline:'} ({len(cand_list)} {'مرشح' if is_ar else 'candidates'})"
+                    )
+                    trace_rows = []
+                    for c_idx, c in enumerate(cand_list[:10], start=1):
+                        c_src, _ = clean_source_name(c.get("source", ""))
+                        trace_rows.append({
+                            "#" if is_ar else "Rank": c_idx,
+                            "الوثيقة" if is_ar else "Document": c_src,
+                            "معيد الترتيب (Score)" if is_ar else "Rerank Score": f"{c.get('score', 0):.4f}" if c.get("score") is not None else "N/A",
+                            "البحث الكثيف (Dense)" if is_ar else "Dense Score": f"{c.get('dense_score', 0):.4f}" if c.get("dense_score") is not None else "N/A",
+                            "البحث المعجمي (BM25)" if is_ar else "BM25 Score": f"{c.get('sparse_score', 0):.4f}" if c.get("sparse_score") is not None else "N/A",
+                        })
+                    st.dataframe(pd.DataFrame(trace_rows), use_container_width=True, hide_index=True)
 
         # Export Button
         st.markdown("<div style='margin-top: 15px;'></div>", unsafe_allow_html=True)
-        export_content = generate_executive_brief_export(active_q, result, chunk_map)
+        export_content = generate_executive_brief_export(active_q, result, chunk_map, is_ar=is_ar)
         st.download_button(
-            label="📥 Export Executive Briefing (.md)",
+            label="📥 تصدير الإيجاز التنفيذي (.md)" if is_ar else "📥 Export Executive Briefing (.md)",
             data=export_content,
             file_name=f"psut_executive_brief_{result.get('request_id', 'audit')[:8]}.md",
             mime="text/markdown",
@@ -952,7 +1161,10 @@ with tab_compare:
                         }.get(rel, rel.replace("_", " ").title())
 
                     st.markdown(f'<div class="rel-badge {badge_class}">{rel_label}</div>', unsafe_allow_html=True)
-                    st.markdown(f"**{'الملخص التنفيذي للنتيجة:' if is_ar else 'Executive Summary:'}** {comp_res.get('summary')}")
+                    st.markdown(
+                        f"<div class='bidi-text'><strong>{'الملخص التنفيذي للنتيجة:' if is_ar else 'Executive Summary:'}</strong> <span dir='auto'>{comp_res.get('summary')}</span></div>",
+                        unsafe_allow_html=True,
+                    )
 
                     # Side by side cards
                     card_a, card_b = st.columns(2)
@@ -961,36 +1173,58 @@ with tab_compare:
 
                     with card_a:
                         with st.container(border=True):
-                            st.markdown(f"#### 📄 Document A: `{doc_a_claim.get('filename')}`")
-                            st.write(f"**Stated Rule / Claim:** {doc_a_claim.get('claim')}")
+                            fname_a = doc_a_claim.get("filename", "")
+                            st.markdown(
+                                f"#### 📄 {'الوثيقة (أ):' if is_ar else 'Document A:'} <code dir='ltr'>{fname_a}</code>",
+                                unsafe_allow_html=True,
+                            )
+                            st.markdown(
+                                f"**{'الحكم أو النص النظامي الوارد:' if is_ar else 'Stated Rule / Claim:'}** <span dir='auto'>{doc_a_claim.get('claim')}</span>",
+                                unsafe_allow_html=True,
+                            )
                             if doc_a_claim.get("scope_notes"):
-                                st.caption(f"**Scope / Version Condition:** {doc_a_claim.get('scope_notes')}")
+                                st.caption(f"**{'نطاق التطبيق أو شرط الإصدار:' if is_ar else 'Scope / Version Condition:'}** {doc_a_claim.get('scope_notes')}")
                             
                             ev_a = doc_a_claim.get("evidence", [])
                             if ev_a:
-                                with st.expander(f"Verified Evidence ({len(ev_a)} passages)", expanded=True):
+                                exp_label = f"📑 {'الأدلة والفقرات الموثقة' if is_ar else 'Verified Evidence'} ({len(ev_a)} {'فقرات' if is_ar else 'passages'})"
+                                with st.expander(exp_label, expanded=True):
                                     for ev in ev_a:
-                                        st.markdown(f"> \"{ev.get('text', '')[:300]}...\"")
-                                        st.caption(f"Source: `{ev.get('source')}`")
+                                        st.markdown(f"> \"<span dir='auto'>{ev.get('text', '')[:300]}...</span>\"", unsafe_allow_html=True)
+                                        st.caption(f"{'المصدر:' if is_ar else 'Source:'} <code dir='ltr'>{ev.get('source')}</code>", unsafe_allow_html=True)
 
                     with card_b:
                         with st.container(border=True):
-                            st.markdown(f"#### 📄 Document B: `{doc_b_claim.get('filename')}`")
-                            st.write(f"**Stated Rule / Claim:** {doc_b_claim.get('claim')}")
+                            fname_b = doc_b_claim.get("filename", "")
+                            st.markdown(
+                                f"#### 📄 {'الوثيقة (ب):' if is_ar else 'Document B:'} <code dir='ltr'>{fname_b}</code>",
+                                unsafe_allow_html=True,
+                            )
+                            st.markdown(
+                                f"**{'الحكم أو النص النظامي الوارد:' if is_ar else 'Stated Rule / Claim:'}** <span dir='auto'>{doc_b_claim.get('claim')}</span>",
+                                unsafe_allow_html=True,
+                            )
                             if doc_b_claim.get("scope_notes"):
-                                st.caption(f"**Scope / Version Condition:** {doc_b_claim.get('scope_notes')}")
+                                st.caption(f"**{'نطاق التطبيق أو شرط الإصدار:' if is_ar else 'Scope / Version Condition:'}** {doc_b_claim.get('scope_notes')}")
 
                             ev_b = doc_b_claim.get("evidence", [])
                             if ev_b:
-                                with st.expander(f"Verified Evidence ({len(ev_b)} passages)", expanded=True):
+                                exp_label = f"📑 {'الأدلة والفقرات الموثقة' if is_ar else 'Verified Evidence'} ({len(ev_b)} {'فقرات' if is_ar else 'passages'})"
+                                with st.expander(exp_label, expanded=True):
                                     for ev in ev_b:
-                                        st.markdown(f"> \"{ev.get('text', '')[:300]}...\"")
-                                        st.caption(f"Source: `{ev.get('source')}`")
+                                        st.markdown(f"> \"<span dir='auto'>{ev.get('text', '')[:300]}...</span>\"", unsafe_allow_html=True)
+                                        st.caption(f"{'المصدر:' if is_ar else 'Source:'} <code dir='ltr'>{ev.get('source')}</code>", unsafe_allow_html=True)
 
                     # Resolution guidance
                     with st.container(border=True):
-                        st.markdown("**🛡️ Decision-Maker Resolution Guidance:**")
-                        st.write(comp_res.get("resolution_notes", "Review primary documents before policy enforcement."))
+                        st.markdown(f"**🛡️ {'توجيهات وتوصيات صانع القرار:' if is_ar else 'Decision-Maker Resolution Guidance:'}**")
+                        default_guidance = (
+                            "يوصى بالرجوع إلى الوثائق المرجعية الأصلية قبل اعتماد القرار الإجرائي."
+                            if is_ar
+                            else "Review primary documents before policy enforcement."
+                        )
+                        res_guidance = comp_res.get("resolution_notes") or default_guidance
+                        st.markdown(f"<div class='bidi-text' dir='auto'>{res_guidance}</div>", unsafe_allow_html=True)
 
                 except Exception as exc:
                     st.error(f"Comparison analysis failed: {exc}")
@@ -1047,8 +1281,17 @@ with tab_briefing:
                     # Summary Box
                     with st.container(border=True):
                         st.markdown("### 📌 " + ("نظرة عامة تنفيذية" if is_ar else "Executive Overview"))
-                        st.markdown(brief_res.get("executive_summary", ""))
-                        st.caption(f"تم التحليل عبر {brief_res.get('document_count')} وثائق: {', '.join(brief_res.get('analyzed_documents', []))}")
+                        st.markdown(
+                            f"<div class='bidi-text' dir='auto'>{brief_res.get('executive_summary', '')}</div>",
+                            unsafe_allow_html=True,
+                        )
+                        analyzed_docs = brief_res.get("analyzed_documents", [])
+                        analyzed_docs_str = ", ".join([f"<code dir='ltr'>{clean_source_name(d)[0]}</code>" for d in analyzed_docs])
+                        st.caption(
+                            f"{'تم التحليل عبر' if is_ar else 'Analyzed across'} {brief_res.get('document_count')} "
+                            f"{'وثائق رسمية:' if is_ar else 'documents:'} {analyzed_docs_str}",
+                            unsafe_allow_html=True,
+                        )
 
                     # Findings List
                     findings = brief_res.get("findings", [])
@@ -1067,27 +1310,48 @@ with tab_briefing:
                         tag_text = cat_labels_ar.get(cat, cat.upper()) if is_ar else cat.replace("_", " ").upper()
                         with st.container(border=True):
                             st.markdown(f'<span class="finding-tag {tag_class}">{tag_text}</span>', unsafe_allow_html=True)
-                            st.markdown(f"**{idx}. {f.get('title')}**")
-                            st.write(f.get("description"))
+                            st.markdown(f"**{idx}. <span dir='auto'>{f.get('title')}</span>**", unsafe_allow_html=True)
+                            st.markdown(f"<div class='bidi-text' dir='auto'>{f.get('description')}</div>", unsafe_allow_html=True)
 
                             evs = f.get("evidence", [])
                             if evs:
-                                with st.expander(f"📑 {'الأدلة الموثقة' if is_ar else 'Grounded Evidence'} ({len(evs)} {'مقطع' if is_ar else 'chunk'})", expanded=False):
+                                with st.expander(
+                                    f"📑 {'الأدلة الموثقة' if is_ar else 'Grounded Evidence'} ({len(evs)} {'مقطع' if is_ar else 'chunk'})",
+                                    expanded=False,
+                                ):
                                     for ev in evs:
-                                        st.markdown(f"> \"{ev.get('text', '')[:300]}...\"")
-                                        st.caption(f"Source: `{ev.get('filename')}` | Reference: `#{ev.get('reference')}`")
+                                        ev_clean, _ = clean_source_name(ev.get("filename", ""))
+                                        st.markdown(f"> \"<span dir='auto'>{ev.get('text', '')[:300]}...</span>\"", unsafe_allow_html=True)
+                                        st.caption(
+                                            f"{'المصدر:' if is_ar else 'Source:'} <code dir='ltr'>{ev_clean}</code> | "
+                                            f"{'المرجع:' if is_ar else 'Reference:'} `#{ev.get('reference')}`",
+                                            unsafe_allow_html=True,
+                                        )
 
                     # Download Briefing
-                    brief_md = [
-                        f"# EXECUTIVE INTELLIGENCE BRIEFING: {focus_input}",
-                        f"**Date:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
-                        f"**Corpus:** {len(target_ids)} documents",
-                        "\n## Executive Overview\n",
-                        brief_res.get("executive_summary", ""),
-                        "\n## Strategic Findings\n",
-                    ]
-                    for f in findings:
-                        brief_md.append(f"### [{f.get('category').upper()}] {f.get('title')}\n{f.get('description')}\n")
+                    if is_ar:
+                        brief_md = [
+                            f"# إيجاز استخباراتي تنفيذي متعدد الوثائق: {focus_input}",
+                            f"**التاريخ:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
+                            f"**نطاق الوثائق:** {len(target_ids)} وثائق رسمية",
+                            "\n## نظرة عامة تنفيذية\n",
+                            brief_res.get("executive_summary", ""),
+                            "\n## النتائج والقرارات الاستراتيجية\n",
+                        ]
+                        for f in findings:
+                            cat_name = cat_labels_ar.get(f.get("category"), f.get("category", "").upper())
+                            brief_md.append(f"### [{cat_name}] {f.get('title')}\n{f.get('description')}\n")
+                    else:
+                        brief_md = [
+                            f"# EXECUTIVE INTELLIGENCE BRIEFING: {focus_input}",
+                            f"**Date:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
+                            f"**Corpus:** {len(target_ids)} documents",
+                            "\n## Executive Overview\n",
+                            brief_res.get("executive_summary", ""),
+                            "\n## Strategic Findings\n",
+                        ]
+                        for f in findings:
+                            brief_md.append(f"### [{f.get('category').upper()}] {f.get('title')}\n{f.get('description')}\n")
 
                     st.download_button(
                         label="📥 تحميل التقرير التنفيذي (.md)" if is_ar else "📥 Download Executive Briefing (.md)",
@@ -1098,7 +1362,7 @@ with tab_briefing:
                     )
 
                 except Exception as exc:
-                    st.error(f"Briefing generation failed: {exc}")
+                    st.error(f"{'فشل توليد الإيجاز التنفيذي:' if is_ar else 'Briefing generation failed:'} {exc}")
 
 
 # =========================================================
@@ -1115,13 +1379,29 @@ with tab_repo:
         st.markdown("#### 🛡️ " + ("تشخيص العتاد والمحركات الذكية" if is_ar else "Hardware & Engine Diagnostics"))
         h_col1, h_col2, h_col3, h_col4 = st.columns(4)
         with h_col1:
-            st.metric("Ollama LLM", health_info.get("ollama", {}).get("model", "qwen3.5:4b"), "Local GPU")
+            st.metric(
+                "محرك التوليد Ollama" if is_ar else "Ollama LLM",
+                health_info.get("ollama", {}).get("model", "qwen3.5:4b"),
+                "كارت الشاشة GPU" if is_ar else "Local GPU",
+            )
         with h_col2:
-            st.metric("Embeddings", "MiniLM-Multilingual", "384-dim Arabic")
+            st.metric(
+                "تضمينات المتجهات" if is_ar else "Embeddings",
+                "MiniLM-Multilingual",
+                "384-dim عربي/إنجليزي" if is_ar else "384-dim Arabic",
+            )
         with h_col3:
-            st.metric("Reranker", "BGE-Reranker-v2-m3", "Cross-Encoder Multilingual")
+            st.metric(
+                "معيد الترتيب Reranker" if is_ar else "Reranker",
+                "BGE-Reranker-v2-m3",
+                "Cross-Encoder متعدد اللغات" if is_ar else "Cross-Encoder Multilingual",
+            )
         with h_col4:
-            st.metric("Vector Store", "Qdrant Embedded", f"{health_info.get('chunk_count', 0)} chunks")
+            st.metric(
+                "قاعدة المتجهات Qdrant" if is_ar else "Vector Store",
+                "Qdrant مدمجة" if is_ar else "Qdrant Embedded",
+                f"{health_info.get('chunk_count', 0)} {'مقطع' if is_ar else 'chunks'}",
+            )
     except Exception:
         st.warning("تعذر جلب بيانات التشخيص الفني في الوقت الفعلي." if is_ar else "Could not fetch real-time health telemetry.")
 
@@ -1147,14 +1427,24 @@ with tab_repo:
 
                 chunk_cnt = result.get("chunk_count", 0)
                 if result.get("duplicate"):
-                    st.info(f"ℹ️ الوثيقة **{uploaded_file.name}** مفهرسة مسبقاً ({chunk_cnt} مقطع). جاهزة للبحث والمقارنة والإيجاز!" if is_ar else f"ℹ️ Document **{uploaded_file.name}** is already indexed ({chunk_cnt} chunks). Ready for search, conflict detection, and briefings!")
+                    st.info(
+                        f"ℹ️ الوثيقة <code dir='ltr'>{uploaded_file.name}</code> مفهرسة مسبقاً ({chunk_cnt} مقطع). جاهزة للبحث والمقارنة والإيجاز!"
+                        if is_ar
+                        else f"ℹ️ Document <code dir='ltr'>{uploaded_file.name}</code> is already indexed ({chunk_cnt} chunks). Ready for search, conflict detection, and briefings!",
+                        unsafe_allow_html=True,
+                    )
                 else:
-                    st.success(f"✅ تمت فهرسة وثيقة **{uploaded_file.name}** بنجاح بعدد ({chunk_cnt} مقطع)!" if is_ar else f"✅ Successfully indexed **{uploaded_file.name}** ({chunk_cnt} chunks) into the vector store!")
+                    st.success(
+                        f"✅ تمت فهرسة وثيقة <code dir='ltr'>{uploaded_file.name}</code> بنجاح بعدد ({chunk_cnt} مقطع)!"
+                        if is_ar
+                        else f"✅ Successfully indexed <code dir='ltr'>{uploaded_file.name}</code> ({chunk_cnt} chunks) into the vector store!",
+                        unsafe_allow_html=True,
+                    )
                     st.session_state["documents"] = client.list_documents()
                     st.rerun()
 
             except Exception as exc:
-                st.error(f"Ingestion failed: {exc}")
+                st.error(f"{'فشلت عملية الفهرسة والتضمين:' if is_ar else 'Ingestion failed:'} {exc}")
 
     st.divider()
 

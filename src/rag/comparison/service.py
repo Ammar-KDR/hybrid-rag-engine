@@ -13,6 +13,7 @@ from rag.config import settings
 from rag.ingestion.registry import DocumentRegistry
 from rag.pipeline import RAGPipeline
 from rag.retrieval.model import RetrievalFilter
+from rag.nlp.arabic import is_arabic_text
 
 
 class DocumentComparisonService:
@@ -82,6 +83,8 @@ class DocumentComparisonService:
             for idx, c in enumerate(chunks_b, start=1)
         ]
 
+        is_ar_topic = is_arabic_text(topic) or is_arabic_text(filename_a) or is_arabic_text(filename_b)
+
         # Step 3: Check sufficiency
         if not chunks_a or not chunks_b:
             missing = []
@@ -90,23 +93,32 @@ class DocumentComparisonService:
             if not chunks_b:
                 missing.append(filename_b)
 
+            if is_ar_topic:
+                summary_text = f"الأدلة المتاحة حول '{topic}' غير كافية في: {', '.join(missing)}."
+                res_notes = "يرجى تزويد النظام بوثائق رسمية تغطي هذا الموضوع لتمكين التدقيق الآلي للتعارض."
+                claim_fallback = "لم يتم العثور على نصوص كافية."
+            else:
+                summary_text = f"Insufficient evidence on '{topic}' found in: {', '.join(missing)}."
+                res_notes = "Provide documents with explicit coverage of this topic to enable automated conflict analysis."
+                claim_fallback = "No relevant passages found."
+
             return CompareResponse(
                 topic=topic,
                 relationship=ComparisonRelationship.INSUFFICIENT_EVIDENCE,
-                summary=f"Insufficient evidence on '{topic}' found in: {', '.join(missing)}.",
+                summary=summary_text,
                 document_a=DocumentClaim(
                     document_id=document_a_id,
                     filename=filename_a,
-                    claim=chunks_a[0].text[:200] if chunks_a else "No relevant passages found.",
+                    claim=chunks_a[0].text[:200] if chunks_a else claim_fallback,
                     evidence=evidence_a,
                 ),
                 document_b=DocumentClaim(
                     document_id=document_b_id_val,
                     filename=filename_b,
-                    claim=chunks_b[0].text[:200] if chunks_b else "No relevant passages found.",
+                    claim=chunks_b[0].text[:200] if chunks_b else claim_fallback,
                     evidence=evidence_b,
                 ),
-                resolution_notes="Provide documents with explicit coverage of this topic to enable automated conflict analysis.",
+                resolution_notes=res_notes,
                 confidence="low",
             )
 
@@ -136,6 +148,14 @@ class DocumentComparisonService:
             "}"
         )
 
+        if is_ar_topic:
+            system_prompt += (
+                "\n\nCRITICAL LANGUAGE INSTRUCTION:\n"
+                "The topic and documents are in Arabic. You MUST generate all text content in the JSON "
+                "('summary', 'doc_a_claim', 'doc_b_claim', 'resolution_notes') in formal, authoritative Arabic (لغة عربية فصحى رسمية). "
+                "The JSON keys and 'relationship' values must remain in standard English."
+            )
+
         user_content = (
             f"Topic: {topic}\n\n"
             f"--- EVIDENCE FROM DOCUMENT A ({filename_a}) ---\n"
@@ -146,27 +166,56 @@ class DocumentComparisonService:
         )
 
         try:
-            chat_url = f"{self.base_url}/chat/completions"
-            payload = {
-                "model": self.model,
-                "messages": [
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": user_content},
-                ],
-                "temperature": 0.0,
-                "max_tokens": 400,
-            }
+            clean_url = self.base_url.rstrip("/")
+            if clean_url.endswith("/v1"):
+                clean_url = clean_url[:-3]
 
-            req = urllib.request.Request(
-                chat_url,
-                data=json.dumps(payload).encode("utf-8"),
-                headers={"Content-Type": "application/json", "User-Agent": "ConflictDetective"},
-            )
+            raw_json = ""
+            # Try native Ollama /api/chat first with think=False
+            try:
+                import requests
+                native_payload = {
+                    "model": self.model,
+                    "messages": [
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": user_content},
+                    ],
+                    "think": False,
+                    "options": {
+                        "temperature": 0.0,
+                        "num_predict": 600,
+                    },
+                    "keep_alive": -1,
+                    "stream": False,
+                }
+                resp = requests.post(f"{clean_url}/api/chat", json=native_payload, timeout=45)
+                if resp.status_code == 200:
+                    raw_json = resp.json().get("message", {}).get("content", "").strip()
+            except Exception:
+                pass
 
-            with urllib.request.urlopen(req, timeout=10.0) as resp:
-                data = json.loads(resp.read().decode("utf-8"))
-                raw_json = data["choices"][0]["message"]["content"].strip()
+            if not raw_json:
+                chat_url = f"{self.base_url}/chat/completions"
+                payload = {
+                    "model": self.model,
+                    "messages": [
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": user_content},
+                    ],
+                    "temperature": 0.0,
+                    "max_tokens": 600,
+                }
+                req = urllib.request.Request(
+                    chat_url,
+                    data=json.dumps(payload).encode("utf-8"),
+                    headers={"Content-Type": "application/json", "User-Agent": "ConflictDetective"},
+                )
+                with urllib.request.urlopen(req, timeout=30.0) as resp:
+                    data = json.loads(resp.read().decode("utf-8"))
+                    raw_json = data["choices"][0]["message"]["content"].strip()
 
+            # Clean <think> tags if present
+            raw_json = re.sub(r"<think>.*?</think>", "", raw_json, flags=re.DOTALL).strip()
             # Clean JSON markdown fences if present
             raw_json = re.sub(r"^```(?:json)?\s*", "", raw_json, flags=re.MULTILINE)
             raw_json = re.sub(r"```$", "", raw_json, flags=re.MULTILINE).strip()
@@ -177,10 +226,21 @@ class DocumentComparisonService:
             if rel_str not in [e.value for e in ComparisonRelationship]:
                 rel_str = "possible_conflict"
 
+            default_summary = (
+                f"تمت مقارنة موضوع '{topic}' بدقة بين الوثيقتين."
+                if is_ar_topic
+                else "Document comparison completed."
+            )
+            default_res_notes = (
+                "يوصى بمراجعة النصوص المرجعية المعتمدة قبل التطبيق."
+                if is_ar_topic
+                else "Review primary documents before enforcement."
+            )
+
             return CompareResponse(
                 topic=topic,
                 relationship=ComparisonRelationship(rel_str),
-                summary=parsed.get("summary", "Document comparison completed."),
+                summary=parsed.get("summary", default_summary),
                 document_a=DocumentClaim(
                     document_id=document_a_id,
                     filename=filename_a,
@@ -195,16 +255,23 @@ class DocumentComparisonService:
                     evidence=evidence_b,
                     scope_notes=parsed.get("doc_b_scope"),
                 ),
-                resolution_notes=parsed.get("resolution_notes", "Review primary documents."),
+                resolution_notes=parsed.get("resolution_notes", default_res_notes),
                 confidence=parsed.get("confidence", "medium") if parsed.get("confidence") in ("high", "medium", "low") else "medium",
             )
 
         except Exception as exc:
             # Fallback heuristic comparison if LLM JSON decode fails
+            if is_ar_topic:
+                fb_summary = f"تمت مقارنة موضوع '{topic}' بين الوثيقتين ({filename_a}) و ({filename_b})."
+                fb_res = "يوصى بالرجوع إلى الوثائق الأصلية للتحقق من الأحكام والاشتراطات قبل اعتماد الإجراء."
+            else:
+                fb_summary = f"Compared '{topic}' across {filename_a} and {filename_b}."
+                fb_res = "Automatic fallback analysis executed."
+
             return CompareResponse(
                 topic=topic,
                 relationship=ComparisonRelationship.AGREEMENT if chunks_a[0].text == chunks_b[0].text else ComparisonRelationship.POSSIBLE_CONFLICT,
-                summary=f"Compared '{topic}' across {filename_a} and {filename_b}.",
+                summary=fb_summary,
                 document_a=DocumentClaim(
                     document_id=document_a_id,
                     filename=filename_a,
@@ -217,6 +284,6 @@ class DocumentComparisonService:
                     claim=chunks_b[0].text[:200],
                     evidence=evidence_b,
                 ),
-                resolution_notes="Automatic fallback analysis executed.",
+                resolution_notes=fb_res,
                 confidence="low",
             )
