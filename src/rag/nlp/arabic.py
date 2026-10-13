@@ -5,7 +5,7 @@ from typing import Tuple, List
 # Tashkeel / Diacritics: Fathatan to Sukun, Dagger Alif
 TASHKEEL_REGEX = re.compile(r"[\u064B-\u065F\u0670]")
 TATWEEL_REGEX = re.compile(r"\u0640")
-ARABIC_CHAR_REGEX = re.compile(r"[\u0600-\u06FF]")
+ARABIC_CHAR_REGEX = re.compile(r"[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]")
 
 # Government Service Heading Keywords
 GOV_HEADING_KEYWORDS = (
@@ -56,6 +56,7 @@ def remove_tatweel(text: str) -> str:
 def normalize_arabic(text: str) -> str:
     """
     Standardizes Arabic text variations:
+    - Normalizes Unicode Presentation Forms to standard Arabic characters
     - Strips tashkeel and tatweel
     - Unifies Alef variants (إ, أ, آ, ٱ -> ا)
     - Unifies Alef Maqsura to Yaa (ى -> ي)
@@ -63,6 +64,9 @@ def normalize_arabic(text: str) -> str:
     """
     if not text:
         return ""
+    import unicodedata
+
+    text = unicodedata.normalize("NFKC", text)
     text = remove_tashkeel(text)
     text = remove_tatweel(text)
     # Normalize Alef variants

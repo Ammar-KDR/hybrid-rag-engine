@@ -11,10 +11,13 @@ SUPPORTED_EXTENSIONS = {".txt", ".md", ".html", ".htm", ".pdf", ".docx"}
 
 def normalize_text(text: str) -> str:
     """
-    Normalize line endings while preserving document structure.
+    Normalize line endings and Unicode canonical compatibility (NFKC).
+    Converts Arabic presentation forms / ligatures to standard Unicode characters.
     """
+    import unicodedata
+
     return (
-        text
+        unicodedata.normalize("NFKC", text)
         .replace("\r\n", "\n")
         .replace("\r", "\n")
         .strip()
@@ -54,6 +57,37 @@ def load_html_document(path: Path) -> list[Document]:
 
 
 def load_pdf_document(path: Path) -> list[Document]:
+    # Try pymupdf (fitz) first for fast, robust extraction and complex font mapping
+    try:
+        import pymupdf
+
+        doc = pymupdf.open(str(path))
+        documents = []
+        page_count = len(doc)
+        for page_index in range(page_count):
+            page = doc[page_index]
+            text = page.get_text() or ""
+            text = normalize_text(text)
+            if not text:
+                continue
+            documents.append(
+                Document(
+                    text=text,
+                    source=str(path),
+                    file_type="pdf",
+                    metadata={
+                        "page_number": page_index + 1,
+                        "page_count": page_count,
+                    },
+                )
+            )
+        doc.close()
+        if documents:
+            return documents
+    except Exception:
+        pass
+
+    # Fallback to pypdf
     reader = PdfReader(path)
 
     documents = []

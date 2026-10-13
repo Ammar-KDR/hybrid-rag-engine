@@ -231,6 +231,30 @@
       "chunk_count": 6,
       "ingested_at": "2026-10-13T15:34:23.806316+00:00",
       "chunking_strategy": "arabic_government_structure"
+    },
+    {
+      "document_id": "265c5c26b7ceab274bcf68bffb05869cbf69248e4ef52d529c35dd33cd256d35",
+      "filename": "vehicle_licensing_guide_2026.pdf",
+      "file_type": "pdf",
+      "chunk_count": 3,
+      "ingested_at": "2026-10-13T16:14:25.375870+00:00",
+      "chunking_strategy": "arabic_government_structure"
+    },
+    {
+      "document_id": "447da1ce04c5c3b01bc902fad2e47729cda618174e923cc8a4431e000a50efa5",
+      "filename": "civil_status_smart_id_guide.pdf",
+      "file_type": "pdf",
+      "chunk_count": 3,
+      "ingested_at": "2026-10-13T16:14:25.850790+00:00",
+      "chunking_strategy": "arabic_government_structure"
+    },
+    {
+      "document_id": "94902eb737541bd738f14a80a312ca333f787060983c99d82962b5b6aca31d75",
+      "filename": "building_permit_instructions_2026.pdf",
+      "file_type": "pdf",
+      "chunk_count": 2,
+      "ingested_at": "2026-10-13T16:14:26.266409+00:00",
+      "chunking_strategy": "arabic_government_structure"
     }
   ]
 }
