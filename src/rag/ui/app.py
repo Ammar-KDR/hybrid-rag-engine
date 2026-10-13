@@ -7,7 +7,7 @@ import streamlit as st
 from dotenv import load_dotenv
 
 from rag.ui.client import RAGAPIClient
-from rag.utils.arabic import is_arabic_text
+from rag.nlp.arabic import is_arabic_text
 
 load_dotenv()
 
