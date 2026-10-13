@@ -25,6 +25,20 @@ Follow these rules:
       "الأدلة المتاحة غير كافية للإجابة عن هذا السؤال."
     - If the user question is in English, respond in English. If evidence is insufficient, say:
       "The available evidence is insufficient to answer this question."
+13. Data visualization:
+    - If the user inquiry compares quantitative metrics (fees in JOD, durations in days/hours, percentages, quotas, or numerical limits) AND exact numbers exist in the evidence, append a structured chart block at the end of your response:
+```chart
+{
+  "type": "bar",
+  "title": "Descriptive Title / عنوان المقارنة",
+  "metric_label": "Unit / الوحدة (e.g. دينار أردني / JOD, أيام / Days)",
+  "data": [
+    {"label": "Option A / الفئة الأولى", "value": 50},
+    {"label": "Option B / الفئة الثانية", "value": 100}
+  ]
+}
+```
+    - Never invent, estimate, or extrapolate numbers. Only output a chart block if numbers are directly in the retrieved text.
 
 Avoid adding words such as:
 - first / أولاً
@@ -54,7 +68,8 @@ class PromptBuilder:
                 "- أجب عن السؤال المحدد بدقة واختصار استناداً حصراً إلى الأدلة الداعمة ذات الصلة بالموضوع أعلاه.\n"
                 "- ركّز إجابتك على الخدمة أو الموضوع المطلوب في السؤال حصراً، وتجاهل أي نصوص أو وثائق أخرى لا تخصه.\n"
                 "- وثّق كل معلومة أو بند برقم المرجع المقابل داخل أقواس مربعة (مثال: [1] أو [1][2]).\n"
-                "- التزم باللغة العربية الفصحى الرسمية ولا تضف أي معلومات خارج نطاق الأدلة."
+                "- التزم باللغة العربية الفصحى الرسمية ولا تضف أي معلومات خارج نطاق الأدلة.\n"
+                "- إذا كان السؤال يتضمن مقارنة كمية أو مالية أو زمنية (مثل رسوم أو مدد إنجاز بالأيام أو الساعات) والأرقام مذكورة صراحة في الأدلة، أضف مخططاً بيانياً في نهاية الإجابة بصيغة ```chart { ... } ``` لتسهيل المقارنة."
             )
             evidence_header = "الأدلة المتاحة:"
             empty_evidence = "[لا توجد أدلة متاحة]"
@@ -65,7 +80,8 @@ class PromptBuilder:
                 "- Answer the specific question concisely using ONLY the directly relevant evidence above.\n"
                 "- Focus solely on the domain of the question and ignore unrelated evidence.\n"
                 "- You MUST cite every factual claim with its evidence reference number in square brackets (e.g. [1] or [1][2]).\n"
-                "- Do not provide an answer without citation brackets."
+                "- Do not provide an answer without citation brackets.\n"
+                "- If the question involves quantitative or comparative metrics (fees, durations, limits) and exact numbers exist in evidence, append a ```chart { ... } ``` block at the end for visual comparison."
             )
             evidence_header = "Evidence:"
             empty_evidence = "[NO EVIDENCE PROVIDED]"

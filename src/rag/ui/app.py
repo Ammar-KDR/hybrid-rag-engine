@@ -1,5 +1,7 @@
 import base64
+import json
 import os
+import re
 import time
 from datetime import datetime
 from pathlib import Path
@@ -890,6 +892,88 @@ def build_chunk_text_map(trace: dict | None, evidence_list: list | None = None) 
     return chunk_map
 
 
+def extract_chart_spec(text: str) -> tuple[str, dict | None]:
+    """
+    Extracts embedded ```chart ... ``` JSON block from answer text.
+    Returns (cleaned_text, chart_dict_or_None).
+    """
+    if not text:
+        return text, None
+
+    pattern = r"```(?:chart|json:chart)\s*(\{.*?\})\s*```"
+    match = re.search(pattern, text, flags=re.DOTALL | re.IGNORECASE)
+    if not match:
+        return text, None
+
+    chart_raw = match.group(1).strip()
+    clean_text = (text[:match.start()] + text[match.end():]).strip()
+    try:
+        chart_dict = json.loads(chart_raw)
+        if isinstance(chart_dict, dict) and "data" in chart_dict and isinstance(chart_dict["data"], list):
+            return clean_text, chart_dict
+    except Exception:
+        pass
+
+    return text, None
+
+
+def render_chart_spec(chart_spec: dict, is_ar: bool = False):
+    """
+    Renders an institutional PSUT-themed bar chart from extracted chart spec.
+    """
+    if not chart_spec or not chart_spec.get("data"):
+        return
+
+    data = chart_spec.get("data", [])
+    title = chart_spec.get("title", "مقارنة إحصائية / رقمية" if is_ar else "Quantitative Comparison")
+    metric_label = chart_spec.get("metric_label") or chart_spec.get("y_label") or ("القيمة / المعيار" if is_ar else "Value")
+
+    clean_rows = []
+    for row in data:
+        if isinstance(row, dict) and "label" in row and "value" in row:
+            try:
+                val_raw = row["value"]
+                if isinstance(val_raw, (int, float)):
+                    val = float(val_raw)
+                else:
+                    val_str = re.sub(r"[^\d.]", "", str(val_raw))
+                    val = float(val_str) if val_str else 0.0
+                clean_rows.append({"label": str(row["label"]), metric_label: val})
+            except Exception:
+                continue
+
+    if not clean_rows:
+        return
+
+    df = pd.DataFrame(clean_rows)
+
+    with st.container():
+        st.markdown(
+            f"""
+            <div style="background:#FFFFFF; border:1.5px solid #BFDBFE; border-top:4px solid #002D62; border-radius:10px; padding:14px 18px; margin-top:14px; margin-bottom:12px; box-shadow: 0 2px 6px rgba(0,45,98,0.04);">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <span style="font-size:1.15rem;">📊</span>
+                        <span style="font-size:0.92rem; font-weight:800; color:#002D62; text-transform:uppercase; letter-spacing:0.03em;">
+                            {title}
+                        </span>
+                    </div>
+                    <span style="background:#EFF6FF; color:#002D62; font-size:0.75rem; font-weight:700; padding:3px 8px; border-radius:4px; border:1px solid #BFDBFE;">
+                        {'مخطط مقارنة تفاعلي' if is_ar else 'Interactive Comparison'}
+                    </span>
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        st.bar_chart(
+            df.set_index("label"),
+            color="#002D62",
+            height=280,
+            use_container_width=True,
+        )
+
+
 def generate_executive_brief_export(
     question: str,
     result: dict,
@@ -1354,6 +1438,7 @@ with tab_qa:
             req_id_short = result.get("request_id", "N/A")[:12]
             verified_pill = "✅ مطابقة كاملة للأصل" if is_ar else "✅ 100% Grounded"
             result_header = "📌 النتيجة والاستخلاص الذكي الموثق" if is_ar else "📌 Synthesized Intelligence & Verifiable Findings"
+            clean_answer, chart_spec = extract_chart_spec(result.get("answer", ""))
             st.markdown(
                 f"""
                 <div class="grounded-result-card">
@@ -1368,11 +1453,15 @@ with tab_qa:
                         </div>
                     </div>
                     <div style="font-size:0.86rem; font-weight:800; color:#002D62; text-transform:uppercase; margin-bottom:8px;">{result_header}</div>
-                    <div class='bidi-text' dir='auto' style='font-size:1.02rem; line-height:1.85; color:#0F172A;'>{result.get('answer', '')}</div>
+                    <div class='bidi-text' dir='auto' style='font-size:1.02rem; line-height:1.85; color:#0F172A;'>{clean_answer}</div>
                 </div>
                 """,
                 unsafe_allow_html=True,
             )
+
+            # Dynamic Comparison Chart if present
+            if chart_spec:
+                render_chart_spec(chart_spec, is_ar=is_ar)
 
         # Latency & Pipeline Metrics Bar
         if latency:
@@ -1760,6 +1849,8 @@ with tab_briefing:
                     analyzed_label = "تم التحليل عبر" if is_ar else "Analyzed across"
                     docs_label = "وثائق رسمية:" if is_ar else "documents:"
 
+                    clean_exec_summary, brief_chart_spec = extract_chart_spec(brief_res.get("executive_summary", ""))
+
                     st.markdown(
                         f"""
                         <div class="brief-overview-card">
@@ -1767,7 +1858,7 @@ with tab_briefing:
                                 📌 {overview_title}
                             </div>
                             <div class="bidi-text" dir="auto" style="font-size:1.02rem; line-height:1.85; color:#0F172A; margin-bottom:14px;">
-                                {brief_res.get('executive_summary', '')}
+                                {clean_exec_summary}
                             </div>
                             <div style="font-size:0.82rem; color:#64748B; border-top:1px solid #E2E8F0; padding-top:10px;">
                                 {analyzed_label} {brief_res.get('document_count')} {docs_label} {analyzed_docs_str}
@@ -1777,9 +1868,12 @@ with tab_briefing:
                         unsafe_allow_html=True,
                     )
 
-                    # Findings List
+                    # Dynamic comparative chart in summary if present
+                    if brief_chart_spec:
+                        render_chart_spec(brief_chart_spec, is_ar=is_ar)
+
+                    # Findings List & Category Visualization
                     findings = brief_res.get("findings", [])
-                    st.markdown(f"### 🎯 {'النتائج والقرارات الاستراتيجية' if is_ar else 'Strategic Findings & Mandates'} ({len(findings)})")
 
                     cat_labels_ar = {
                         "policy": "🏛️ السياسات والأنظمة",
@@ -1787,6 +1881,77 @@ with tab_briefing:
                         "compliance": "⚖️ الشروط والامتثال",
                         "action_item": "✅ الإجراءات التنفيذية",
                     }
+                    cat_labels_en = {
+                        "policy": "🏛️ Policy & Mandates",
+                        "technical": "⚙️ Technical Specs",
+                        "compliance": "⚖️ Compliance & Rules",
+                        "action_item": "✅ Action Items",
+                    }
+                    cat_dict = cat_labels_ar if is_ar else cat_labels_en
+
+                    if findings:
+                        # Strategic Governance Distribution Chart & Matrix Table
+                        cat_counts = {k: 0 for k in cat_dict.keys()}
+                        for f in findings:
+                            c = f.get("category", "policy")
+                            if c in cat_counts:
+                                cat_counts[c] += 1
+                            else:
+                                cat_counts[c] = 1
+
+                        col_chart, col_matrix = st.columns([1.3, 1.7])
+                        with col_chart:
+                            st.markdown(
+                                f"""
+                                <div style="background:#FFFFFF; border:1.5px solid #BFDBFE; border-top:4px solid #002D62; border-radius:10px; padding:12px 16px; margin-bottom:10px;">
+                                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                                        <span style="font-weight:800; color:#002D62; font-size:0.86rem; text-transform:uppercase;">
+                                            📊 {'توزيع النتائج حسب المحور الاستراتيجي' if is_ar else 'Findings by Strategic Pillar'}
+                                        </span>
+                                        <span style="font-size:0.75rem; font-weight:700; color:#1E40AF; background:#EFF6FF; padding:2px 8px; border-radius:4px;">
+                                            {len(findings)} {'نتائج' if is_ar else 'Total'}
+                                        </span>
+                                    </div>
+                                </div>
+                                """,
+                                unsafe_allow_html=True,
+                            )
+                            chart_rows = [{"Pillar": cat_dict.get(k, k), ("عدد النتائج" if is_ar else "Count"): v} for k, v in cat_counts.items()]
+                            df_cat = pd.DataFrame(chart_rows)
+                            st.bar_chart(
+                                df_cat.set_index("Pillar"),
+                                color="#002D62",
+                                height=230,
+                                use_container_width=True,
+                            )
+
+                        with col_matrix:
+                            st.markdown(
+                                f"""
+                                <div style="background:#FFFFFF; border:1.5px solid #BFDBFE; border-top:4px solid #1E40AF; border-radius:10px; padding:12px 16px; margin-bottom:10px;">
+                                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                                        <span style="font-weight:800; color:#002D62; font-size:0.86rem; text-transform:uppercase;">
+                                            📋 {'مصفوفة القرارات التنفيذية المعتمدة' if is_ar else 'Executive Decision Matrix'}
+                                        </span>
+                                        <span style="font-size:0.75rem; font-weight:700; color:#047857; background:#ECFDF5; padding:2px 8px; border-radius:4px;">
+                                            {'جدول منظم' if is_ar else 'Structured Table'}
+                                        </span>
+                                    </div>
+                                </div>
+                                """,
+                                unsafe_allow_html=True,
+                            )
+                            matrix_rows = []
+                            for m_idx, f in enumerate(findings, start=1):
+                                matrix_rows.append({
+                                    "#": m_idx,
+                                    ("البند / القرار الاستراتيجي" if is_ar else "Finding Title"): f.get("title", ""),
+                                    ("التصنيف" if is_ar else "Category"): cat_dict.get(f.get("category"), f.get("category")),
+                                    ("المرجع" if is_ar else "Primary Ref"): f"#{f.get('primary_ref', 1)}",
+                                })
+                            st.dataframe(pd.DataFrame(matrix_rows), use_container_width=True, hide_index=True, height=230)
+
+                    st.markdown(f"### 🎯 {'النتائج والقرارات الاستراتيجية التفصيلية' if is_ar else 'Detailed Strategic Findings & Mandates'} ({len(findings)})")
 
                     for idx, f in enumerate(findings, start=1):
                         cat = f.get("category", "policy")
