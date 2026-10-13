@@ -169,7 +169,7 @@ textarea::placeholder {
     border: 2px solid #CBD5E1;
 }
 
-/* Primary Button (PSUT Navy) */
+/* Primary Button (PSUT Navy) - Emil Kowalski Micro-Interactions */
 .stButton>button[kind="primary"] {
     background-color: #002D62 !important;
     color: #FFFFFF !important;
@@ -178,8 +178,8 @@ textarea::placeholder {
     padding: 0.55rem 1.25rem !important;
     font-weight: 700 !important;
     font-size: 0.95rem !important;
-    box-shadow: 0 2px 4px rgba(0, 45, 98, 0.2) !important;
-    transition: all 0.2s ease !important;
+    box-shadow: 0 1px 3px rgba(0, 45, 98, 0.12), 0 3px 8px rgba(0, 45, 98, 0.16) !important;
+    transition: transform 140ms cubic-bezier(0.23, 1, 0.32, 1), background-color 140ms ease, box-shadow 140ms ease !important;
 }
 
 .stButton>button[kind="primary"] p {
@@ -189,13 +189,22 @@ textarea::placeholder {
 
 .stButton>button[kind="primary"]:hover {
     background-color: #1E40AF !important;
+    box-shadow: 0 2px 6px rgba(0, 45, 98, 0.2), 0 6px 14px rgba(0, 45, 98, 0.18) !important;
+    transform: translateY(-1px) !important;
 }
 
-/* Secondary Button */
+.stButton>button[kind="primary"]:active {
+    transform: scale(0.97) !important;
+    box-shadow: 0 1px 2px rgba(0, 45, 98, 0.2) !important;
+}
+
+/* Secondary Button - Emil Kowalski Tactile Feedback */
 .stButton>button[kind="secondary"] {
     background-color: #FFFFFF !important;
     color: #002D62 !important;
     border: 1.5px solid #CBD5E1 !important;
+    border-radius: 8px !important;
+    transition: transform 140ms cubic-bezier(0.23, 1, 0.32, 1), border-color 140ms ease, background-color 140ms ease !important;
 }
 
 .stButton>button[kind="secondary"] p {
@@ -207,14 +216,21 @@ textarea::placeholder {
     border-color: #002D62 !important;
     color: #002D62 !important;
     background-color: #EFF6FF !important;
+    transform: translateY(-1px) !important;
 }
 
-/* Download Button */
+.stButton>button[kind="secondary"]:active {
+    transform: scale(0.97) !important;
+}
+
+/* Download Button - Emil Kowalski Tactile Feedback */
 [data-testid="stDownloadButton"] button {
     background-color: #FFFFFF !important;
     color: #002D62 !important;
     border: 2px solid #002D62 !important;
+    border-radius: 8px !important;
     font-weight: 700 !important;
+    transition: transform 140ms cubic-bezier(0.23, 1, 0.32, 1), background-color 140ms ease, color 140ms ease !important;
 }
 
 [data-testid="stDownloadButton"] button p {
@@ -225,10 +241,15 @@ textarea::placeholder {
 [data-testid="stDownloadButton"] button:hover {
     background-color: #002D62 !important;
     color: #FFFFFF !important;
+    transform: translateY(-1px) !important;
 }
 
 [data-testid="stDownloadButton"] button:hover p {
     color: #FFFFFF !important;
+}
+
+[data-testid="stDownloadButton"] button:active {
+    transform: scale(0.97) !important;
 }
 
 /* Top Tab Bar Styling */
