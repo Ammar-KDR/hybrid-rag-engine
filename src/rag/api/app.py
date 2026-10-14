@@ -122,6 +122,7 @@ async def lifespan(app: FastAPI):
         hybrid_retriever=(
             hybrid_retriever
         ),
+        service_router=getattr(pipeline, "service_router", None),
     )
 
     app.state.ingestion_service = (

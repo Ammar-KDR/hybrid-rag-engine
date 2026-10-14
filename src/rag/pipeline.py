@@ -97,14 +97,19 @@ class RAGPipeline:
         route_res: RouteResult | None = None
         active_filter = filter
 
-        if settings.GOV_SERVICE_MODE and self.service_router is not None:
+        has_explicit_doc_filter = filter is not None and bool(getattr(filter, "document_ids", None))
+
+        if has_explicit_doc_filter:
+            # Caller explicitly selected document(s); respect explicit document filter and bypass auto-service routing
+            active_filter = filter
+            route_res = None
+        elif settings.GOV_SERVICE_MODE and self.service_router is not None:
             # If caller didn't pass explicit service_ids, route automatically
             if filter is None or not getattr(filter, "service_ids", None):
                 route_res = self.service_router.route(question, history=history)
-                if route_res.service_ids:
-                    doc_ids = getattr(filter, "document_ids", ()) if filter else ()
+                if route_res.service_ids and route_res.confidence >= 0.50:
                     active_filter = RetrievalFilter(
-                        document_ids=doc_ids,
+                        document_ids=(),
                         service_ids=route_res.service_ids,
                     )
 
@@ -188,6 +193,7 @@ class RAGPipeline:
             and self.service_context_builder is not None
             and route_res is not None
             and route_res.routed_services
+            and not has_explicit_doc_filter
         ):
             if len(route_res.routed_services) >= 2:
                 context = self.service_context_builder.build_comparison(

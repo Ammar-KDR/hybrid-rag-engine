@@ -33,6 +33,20 @@ GENERIC_SERVICE_TITLE_WORDS = {
     "الهاشمية", "معاملات", "معاملة", "معامله", "اجراءات", "إجراءات"
 }
 
+GENERIC_ACTION_WORDS = {
+    "تجديد", "تجديدها", "تجديده", "التجديد",
+    "اصدار", "إصدار", "اصدارها", "إصدارها", "الاصدار", "الإصدار",
+    "طلب", "طلبات", "الطلب", "الطلبات",
+    "تقديم", "التقديم", "الحصول",
+    "رسوم", "الرسوم", "رسم", "الرسم",
+    "غرامة", "الغرامة", "غرامات", "الغرامات",
+    "وثائق", "الوثائق", "اوراق", "أوراق", "مستندات", "المستندات",
+    "شروط", "الشروط", "معاملة", "معاملات", "المعاملة", "المعاملات",
+    "اجراءات", "إجراءات", "الاجراءات", "الإجراءات",
+    "وقت", "الوقت", "مدة", "المدة", "زمن", "الزمن",
+    "فاقد", "ضاعت", "فقدت", "فقدان", "ضياع",
+}
+
 
 @dataclass
 class RouteResult:
@@ -132,7 +146,12 @@ class ServiceRouter:
         for svc in self.services:
             for alias in svc.aliases:
                 norm_alias = normalize_arabic(alias)
-                if norm_alias and norm_alias in norm_query:
+                if not norm_alias or norm_alias in GENERIC_ACTION_WORDS:
+                    continue
+                if len(norm_alias.split()) == 1:
+                    if re.search(rf"(?:^|\s){re.escape(norm_alias)}(?:$|\s)", norm_query):
+                        alias_matches.append((len(norm_alias), svc))
+                elif norm_alias in norm_query:
                     alias_matches.append((len(norm_alias), svc))
 
         if alias_matches:
@@ -163,6 +182,14 @@ class ServiceRouter:
             )
 
         top_score, top_svc = scored[0]
+
+        if top_score < 0.50:
+            return RouteResult(
+                routed_services=[],
+                service_ids=(),
+                confidence=0.0,
+                routing_reason="unscoped_fallback",
+            )
 
         # Check margin over 2nd place
         if len(scored) > 1:
@@ -253,9 +280,13 @@ class ServiceRouter:
         if not distinctive:
             distinctive = title_tokens
 
-        overlap = len(distinctive.intersection(query_tokens))
-        jaccard = overlap / len(distinctive.union(query_tokens)) if distinctive else 0.0
-        recall = overlap / len(distinctive) if distinctive else 0.0
+        overlap = distinctive.intersection(query_tokens)
+        # Overlap must contain at least one domain-specific noun (not solely generic action/fee words)
+        if not (overlap - GENERIC_ACTION_WORDS):
+            return 0.0
+
+        jaccard = len(overlap) / len(distinctive.union(query_tokens)) if distinctive else 0.0
+        recall = len(overlap) / len(distinctive) if distinctive else 0.0
 
         score = (recall * 0.8) + (jaccard * 0.2)
 
@@ -263,9 +294,10 @@ class ServiceRouter:
         for alias in svc.aliases:
             alias_tokens = set(tokenize_arabic(normalize_arabic(alias))) - GENERIC_SERVICE_TITLE_WORDS
             if alias_tokens:
-                alias_overlap = len(alias_tokens.intersection(query_tokens))
-                alias_recall = alias_overlap / len(alias_tokens)
-                if alias_recall > score:
-                    score = alias_recall
+                alias_overlap = alias_tokens.intersection(query_tokens)
+                if alias_overlap - GENERIC_ACTION_WORDS:
+                    alias_recall = len(alias_overlap) / len(alias_tokens)
+                    if alias_recall > score:
+                        score = alias_recall
 
         return min(round(score, 3), 1.0)
