@@ -2,6 +2,7 @@ import base64
 import json
 import os
 import re
+import textwrap
 import time
 from datetime import datetime
 from pathlib import Path
@@ -11,6 +12,7 @@ from dotenv import load_dotenv
 
 from rag.ui.client import RAGAPIClient
 from rag.nlp.arabic import is_arabic_text
+from rag.ui.chart_extractor import extract_all_charts
 
 load_dotenv()
 
@@ -955,35 +957,8 @@ def build_chunk_text_map(trace: dict | None, evidence_list: list | None = None) 
     return chunk_map
 
 
-def extract_chart_spec(text: str) -> tuple[str, dict | None]:
-    """
-    Extracts embedded ```chart ... ``` JSON block from answer text.
-    Returns (cleaned_text, chart_dict_or_None).
-    """
-    if not text:
-        return text, None
-
-    pattern = r"```(?:chart|json:chart)\s*(\{.*?\})\s*```"
-    match = re.search(pattern, text, flags=re.DOTALL | re.IGNORECASE)
-    if not match:
-        return text, None
-
-    chart_raw = match.group(1).strip()
-    clean_text = (text[:match.start()] + text[match.end():]).strip()
-    try:
-        chart_dict = json.loads(chart_raw)
-        if isinstance(chart_dict, dict) and "data" in chart_dict and isinstance(chart_dict["data"], list):
-            return clean_text, chart_dict
-    except Exception:
-        pass
-
-    return text, None
-
-
-def render_chart_spec(chart_spec: dict, is_ar: bool = False):
-    """
-    Renders an institutional PSUT-themed bar chart from extracted chart spec.
-    """
+def render_single_chart(chart_spec: dict, is_ar: bool = False, color: str = "#002D62"):
+    """Renders a single institutional PSUT-themed bar chart."""
     if not chart_spec or not chart_spec.get("data"):
         return
 
@@ -1010,31 +985,55 @@ def render_chart_spec(chart_spec: dict, is_ar: bool = False):
 
     df = pd.DataFrame(clean_rows)
 
-    with st.container():
-        st.markdown(
-            f"""
-            <div style="background:#FFFFFF; border:1.5px solid #BFDBFE; border-top:4px solid #002D62; border-radius:10px; padding:14px 18px; margin-top:14px; margin-bottom:12px; box-shadow: 0 2px 6px rgba(0,45,98,0.04);">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                    <div style="display:flex; align-items:center; gap:8px;">
-                        <span style="font-size:1.15rem;">📊</span>
-                        <span style="font-size:0.92rem; font-weight:800; color:#002D62; text-transform:uppercase; letter-spacing:0.03em;">
-                            {title}
-                        </span>
-                    </div>
-                    <span style="background:#EFF6FF; color:#002D62; font-size:0.75rem; font-weight:700; padding:3px 8px; border-radius:4px; border:1px solid #BFDBFE;">
-                        {'مخطط مقارنة تفاعلي' if is_ar else 'Interactive Comparison'}
-                    </span>
-                </div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-        st.bar_chart(
-            df.set_index("label"),
-            color="#002D62",
-            height=280,
-            use_container_width=True,
-        )
+    chart_header_html = textwrap.dedent(f"""
+<div style="background:#FFFFFF; border:1.5px solid #BFDBFE; border-top:4px solid {color}; border-radius:10px; padding:12px 16px; margin-top:10px; margin-bottom:8px; box-shadow: 0 2px 6px rgba(0,45,98,0.04);">
+<div style="display:flex; justify-content:space-between; align-items:center;">
+<div style="display:flex; align-items:center; gap:8px;">
+<span style="font-size:1.15rem;">📊</span>
+<span style="font-size:0.92rem; font-weight:800; color:#002D62; text-transform:uppercase; letter-spacing:0.03em;">
+{title}
+</span>
+</div>
+<span style="background:#EFF6FF; color:#002D62; font-size:0.75rem; font-weight:700; padding:3px 8px; border-radius:4px; border:1px solid #BFDBFE;">
+{'مخطط مقارنة تفاعلي' if is_ar else 'Interactive Comparison'}
+</span>
+</div>
+</div>
+""").strip()
+
+    st.markdown(chart_header_html, unsafe_allow_html=True)
+    st.bar_chart(
+        df.set_index("label"),
+        color=color,
+        height=280,
+        use_container_width=True,
+    )
+
+
+def render_charts(charts: list[dict], is_ar: bool = False):
+    """Renders one or multiple comparison charts (e.g. Fees and SLA)."""
+    if not charts:
+        return
+
+    st.markdown(
+        textwrap.dedent(f"""
+<div style="font-size:0.86rem; font-weight:800; color:#002D62; text-transform:uppercase; letter-spacing:0.04em; margin-top:16px; margin-bottom:4px;">
+{'📊 الرسوم البيانية ومؤشرات المقارنة التفاعلية' if is_ar else '📊 Interactive Comparison Charts & Visual Metrics'}
+</div>
+""").strip(),
+        unsafe_allow_html=True,
+    )
+
+    if len(charts) == 2:
+        col1, col2 = st.columns(2)
+        with col1:
+            render_single_chart(charts[0], is_ar=is_ar, color="#002D62")
+        with col2:
+            render_single_chart(charts[1], is_ar=is_ar, color="#1E40AF")
+    else:
+        colors = ["#002D62", "#1E40AF", "#047857", "#B45309"]
+        for idx, chart in enumerate(charts):
+            render_single_chart(chart, is_ar=is_ar, color=colors[idx % len(colors)])
 
 
 def generate_executive_brief_export(
@@ -1551,7 +1550,7 @@ if selected_feature_idx == 0:
             req_id_short = result.get("request_id", "N/A")[:12]
             verified_pill = "✅ مطابقة كاملة للأصل" if is_ar else "✅ 100% Grounded"
             result_header = "📌 النتيجة والاستخلاص الذكي الموثق" if is_ar else "📌 Synthesized Intelligence & Verifiable Findings"
-            clean_answer, chart_spec = extract_chart_spec(result.get("answer", ""))
+            clean_answer, charts = extract_all_charts(result.get("answer", ""), is_ar=is_ar)
             selected_svc_name = result.get("selected_service_name")
             svc_badge_html = (
                 f'<span style="background:#EFF6FF; color:#002D62; font-size:0.78rem; font-weight:800; padding:3px 10px; border-radius:6px; border:1px solid #BFDBFE;">🏛️ {selected_svc_name}</span>'
@@ -1559,30 +1558,31 @@ if selected_feature_idx == 0:
                 else ""
             )
 
-            st.markdown(
-                f"""
-                <div class="grounded-result-card">
-                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1.5px solid #E2E8F0; padding-bottom:12px; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
-                        <div style="display:flex; align-items:center; gap:10px;">
-                            <span style="color:#047857; font-size:1.1rem; font-weight:800;">●</span>
-                            <span style="font-weight:800; color:#002D62; font-size:0.98rem;">{badge_title}</span>
-                            <span style="background:#ECFDF5; color:#047857; font-size:0.75rem; font-weight:800; padding:3px 8px; border-radius:4px; border:1px solid #A7F3D0;">{verified_pill}</span>
-                            {svc_badge_html}
-                        </div>
-                        <div>
-                            <span style="background:#EFF6FF; color:#002D62; font-size:0.78rem; font-weight:700; padding:4px 10px; border-radius:6px; border:1px solid #BFDBFE;" dir="ltr">{req_label} {req_id_short}</span>
-                        </div>
-                    </div>
-                    <div style="font-size:0.86rem; font-weight:800; color:#002D62; text-transform:uppercase; margin-bottom:8px;">{result_header}</div>
-                    <div class='bidi-text' dir='auto' style='font-size:1.02rem; line-height:1.85; color:#0F172A;'>{clean_answer}</div>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
+            header_html = textwrap.dedent(f"""
+<div class="grounded-result-card" style="margin-bottom:12px; padding:16px 20px;">
+<div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1.5px solid #E2E8F0; padding-bottom:10px; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+<div style="display:flex; align-items:center; gap:10px;">
+<span style="color:#047857; font-size:1.1rem; font-weight:800;">●</span>
+<span style="font-weight:800; color:#002D62; font-size:0.98rem;">{badge_title}</span>
+<span style="background:#ECFDF5; color:#047857; font-size:0.75rem; font-weight:800; padding:3px 8px; border-radius:4px; border:1px solid #A7F3D0;">{verified_pill}</span>
+{svc_badge_html}
+</div>
+<div>
+<span style="background:#EFF6FF; color:#002D62; font-size:0.78rem; font-weight:700; padding:4px 10px; border-radius:6px; border:1px solid #BFDBFE;" dir="ltr">{req_label} {req_id_short}</span>
+</div>
+</div>
+<div style="font-size:0.86rem; font-weight:800; color:#002D62; text-transform:uppercase; margin-bottom:4px;">{result_header}</div>
+</div>
+""").strip()
 
-            # Dynamic Comparison Chart if present
-            if chart_spec:
-                render_chart_spec(chart_spec, is_ar=is_ar)
+            st.markdown(header_html, unsafe_allow_html=True)
+
+            with st.container():
+                st.markdown(clean_answer)
+
+            # Dynamic Comparison Charts if present
+            if charts:
+                render_charts(charts, is_ar=is_ar)
 
         # Latency & Pipeline Metrics Bar
         if latency:

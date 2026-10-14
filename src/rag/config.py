@@ -118,7 +118,7 @@ class Settings:
     ).lower() in ("true", "1", "yes")
 
     ENABLE_CHARTS = os.getenv(
-        "ENABLE_CHARTS", "false"
+        "ENABLE_CHARTS", "true"
     ).lower() in ("true", "1", "yes")
 
     OCR_ENABLED = os.getenv(
