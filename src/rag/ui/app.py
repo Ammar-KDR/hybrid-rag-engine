@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 
 from rag.ui.client import RAGAPIClient
 from rag.nlp.arabic import is_arabic_text
-from rag.ui.chart_extractor import extract_all_charts, extract_chart_spec
+from rag.ui.chart_extractor import extract_all_charts
 
 load_dotenv()
 
