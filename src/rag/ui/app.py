@@ -958,8 +958,8 @@ def build_chunk_text_map(trace: dict | None, evidence_list: list | None = None) 
     return chunk_map
 
 
-def wrap_label_multiline(text: str, max_chars_per_line: int = 16) -> str | list[str]:
-    """Wraps label words into multiple lines for Vega-Lite underneath rendering."""
+def wrap_label_multiline(text: str, max_chars_per_line: int = 16) -> str:
+    """Wraps label words into multiple lines using newline characters."""
     text = re.sub(r"[*_`]", "", str(text)).strip()
     if len(text) <= max_chars_per_line:
         return text
@@ -979,7 +979,7 @@ def wrap_label_multiline(text: str, max_chars_per_line: int = 16) -> str | list[
         lines.append(" ".join(cur_line))
     if len(lines) > 3:
         lines = lines[:2] + ["..."]
-    return lines if len(lines) > 1 else text
+    return "\n".join(lines)
 
 
 def render_single_chart(chart_spec: dict, is_ar: bool = False, color: str = "#002D62"):
@@ -1048,6 +1048,7 @@ def render_single_chart(chart_spec: dict, is_ar: bool = False, color: str = "#00
                 sort=None,
                 axis=alt.Axis(
                     title=None,
+                    labelExpr="split(datum.label, '\n')",
                     labelAngle=label_angle,
                     labelBaseline="top",
                     labelAlign=label_align,
