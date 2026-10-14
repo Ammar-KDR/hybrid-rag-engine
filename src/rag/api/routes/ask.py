@@ -405,11 +405,18 @@ def ask(
     for block in getattr(generated, "evidence", []):
         doc_id = getattr(block, "document_id", None) or ""
         fname = getattr(block, "filename", None) or (block.source.replace("\\", "/").split("/")[-1] if block.source else "")
+        meta = getattr(block, "metadata", {}) or {}
+        svc_id = getattr(block, "service_id", None) or meta.get("service_id")
+        svc_name = getattr(block, "service_name", None) or meta.get("service_name")
+        sec_type = getattr(block, "section_type", None) or meta.get("section_type")
         evidence_list.append(
             EvidenceRef(
                 reference=block.reference,
                 chunk_id=block.chunk_id,
                 document_id=doc_id,
+                service_id=svc_id,
+                service_name=svc_name,
+                section_type=sec_type,
                 filename=fname,
                 source=block.source or "",
                 text=block.text,
@@ -425,6 +432,8 @@ def ask(
     # API response
     # =====================================================
 
+    selected_svc = result.route_result.primary_service if getattr(result, "route_result", None) else None
+
     return AskResponse(
         request_id=request_id,
         question=request_body.question,
@@ -432,6 +441,9 @@ def ask(
         retrieval_question=retrieval_question,
         was_rewritten=was_rewritten,
         answer=verified.final_answer,
+
+        selected_service_id=selected_svc.service_id if selected_svc else None,
+        selected_service_name=selected_svc.service_name if selected_svc else None,
 
         abstained=(
             verified

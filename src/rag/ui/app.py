@@ -1552,6 +1552,13 @@ if selected_feature_idx == 0:
             verified_pill = "✅ مطابقة كاملة للأصل" if is_ar else "✅ 100% Grounded"
             result_header = "📌 النتيجة والاستخلاص الذكي الموثق" if is_ar else "📌 Synthesized Intelligence & Verifiable Findings"
             clean_answer, chart_spec = extract_chart_spec(result.get("answer", ""))
+            selected_svc_name = result.get("selected_service_name")
+            svc_badge_html = (
+                f'<span style="background:#EFF6FF; color:#002D62; font-size:0.78rem; font-weight:800; padding:3px 10px; border-radius:6px; border:1px solid #BFDBFE;">🏛️ {selected_svc_name}</span>'
+                if selected_svc_name
+                else ""
+            )
+
             st.markdown(
                 f"""
                 <div class="grounded-result-card">
@@ -1560,6 +1567,7 @@ if selected_feature_idx == 0:
                             <span style="color:#047857; font-size:1.1rem; font-weight:800;">●</span>
                             <span style="font-weight:800; color:#002D62; font-size:0.98rem;">{badge_title}</span>
                             <span style="background:#ECFDF5; color:#047857; font-size:0.75rem; font-weight:800; padding:3px 8px; border-radius:4px; border:1px solid #A7F3D0;">{verified_pill}</span>
+                            {svc_badge_html}
                         </div>
                         <div>
                             <span style="background:#EFF6FF; color:#002D62; font-size:0.78rem; font-weight:700; padding:4px 10px; border-radius:6px; border:1px solid #BFDBFE;" dir="ltr">{req_label} {req_id_short}</span>
@@ -1610,9 +1618,13 @@ if selected_feature_idx == 0:
                 cid = cit.get("chunk_id", "")
                 doc_id = cit.get("document_id", "")
                 heading = " → ".join(cit.get("heading_path") or [])
+                svc_name = cit.get("service_name")
+                sec_type = cit.get("section_type")
 
                 page_label = f" • {'صفحة' if is_ar else 'Page'} {page}" if page is not None else ""
-                exp_header = f"📄 {'الدليل' if is_ar else 'Evidence'} [{ref}]: {clean_name}{page_label}"
+                svc_label = f" • 🏛️ {svc_name}" if svc_name else ""
+                sec_label = f" • [{sec_type}]" if sec_type else ""
+                exp_header = f"📄 {'الدليل' if is_ar else 'Evidence'} [{ref}]: {clean_name}{svc_label}{page_label}{sec_label}"
                 with st.expander(exp_header, expanded=(idx == 1)):
                     c_left, c_right = st.columns([1.5, 1])
                     with c_left:
@@ -1620,6 +1632,10 @@ if selected_feature_idx == 0:
                             f"**{'الوثيقة:' if is_ar else 'Document:'}** <code dir='ltr'>{clean_name}</code> (<code dir='ltr'>{base_src}</code>)",
                             unsafe_allow_html=True,
                         )
+                        if svc_name:
+                            st.caption(f"**{'الخدمة الحكومية:' if is_ar else 'Service:'}** {svc_name}")
+                        if sec_type:
+                            st.caption(f"**{'نوع القسم:' if is_ar else 'Section:'}** `{sec_type}`")
                         if heading:
                             st.caption(f"**{'المسار / القسم:' if is_ar else 'Section Path:'}** {heading}")
                         st.caption(

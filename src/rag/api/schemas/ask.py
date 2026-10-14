@@ -11,6 +11,9 @@ class EvidenceRef(BaseModel):
     reference: int
     chunk_id: str
     document_id: str | None = None
+    service_id: str | None = None
+    service_name: str | None = None
+    section_type: str | None = None
     filename: str | None = None
     source: str
     text: str
@@ -26,6 +29,7 @@ class AskRequest(BaseModel):
     include_trace: bool = False
     history: list[ChatMessage] = []
     document_ids: list[str] | None = None
+    service_ids: list[str] | None = None
     verification_mode: Literal["fast", "full"] = "fast"
 
     @field_validator("question")
@@ -177,5 +181,7 @@ class AskResponse(BaseModel):
 
     latency: LatencyResponse
     token_usage: TokenUsageResponse
+    selected_service_id: str | None = None
+    selected_service_name: str | None = None
 
     trace: RetrievalTraceResponse | None = None
