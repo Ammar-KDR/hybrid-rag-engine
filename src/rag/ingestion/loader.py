@@ -3,7 +3,12 @@ from pathlib import Path
 from bs4 import BeautifulSoup
 from pypdf import PdfReader
 
+from .extraction_audit import audit_extracted_page
 from .model import Document
+from .table_serializer import (
+    extract_and_serialize_pymupdf_tables,
+    serialize_table_to_records,
+)
 
 
 SUPPORTED_EXTENSIONS = {".txt", ".md", ".html", ".htm", ".pdf", ".docx"}
@@ -57,7 +62,7 @@ def load_html_document(path: Path) -> list[Document]:
 
 
 def load_pdf_document(path: Path) -> list[Document]:
-    # Try pymupdf (fitz) first for fast, robust extraction and complex font mapping
+    # Try pymupdf (fitz) first for fast, robust extraction, table detection, and layout preservation
     try:
         import pymupdf
 
@@ -66,18 +71,56 @@ def load_pdf_document(path: Path) -> list[Document]:
         page_count = len(doc)
         for page_index in range(page_count):
             page = doc[page_index]
-            text = page.get_text() or ""
-            text = normalize_text(text)
-            if not text:
-                continue
+            page_num = page_index + 1
+
+            # 1. Native structured table extraction
+            table_text, table_count = extract_and_serialize_pymupdf_tables(page, page_num)
+
+            # 2. Page raw text extraction
+            raw_text = page.get_text() or ""
+            raw_text = normalize_text(raw_text)
+
+            # Interleave/append serialized tables so fees and rules are explicitly bound
+            if table_text:
+                if raw_text:
+                    page_text = f"{raw_text}\n\n{table_text}"
+                else:
+                    page_text = table_text
+            else:
+                page_text = raw_text
+
+            # Check for images/scans
+            has_images = bool(page.get_images())
+
+            # 3. Page-level extraction audit
+            audit = audit_extracted_page(
+                filename=path.name,
+                page_num=page_num,
+                text=page_text,
+                method="digital_pdf",
+                tables_count=table_count,
+                has_images=has_images,
+            )
+
+            # Do not silently drop scanned or blank pages
+            if not page_text.strip():
+                if audit.status == "needs_ocr":
+                    page_text = f"[تنبيه: صفحة {page_num} تحتوي على مسح ضوئي أو صورة بدون نص رقمي وتتطلب تدقيقاً يدوياً أو تفعيل OCR]"
+                else:
+                    page_text = f"[صفحة {page_num} فارغة]"
+
             documents.append(
                 Document(
-                    text=text,
+                    text=page_text,
                     source=str(path),
                     file_type="pdf",
                     metadata={
-                        "page_number": page_index + 1,
+                        "page_number": page_num,
                         "page_count": page_count,
+                        "extraction_method": audit.method if audit.status != "needs_ocr" else "needs_ocr",
+                        "extraction_status": audit.status,
+                        "audit": audit.to_dict(),
+                        "warnings": audit.warnings,
                     },
                 )
             )
@@ -89,16 +132,23 @@ def load_pdf_document(path: Path) -> list[Document]:
 
     # Fallback to pypdf
     reader = PdfReader(path)
-
     documents = []
+    page_count = len(reader.pages)
 
     for page_index, page in enumerate(reader.pages):
+        page_num = page_index + 1
         text = page.extract_text() or ""
         text = normalize_text(text)
 
-        # Don't create useless empty documents.
-        if not text:
-            continue
+        audit = audit_extracted_page(
+            filename=path.name,
+            page_num=page_num,
+            text=text,
+            method="pypdf",
+        )
+
+        if not text.strip():
+            text = f"[صفحة {page_num} فارغة]"
 
         documents.append(
             Document(
@@ -106,8 +156,12 @@ def load_pdf_document(path: Path) -> list[Document]:
                 source=str(path),
                 file_type="pdf",
                 metadata={
-                    "page_number": page_index + 1,
-                    "page_count": len(reader.pages),
+                    "page_number": page_num,
+                    "page_count": page_count,
+                    "extraction_method": "pypdf",
+                    "extraction_status": audit.status,
+                    "audit": audit.to_dict(),
+                    "warnings": audit.warnings,
                 },
             )
         )
@@ -119,27 +173,64 @@ def load_docx_document(path: Path) -> list[Document]:
     import docx
 
     doc = docx.Document(path)
-    paragraphs = [p.text for p in doc.paragraphs if p.text.strip()]
+    elements = []
+    table_idx = 0
 
-    for table in doc.tables:
-        for row in table.rows:
-            row_text = " | ".join(
-                cell.text.strip() for cell in row.cells if cell.text.strip()
-            )
-            if row_text:
-                paragraphs.append(row_text)
+    # Iterate XML body children in true document order (paragraphs and tables interleaved)
+    for child in doc.element.body:
+        if child.tag.endswith("p"):
+            p = docx.text.paragraph.Paragraph(child, doc)
+            p_text = p.text.strip()
+            if p_text:
+                elements.append(p_text)
+        elif child.tag.endswith("tbl"):
+            table_idx += 1
+            tbl = docx.table.Table(child, doc)
+            if tbl.rows:
+                headers = [cell.text.strip() for cell in tbl.rows[0].cells]
+                data_rows = (
+                    [[cell.text.strip() for cell in row.cells] for row in tbl.rows[1:]]
+                    if len(tbl.rows) > 1
+                    else []
+                )
 
-    text = "\n\n".join(paragraphs)
+                if not any(headers) and data_rows:
+                    headers = [f"عمود {i+1}" for i in range(len(tbl.rows[0].cells))]
+                    data_rows = [[cell.text.strip() for cell in tbl.rows[0].cells]]
+                elif len(tbl.rows) == 1 and any(headers):
+                    data_rows = [headers]
+                    headers = [f"عمود {i+1}" for i in range(len(headers))]
+
+                serialized = serialize_table_to_records(headers, data_rows, table_index=table_idx)
+                if serialized:
+                    elements.append(serialized)
+
+    text = "\n\n".join(elements)
     text = normalize_text(text)
 
     if not text:
-        return []
+        text = "[مستند Word فارغ]"
+
+    audit = audit_extracted_page(
+        filename=path.name,
+        page_num=1,
+        text=text,
+        method="docx",
+        tables_count=table_idx,
+        has_images=False,
+    )
 
     return [
         Document(
             text=text,
             source=str(path),
             file_type="docx",
+            metadata={
+                "extraction_method": "docx",
+                "extraction_status": audit.status,
+                "audit": audit.to_dict(),
+                "warnings": audit.warnings,
+            },
         )
     ]
 
