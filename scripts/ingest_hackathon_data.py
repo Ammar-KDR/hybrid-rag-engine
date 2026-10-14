@@ -89,11 +89,7 @@ def ingest_and_index(source_folder: Path | None = None, audit: bool = False) -> 
             file_docs = load_document(file_path)
             file_services = segmenter.segment(file_docs, doc_id, file_path.name)
             all_services.extend(file_services)
-            file_chunks = service_records_to_chunks(file_services)
-            for chk in file_chunks:
-                chk.source = source
-                chk.metadata["filename"] = file_path.name
-                chk.metadata["source"] = source
+            file_chunks = service_records_to_chunks(file_services, default_source=source)
             chunks.extend(file_chunks)
             chunks_by_source[source].extend(file_chunks)
 

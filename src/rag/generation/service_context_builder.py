@@ -61,6 +61,11 @@ class ServiceContextBuilder:
                     source=span.get("filename", service.service_name),
                     page_number=span.get("page_number"),
                     heading_path=heading_path,
+                    document_id=service.document_id,
+                    filename=span.get("filename"),
+                    service_id=service.service_id,
+                    service_name=service.service_name,
+                    section_type=sec_type,
                 )
                 blocks.append(block)
                 ref_counter += 1
@@ -85,6 +90,7 @@ class ServiceContextBuilder:
                     break
 
                 meta = chk.metadata or {}
+                chk_sec_type = meta.get("section_type", "other")
                 block = ContextBlock(
                     reference=ref_counter,
                     chunk_id=chk.chunk_id,
@@ -92,6 +98,11 @@ class ServiceContextBuilder:
                     source=meta.get("filename") or meta.get("source", ""),
                     page_number=meta.get("page_number"),
                     heading_path=meta.get("heading_path", [service.service_name]),
+                    document_id=service.document_id,
+                    filename=meta.get("filename"),
+                    service_id=service.service_id,
+                    service_name=service.service_name,
+                    section_type=chk_sec_type,
                 )
                 blocks.append(block)
                 accumulated_chars += len(text)
@@ -120,6 +131,7 @@ class ServiceContextBuilder:
 
                 span = sec.get("source_span", {})
                 heading = sec.get("heading")
+                sec_type = sec.get("section_type", "other")
                 heading_path = [svc.service_name]
                 if heading:
                     heading_path.append(heading)
@@ -131,6 +143,11 @@ class ServiceContextBuilder:
                     source=span.get("filename", svc.service_name),
                     page_number=span.get("page_number"),
                     heading_path=heading_path,
+                    document_id=svc.document_id,
+                    filename=span.get("filename"),
+                    service_id=svc.service_id,
+                    service_name=svc.service_name,
+                    section_type=sec_type,
                 )
                 blocks.append(block)
                 svc_chars += len(text)

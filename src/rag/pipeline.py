@@ -274,6 +274,7 @@ class RAGPipeline:
             evidence_count=len(context.blocks),
             candidates=candidates,
             reranked_chunks=reranked_chunks,
+            route_result=route_res,
         )
 
     @staticmethod

@@ -68,9 +68,10 @@ def ask(
     )
 
     retrieval_filter = None
-    if request_body.document_ids:
+    if request_body.document_ids or request_body.service_ids:
         retrieval_filter = RetrievalFilter(
-            document_ids=tuple(request_body.document_ids)
+            document_ids=tuple(request_body.document_ids) if request_body.document_ids else (),
+            service_ids=tuple(request_body.service_ids) if request_body.service_ids else (),
         )
 
     try:
@@ -78,6 +79,7 @@ def ask(
             result = pipeline.run(
                 question=retrieval_question,
                 filter=retrieval_filter,
+                history=request_body.history,
             )
         except TypeError:
             result = pipeline.run(retrieval_question)

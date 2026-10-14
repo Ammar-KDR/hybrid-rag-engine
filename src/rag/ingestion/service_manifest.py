@@ -46,6 +46,10 @@ class ServiceRecord(BaseModel):
     extraction_warnings: List[str] = Field(default_factory=list)
     review_status: str = "needs_review"  # reviewed | needs_review
 
+    @property
+    def sections(self) -> List[Dict[str, Any]]:
+        return self.raw_sections
+
 
 class ServicesManifest(BaseModel):
     services_count: int
@@ -92,10 +96,30 @@ def generate_service_aliases(service_name: str) -> List[str]:
                 aliases.add(unprefixed)
 
     # 2. Add common Jordanian colloquial / official phrasing variations
+    if "البطاقة الشخصية" in clean_name or "البطاقه الشخصيه" in norm:
+        aliases.update(["الهوية الشخصية", "الهوية الذكية", "الهوية", "هوية", "بطاقة شخصية", "الهويه الشخصيه", "الهويه"])
+    if "جواز السفر" in clean_name:
+        aliases.update(["جواز سفر", "جواز", "الجواز"])
+    if "دفتر العائلة" in clean_name or "دفتر العائله" in norm:
+        aliases.update(["دفتر عائلة", "دفتر عائله", "دفتر العيلة", "دفتر عيلة"])
+    if "رخص القيادة" in clean_name or "رخصه القياده" in norm:
+        aliases.update(["رخصة القيادة", "رخصه السواقه", "رخصة السواقة", "رخصة قيادة", "رخصة سواقة"])
+    if "ترخيص" in clean_name and "المركبات" in clean_name:
+        aliases.update(["ترخيص المركبات", "ترخيص المركبة", "ترخيص السيارات", "ترخيص سيارة"])
+    if "الأبنية" in clean_name or "الابنيه" in norm:
+        aliases.update(["ترخيص الأبنية", "ترخيص البناء", "ترخيص بناء", "رخصة بناء", "إذن إشغال", "اذن اشغال"])
+    if "عدم المحكومية" in clean_name or "عدم المحكوميه" in norm:
+        aliases.update(["عدم محكومية", "شهادة عدم محكومية", "عدم محكوميه"])
+    if "رخص المهن" in clean_name:
+        aliases.update(["رخصة المهن", "ترخيص المهن", "رخصة تجارية", "ترخيص تجاري"])
+    if "الاشتراك الاختياري" in clean_name or "التعطل" in clean_name:
+        aliases.update(["الضمان الاجتماعي", "الضمان", "بدل التعطل", "اشتراك الضمان"])
+    if "التأمين الصحي" in clean_name or "التامين الصحي" in norm:
+        aliases.update(["التأمين الصحي", "تامين صحي", "بطاقة التأمين الصحي"])
+
     if "بدل فاقد" in clean_name and "هوية" not in clean_name and "جواز" not in clean_name:
         aliases.add(f"{clean_name} للبطاقة الشخصية")
-    
-    # 3. Add version without definite article where appropriate
+
     return sorted([a for a in aliases if a and a != service_name])
 
 

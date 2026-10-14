@@ -14,6 +14,9 @@ class ContextBlock:
     filename: Optional[str] = None
     final_score: Optional[float] = None
     reranker_score: Optional[float] = None
+    service_id: Optional[str] = None
+    service_name: Optional[str] = None
+    section_type: Optional[str] = None
 
 
 @dataclass
@@ -29,6 +32,9 @@ class EvidenceRef:
     heading_path: Optional[list[str]] = None
     final_score: Optional[float] = None
     reranker_score: Optional[float] = None
+    service_id: Optional[str] = None
+    service_name: Optional[str] = None
+    section_type: Optional[str] = None
 
 
 @dataclass

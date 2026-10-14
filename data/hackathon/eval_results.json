@@ -1,0 +1,1541 @@
+{
+  "timestamp": "2026-10-14 16:51:48",
+  "model": "qwen3.5:4b",
+  "metrics_mode_b": {
+    "total_cases": 50,
+    "service_hit_at_1": 0.92,
+    "evidence_recall_context": 1.0,
+    "answer_correctness": 0.76,
+    "numeric_consistency": 0.62,
+    "citation_validity": 0.98,
+    "abstention_precision": 0.625,
+    "abstention_recall": 1.0,
+    "avg_latency_ms": 7636.8344,
+    "p50_latency_ms": 5846.1,
+    "p95_latency_ms": 12010.91,
+    "by_category": {
+      "colloquial": {
+        "count": 3,
+        "service_hit_rate": 1.0,
+        "answer_correct_rate": 0.6666666666666666,
+        "numeric_consistent_rate": 0.6666666666666666,
+        "avg_latency_ms": 6339.72
+      },
+      "comparison": {
+        "count": 5,
+        "service_hit_rate": 0.8,
+        "answer_correct_rate": 0.8,
+        "numeric_consistent_rate": 0.6,
+        "avg_latency_ms": 10284.246
+      },
+      "conditional": {
+        "count": 8,
+        "service_hit_rate": 1.0,
+        "answer_correct_rate": 0.625,
+        "numeric_consistent_rate": 0.375,
+        "avg_latency_ms": 5523.23
+      },
+      "direct_fact": {
+        "count": 12,
+        "service_hit_rate": 0.9166666666666666,
+        "answer_correct_rate": 0.9166666666666666,
+        "numeric_consistent_rate": 0.75,
+        "avg_latency_ms": 5374.905833333333
+      },
+      "disambiguation_trap": {
+        "count": 6,
+        "service_hit_rate": 0.8333333333333334,
+        "answer_correct_rate": 0.3333333333333333,
+        "numeric_consistent_rate": 0.3333333333333333,
+        "avg_latency_ms": 5851.333333333333
+      },
+      "follow_up": {
+        "count": 3,
+        "service_hit_rate": 0.6666666666666666,
+        "answer_correct_rate": 0.3333333333333333,
+        "numeric_consistent_rate": 0.3333333333333333,
+        "avg_latency_ms": 8640.609999999999
+      },
+      "multi_section": {
+        "count": 8,
+        "service_hit_rate": 1.0,
+        "answer_correct_rate": 1.0,
+        "numeric_consistent_rate": 0.75,
+        "avg_latency_ms": 6402.58375
+      },
+      "out_of_corpus": {
+        "count": 5,
+        "service_hit_rate": 1.0,
+        "answer_correct_rate": 1.0,
+        "numeric_consistent_rate": 1.0,
+        "avg_latency_ms": 18093.224000000002
+      }
+    }
+  },
+  "cases_mode_b": [
+    {
+      "id": "direct_01_smart_id_first_fee",
+      "category": "direct_fact",
+      "question": "كم رسم إصدار البطاقة الشخصية الذكية لأول مرة؟",
+      "expected_services": [
+        "service_smart_id"
+      ],
+      "predicted_services": [
+        "58fc2563cb6e046d"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": true,
+      "missing_facts": [],
+      "numeric_consistent": true,
+      "missing_numbers": [],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 5939.7,
+      "retrieval_ms": 201.67,
+      "rerank_ms": 2530.11,
+      "generation_ms": 3198.93,
+      "generated_answer": "رسم إصدار البطاقة الشخصية الذكية لأول مرة هو ٢ دينار أردنيان [1]."
+    },
+    {
+      "id": "direct_02_smart_id_renew_fee",
+      "category": "direct_fact",
+      "question": "ما هي رسوم تجديد البطاقة الشخصية الذكية المنتهية؟",
+      "expected_services": [
+        "service_smart_id"
+      ],
+      "predicted_services": [
+        "58fc2563cb6e046d"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": true,
+      "missing_facts": [],
+      "numeric_consistent": true,
+      "missing_numbers": [],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 5695.57,
+      "retrieval_ms": 40.81,
+      "rerank_ms": 2400.23,
+      "generation_ms": 3249.77,
+      "generated_answer": "تبلغ رسوم تجديد البطاقة الشخصية الذكية المنتهية الصلاحية 5 دنانير أردنية، وذلك عند تقديم الطلب مع إجراء مطابقة البصمة العشرية والصورة الحيوية أمام موظف الاستقبال [1]."
+    },
+    {
+      "id": "direct_03_passport_adult_fee",
+      "category": "direct_fact",
+      "question": "كم تبلغ رسوم إصدار وتجديد جواز السفر العادي لمن هم فوق سن 16 عاماً؟",
+      "expected_services": [
+        "service_passport"
+      ],
+      "predicted_services": [
+        "ca0a836e8ae429ff"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": true,
+      "missing_facts": [],
+      "numeric_consistent": true,
+      "missing_numbers": [],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 5367.64,
+      "retrieval_ms": 38.11,
+      "rerank_ms": 1962.39,
+      "generation_ms": 3363.6,
+      "generated_answer": "تبلغ رسوم إصدار وتجديد جواز السفر العادي لمن هم فوق سن 16 عاماً ديناراً أردنياً 50، وذلك وفقاً للجدول المعتمد في الدليل المذكور [1]."
+    },
+    {
+      "id": "direct_04_passport_minor_validity",
+      "category": "direct_fact",
+      "question": "كم مدة صلاحية جواز السفر للأشخاص دون سن 16 عاماً؟",
+      "expected_services": [
+        "service_passport"
+      ],
+      "predicted_services": [
+        "ca0a836e8ae429ff"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": true,
+      "missing_facts": [],
+      "numeric_consistent": false,
+      "missing_numbers": [
+        "3"
+      ],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 4875.77,
+      "retrieval_ms": 34.66,
+      "rerank_ms": 1907.78,
+      "generation_ms": 2929.95,
+      "generated_answer": "مدة صلاحية جواز السفر للأشخاص دون سن 16 عاماً هي ثلاث سنوات [1]."
+    },
+    {
+      "id": "direct_05_family_book_newborn_fee",
+      "category": "direct_fact",
+      "question": "كم رسم إضافة مولود جديد في دفتر العائلة؟",
+      "expected_services": [
+        "service_family_book"
+      ],
+      "predicted_services": [
+        "e871edb729590933"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": true,
+      "missing_facts": [],
+      "numeric_consistent": false,
+      "missing_numbers": [
+        "1"
+      ],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 4663.47,
+      "retrieval_ms": 35.03,
+      "rerank_ms": 1756.38,
+      "generation_ms": 2867.92,
+      "generated_answer": "رسم إضافة مولود جديد في دفتر العائلة هو دينار واحد، وذلك بموجب شهادة ولادة رسمية [1]."
+    },
+    {
+      "id": "direct_06_vehicle_inspection_fee",
+      "category": "direct_fact",
+      "question": "ما هو رسم الفحص الفني لترخيص المركبة في إدارة الترخيص؟",
+      "expected_services": [
+        "service_vehicle_license"
+      ],
+      "predicted_services": [
+        "eec52fc302979ba7"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": true,
+      "missing_facts": [],
+      "numeric_consistent": true,
+      "missing_numbers": [],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 5828.02,
+      "retrieval_ms": 34.89,
+      "rerank_ms": 2562.3,
+      "generation_ms": 3227.75,
+      "generated_answer": "يُضاف رسم فحص فني مقداره 5 دنانير إلى رسوم ترخيص المركبة، بالإضافة إلى رسم ملصق إلكتروني بقيمة 10 دنانير [1]."
+    },
+    {
+      "id": "direct_07_vehicle_electric_fee",
+      "category": "direct_fact",
+      "question": "كم رسم الترخيص السنوي للمركبات الكهربائية بالكامل؟",
+      "expected_services": [
+        "service_vehicle_license"
+      ],
+      "predicted_services": [
+        "eec52fc302979ba7"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": true,
+      "missing_facts": [],
+      "numeric_consistent": true,
+      "missing_numbers": [],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 5780.36,
+      "retrieval_ms": 29.1,
+      "rerank_ms": 2543.17,
+      "generation_ms": 3203.46,
+      "generated_answer": "رسم الترخيص السنوي للمركبات الكهربائية بالكامل هو 50 دينار أردني، بالإضافة إلى رسم ملصق إلكتروني بقيمة 5 دنانير ورسم فحص فني مقداره 10 دنانير [1]."
+    },
+    {
+      "id": "direct_08_driving_first_license_fee",
+      "category": "direct_fact",
+      "question": "كم رسم إصدار رخصة القيادة الفئة الثالثة لأول مرة بعد اجتياز الفحص؟",
+      "expected_services": [
+        "service_driving_license"
+      ],
+      "predicted_services": [
+        "3a23c85a61499d17"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": true,
+      "missing_facts": [],
+      "numeric_consistent": true,
+      "missing_numbers": [],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 5049.07,
+      "retrieval_ms": 36.98,
+      "rerank_ms": 1821.08,
+      "generation_ms": 3163.72,
+      "generated_answer": "رسم إصدار رخصة القيادة للفئة الثالثة لأول مرة بعد النجاح في الاختبارات هو 36 ديناراً أردنياً [1]."
+    },
+    {
+      "id": "direct_09_building_residential_sqm_fee",
+      "category": "direct_fact",
+      "question": "كم رسم ترخيص المتر المربع للأبنية السكنية؟",
+      "expected_services": [
+        "service_building_permit"
+      ],
+      "predicted_services": [
+        "eec52fc302979ba7"
+      ],
+      "service_hit_1": false,
+      "service_recall_2": false,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": true,
+      "abstention_correct": false,
+      "answer_correct": false,
+      "missing_facts": [
+        "3 دنانير",
+        "ثلاثة دنانير"
+      ],
+      "numeric_consistent": false,
+      "missing_numbers": [
+        "3"
+      ],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 5864.18,
+      "retrieval_ms": 38.07,
+      "rerank_ms": 2545.53,
+      "generation_ms": 3276.08,
+      "generated_answer": "لم أجد في الوثائق المتاحة ما يحدد رسم ترخيص المتر المربع للأبنية السكنية، حيث تركز الوثيقة المذكورة حصراً على إجراءات ترخيص ونقل ملكية المركبات والفحص الفني [1]."
+    },
+    {
+      "id": "direct_10_non_conviction_arabic_fee",
+      "category": "direct_fact",
+      "question": "ما هي رسوم إصدار شهادة عدم المحكومية باللغة العربية؟",
+      "expected_services": [
+        "service_non_conviction"
+      ],
+      "predicted_services": [
+        "01d014736f059404"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": true,
+      "missing_facts": [],
+      "numeric_consistent": true,
+      "missing_numbers": [],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 4644.9,
+      "retrieval_ms": 37.45,
+      "rerank_ms": 1596.53,
+      "generation_ms": 3007.14,
+      "generated_answer": "تبلغ رسوم إصدار شهادة عدم المحكومية باللغة العربية 5 دنانير أردنية [1]."
+    },
+    {
+      "id": "direct_11_social_security_optional_rate",
+      "category": "direct_fact",
+      "question": "ما هي نسبة الاقتطاع الشهري للاشتراك الاختياري في الضمان الاجتماعي؟",
+      "expected_services": [
+        "service_social_security"
+      ],
+      "predicted_services": [
+        "61bbf323c1d09211"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": true,
+      "missing_facts": [],
+      "numeric_consistent": true,
+      "missing_numbers": [],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 5431.5,
+      "retrieval_ms": 34.09,
+      "rerank_ms": 1881.19,
+      "generation_ms": 3512.52,
+      "generated_answer": "تنطبق نسبة الاقتطاع الشهري للاشتراك الاختياري في الضمان الاجتماعي على 17.5% من الأجر المعتمد، وذلك وفقاً للدليل المرفق [1]."
+    },
+    {
+      "id": "direct_12_health_insurance_card_fee",
+      "category": "direct_fact",
+      "question": "كم رسم إصدار بطاقة التأمين الصحي المدني البلاستيكية؟",
+      "expected_services": [
+        "service_health_insurance"
+      ],
+      "predicted_services": [
+        "e6831e56ee59122f"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": true,
+      "missing_facts": [],
+      "numeric_consistent": true,
+      "missing_numbers": [],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 5358.69,
+      "retrieval_ms": 31.37,
+      "rerank_ms": 1971.79,
+      "generation_ms": 3351.39,
+      "generated_answer": "رسم إصدار بطاقة التأمين الصحي المدني البلاستيكية هو 3 دنانير أردنية [1]."
+    },
+    {
+      "id": "cond_01_smart_id_second_loss",
+      "category": "conditional",
+      "question": "كم رسوم بدل فاقد للبطاقة الشخصية الذكية للمرة الثانية فما فوق؟",
+      "expected_services": [
+        "service_smart_id"
+      ],
+      "predicted_services": [
+        "58fc2563cb6e046d"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": true,
+      "missing_facts": [],
+      "numeric_consistent": true,
+      "missing_numbers": [],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 5468.19,
+      "retrieval_ms": 43.1,
+      "rerank_ms": 2484.7,
+      "generation_ms": 2936.06,
+      "generated_answer": "تبلغ رسوم بدل فاقد للبطاقة الشخصية الذكية للمرة الثانية فما فوق 50 دينار أردنيًا [1]."
+    },
+    {
+      "id": "cond_02_passport_vip_urgent",
+      "category": "conditional",
+      "question": "كم رسوم إصدار جواز السفر المستعجل خلال ساعة واحدة خدمة VIP؟",
+      "expected_services": [
+        "service_passport"
+      ],
+      "predicted_services": [
+        "ca0a836e8ae429ff"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": true,
+      "missing_facts": [],
+      "numeric_consistent": true,
+      "missing_numbers": [],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 5164.45,
+      "retrieval_ms": 49.97,
+      "rerank_ms": 1902.4,
+      "generation_ms": 3209.0,
+      "generated_answer": "تبلغ رسوم إصدار جواز السفر المستعجل (خدمة VIP خلال ساعة واحدة) دينار أردني 100، وذلك وفقاً للجدول المذكور في المرجع [1]."
+    },
+    {
+      "id": "cond_03_driving_senior_citizens",
+      "category": "conditional",
+      "question": "كم رسوم تجديد رخصة القيادة لمن تجاوزوا سن 65 عاماً وما هي مدتها؟",
+      "expected_services": [
+        "service_driving_license"
+      ],
+      "predicted_services": [
+        "3a23c85a61499d17"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": true,
+      "missing_facts": [],
+      "numeric_consistent": false,
+      "missing_numbers": [
+        "8",
+        "2"
+      ],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 5208.06,
+      "retrieval_ms": 40.74,
+      "rerank_ms": 1854.48,
+      "generation_ms": 3308.86,
+      "generated_answer": "يُعدّ رسم تجديد رخصة القيادة للأشخاص الذين تجاوزوا سن 65 عاماً هو **80 دينار أردني**، وتكون مدة التجديد **سنتين** فقط، بشرط إتمام الفحص الطبي الإلزامي [1]."
+    },
+    {
+      "id": "cond_04_vehicle_2200cc_fee",
+      "category": "conditional",
+      "question": "كم تبلغ رسوم الترخيص السنوي لمركبة خصوصية سعة محركها 2200 سي سي؟",
+      "expected_services": [
+        "service_vehicle_license"
+      ],
+      "predicted_services": [
+        "eec52fc302979ba7"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": false,
+      "missing_facts": [
+        "130 ديناراً",
+        "مائة وثلاثين"
+      ],
+      "numeric_consistent": false,
+      "missing_numbers": [
+        "130"
+      ],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 6142.58,
+      "retrieval_ms": 44.11,
+      "rerank_ms": 2573.29,
+      "generation_ms": 3520.54,
+      "generated_answer": "تبلغ رسوم الترخيص السنوي لمركبة خصوصية سعة محركها 2200 سي سي مبلغ 2500 دينار أردني، وذلك لأن المحركات من 1601 إلى 2001 سي سي تخضع لهذا الرسم [1]."
+    },
+    {
+      "id": "cond_05_social_security_min_wage",
+      "category": "conditional",
+      "question": "ما هو الحد الأدنى للأجر المعتمد للاشتراك الاختياري في الضمان الاجتماعي؟",
+      "expected_services": [
+        "service_social_security"
+      ],
+      "predicted_services": [
+        "61bbf323c1d09211"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": false,
+      "missing_facts": [
+        "260 ديناراً",
+        "مائتان وستون"
+      ],
+      "numeric_consistent": false,
+      "missing_numbers": [
+        "260"
+      ],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 5095.78,
+      "retrieval_ms": 39.5,
+      "rerank_ms": 1934.43,
+      "generation_ms": 3118.67,
+      "generated_answer": "يُحدَّد الحد الأدنى للأجر المعتمد للاشتراك الاختياري في الضمان الاجتماعي بالحد الأدنى للأجور في المملكة، وهو 360 دينار أردني [1]."
+    },
+    {
+      "id": "cond_06_unemployment_first_month_rate",
+      "category": "conditional",
+      "question": "كم نسبة بدل التعطل عن العمل في الشهر الأول للمؤمن عليه المتعطل؟",
+      "expected_services": [
+        "service_social_security"
+      ],
+      "predicted_services": [
+        "61bbf323c1d09211"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": false,
+      "missing_facts": [
+        "75%"
+      ],
+      "numeric_consistent": false,
+      "missing_numbers": [
+        "75"
+      ],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 5006.85,
+      "retrieval_ms": 47.66,
+      "rerank_ms": 1906.63,
+      "generation_ms": 3049.04,
+      "generated_answer": "تنص الوثيقة على أن بدل التعطل عن العمل في الشهر الأول يُصرف بنسبة 65% من متوسط أجر آخر سنة [1]."
+    },
+    {
+      "id": "cond_07_vehicle_new_exemption",
+      "category": "conditional",
+      "question": "هل تخضع المركبات الجديدة كلياً للفحص الفني الدوري عند ترخيصها السنوي؟",
+      "expected_services": [
+        "service_vehicle_license"
+      ],
+      "predicted_services": [
+        "eec52fc302979ba7"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": true,
+      "missing_facts": [],
+      "numeric_consistent": true,
+      "missing_numbers": [],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 6150.58,
+      "retrieval_ms": 45.62,
+      "rerank_ms": 2627.03,
+      "generation_ms": 3473.32,
+      "generated_answer": "لا، لا تخضع المركبات الجديدة كلياً للفحص الفني الدوري عند ترخيصها السنوي، حيث يشترط القانون إعفاء المركبات التي يقل عمرها عن 3 سنوات من سنة الصنع من اجتياز الفحص الفني الدوري [1]."
+    },
+    {
+      "id": "cond_08_health_insurance_exemptions",
+      "category": "conditional",
+      "question": "من هي الفئات المعفاة كلياً من رسوم الاشتراك والعلاج في التأمين الصحي المدني؟",
+      "expected_services": [
+        "service_health_insurance"
+      ],
+      "predicted_services": [
+        "e6831e56ee59122f"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": true,
+      "missing_facts": [],
+      "numeric_consistent": false,
+      "missing_numbers": [
+        "6",
+        "60"
+      ],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 5949.35,
+      "retrieval_ms": 37.83,
+      "rerank_ms": 2031.3,
+      "generation_ms": 3876.02,
+      "generated_answer": "الفئات المعفاة كلياً من رسوم الاشتراك والعلاج في التأمين الصحي المدني هي:\n\n1. الأطفال دون سن عام واحد [1].\n2. المواطنين فوق سن الستين عاماً غير المقتدرين معفون تلقائياً من رسوم الاشتراك والعلاج [1].\n3. مرضى السرطان والمتبرعون بالأعضاء يعفون بنسبة 100% من تكاليف العلاج وإصدار البطاقة [1]."
+    },
+    {
+      "id": "multi_01_smart_id_docs_and_fee",
+      "category": "multi_section",
+      "question": "ما هي الوثائق المطلوبة ورسم الإصدار لأول مرة للبطاقة الشخصية الذكية؟",
+      "expected_services": [
+        "service_smart_id"
+      ],
+      "predicted_services": [
+        "58fc2563cb6e046d"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": true,
+      "missing_facts": [],
+      "numeric_consistent": true,
+      "missing_numbers": [],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 7592.94,
+      "retrieval_ms": 37.22,
+      "rerank_ms": 2497.12,
+      "generation_ms": 5054.9,
+      "generated_answer": "للحصول على البطاقة الشخصية الذكية لأول مرة، يجب استيفاء الشروط التالية:\n\n**أولاً: السن:**\nيجب أن يكون المواطن الأردني قد أتم السادسة عشرة من عمره [1].\n\n**ثانياً: الوثائق المطلوبة:**\n*   شهادة الميلاد الأصلية الصادرة عن دائرة الأحوال المدنية وتحمل الرقم الوطني [1].\n*   دفتر عائلة الوالد الأصلي مسجل فيه صاحب الطلب [1].\n*   صورتان شخصيتان حديثتان ملونتان بقياس 6×4 سم وبخلفية بيضاء [1].\n*   حضور ولي الأمر (الأب أو الجد لأب في حال وفاة الأب) للتعريف وإعطاء الموافقة الخطية [1].\n\n**ثالثاً: الرسوم:**\n*   رسم إصدار أولي مقداره دينار أردنيان 2 [1]."
+    },
+    {
+      "id": "multi_02_vehicle_license_docs_and_sticker",
+      "category": "multi_section",
+      "question": "ما هي متطلبات ترخيص المركبة ورسم الملصق الإلكتروني المقرر لها؟",
+      "expected_services": [
+        "service_vehicle_license"
+      ],
+      "predicted_services": [
+        "eec52fc302979ba7"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": true,
+      "missing_facts": [],
+      "numeric_consistent": false,
+      "missing_numbers": [
+        "5"
+      ],
+      "citation_count": 0,
+      "citation_valid": false,
+      "latency_ms": 7112.14,
+      "retrieval_ms": 43.35,
+      "rerank_ms": 2615.77,
+      "generation_ms": 4449.51,
+      "generated_answer": "شروط ترخيص المركبة السنوي هي: إحضار رخصة اقتناء الأصلية المنتهية سنوات من سنة الصنع معفاة من3، وعقد تأمين إلزامي (ضد الغير) أو شامل ساري المفعول لمدة لا تقل عن سنة كاملة2، وإجتياز الفحص الفني الدوري للسلامة العامة للمركبات التي يقل عمرها عن3 سنوات، وتسديد كافة المخالفات المرورية المسجلة بحق المركبة أو السائق4.\n\nرسم الملصق الإلكتروني هو قيمة10 دنانير5."
+    },
+    {
+      "id": "multi_03_driving_license_exam_fees_and_hours",
+      "category": "multi_section",
+      "question": "كم عدد ساعات الدورة التدريبية المطلوبة لرخصة القيادة ورسوم الفحص النظري والعملي؟",
+      "expected_services": [
+        "service_driving_license"
+      ],
+      "predicted_services": [
+        "3a23c85a61499d17"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": true,
+      "missing_facts": [],
+      "numeric_consistent": true,
+      "missing_numbers": [],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 5222.7,
+      "retrieval_ms": 43.67,
+      "rerank_ms": 1869.19,
+      "generation_ms": 3305.61,
+      "generated_answer": "تبلغ مدة الدورة التدريبية المطلوبة 40 ساعة، ورسوم الفحص النظري هي 10 دنانير، ورسوم الفحص العملي الميداني هي 15 ديناراً أردنياً [1]."
+    },
+    {
+      "id": "multi_04_building_permit_docs_and_deposit",
+      "category": "multi_section",
+      "question": "ما هي وثائق ترخيص البناء وقيمة تأمين حسن التنفيذ للأبنية السكنية؟",
+      "expected_services": [
+        "service_building_permit"
+      ],
+      "predicted_services": [
+        "34d11eea56a29304"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": true,
+      "missing_facts": [],
+      "numeric_consistent": true,
+      "missing_numbers": [],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 6982.56,
+      "retrieval_ms": 39.86,
+      "rerank_ms": 2333.16,
+      "generation_ms": 4606.19,
+      "generated_answer": "وثائق ترخيص البناء السكنية هي:\n1. مخطط موقع وترسيم حديث لا يتجاوز أشهر 3 [1].\n2. سند تسجيل ملكية حديث (إخراج قيد) خالٍ من الحجوزات [1].\n3. مخططات هندسية تنفيذية مصدقة ومختومة من نقابة المهندسين الأردنيين [1].\n4. موافقة مديرية الدفاع المدني على اشتراطات الوقاية والسلامة ومكافحة الحريق [1].\n\nقيمة تأمين حسن التنفيذ للأبنية السكنية هي 500 دينار أردني لكل متر مربع مرخص [1]."
+    },
+    {
+      "id": "multi_05_family_book_marriage_deadline_fee",
+      "category": "multi_section",
+      "question": "ما هي مهلة إصدار دفتر العائلة بعد الزواج ورسم إصداره وغرامة التأخير؟",
+      "expected_services": [
+        "service_family_book"
+      ],
+      "predicted_services": [
+        "e871edb729590933"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": true,
+      "missing_facts": [],
+      "numeric_consistent": false,
+      "missing_numbers": [
+        "10"
+      ],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 5522.46,
+      "retrieval_ms": 40.47,
+      "rerank_ms": 1933.97,
+      "generation_ms": 3544.08,
+      "generated_answer": "تبلغ مهلة إصدار دفتر العائلة لأول مرة بعد عقد الزواج 90 يوماً، ويُفرض غرامة تأخير قدرها 2 دنانير أردنية في حال انقضاء هذه المهلة دون إصدار [1]. الرسم المقرر لإصدار دفتر العائلة لأول مرة هو 4 دنانير أردنية [1]."
+    },
+    {
+      "id": "multi_06_social_security_age_and_rate",
+      "category": "multi_section",
+      "question": "ما هو الحد الأقصى للعمر للتقديم على الاشتراك الاختياري في الضمان وما هي نسبة الاقتطاع؟",
+      "expected_services": [
+        "service_social_security"
+      ],
+      "predicted_services": [
+        "61bbf323c1d09211"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": true,
+      "missing_facts": [],
+      "numeric_consistent": true,
+      "missing_numbers": [],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 5711.52,
+      "retrieval_ms": 30.91,
+      "rerank_ms": 1954.48,
+      "generation_ms": 3710.65,
+      "generated_answer": "يحق لأي مواطن أردني غير مشمول بالضمان الإلزامي الاشتراك اختياريًا، بشرط ألا يكون قد أكمل سن 60 عامًا للذكور أو 55 عامًا للإناث [1]. وتبلغ نسبة الاقتطاع الشهري للاشتراك الاختياري 17.5% من الأجر المعتمد [1]."
+    },
+    {
+      "id": "multi_07_business_license_docs_and_inspection",
+      "category": "multi_section",
+      "question": "ما هي شروط ترخيص المهن لأول مرة وما هو رسم التفتيش الموقعي؟",
+      "expected_services": [
+        "service_business_license"
+      ],
+      "predicted_services": [
+        "7f6288e84625b433"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": true,
+      "missing_facts": [],
+      "numeric_consistent": true,
+      "missing_numbers": [],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 6788.7,
+      "retrieval_ms": 38.22,
+      "rerank_ms": 2116.54,
+      "generation_ms": 4630.83,
+      "generated_answer": "شروط ترخيص المهن لأول مرة هي كالتالي:\n1. شهادة تسجيل تجاري سارية المفعول صادرة عن وزارة الصناعة والتجارة [1].\n2. عقد إيجار مصدق من البلدية أو سند ملكية المحل التجاري [1].\n3. إذن إشغال ساري المفعول للمبنى التجاري [1].\n4. موافقة الدفاع المدني للمنشآت والمحال التي تتجاوز مساحتها 150 مترًا مربعًا [1].\n\nرسم التفتيش والمعاينة الموقعية هو 20 دينار تدفع لمرة واحدة عند التأسيس [1]."
+    },
+    {
+      "id": "multi_08_minor_passport_approval_and_fee",
+      "category": "multi_section",
+      "question": "ما هي شروط إصدار جواز السفر لمن هم دون 16 عاماً وما هو رسم إصداره؟",
+      "expected_services": [
+        "service_passport"
+      ],
+      "predicted_services": [
+        "ca0a836e8ae429ff"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": true,
+      "missing_facts": [],
+      "numeric_consistent": true,
+      "missing_numbers": [],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 6287.65,
+      "retrieval_ms": 31.04,
+      "rerank_ms": 2169.74,
+      "generation_ms": 4083.7,
+      "generated_answer": "شروط إصدار جواز السفر الأردني الدائم لمن هم دون 16 عاماً هي:\n1. إبراز البطاقة الشخصية الذكية الأصلية وسارية المفعول [1].\n2. تقديم صورتين شخصيتين حديثتين ملونتين بقياس (6×4) بخلفية بيضاء [1].\n3. الحصول على موافقة خطية من ولي الأمر [1].\n\nرسم إصدار جواز السفر العادي لمن هم دون 16 عاماً هو 25 دينار أردني [1]."
+    },
+    {
+      "id": "trap_01_lost_driving_vs_id",
+      "category": "disambiguation_trap",
+      "question": "ما هو رسم استخراج بدل فاقد لرخصة القيادة؟",
+      "expected_services": [
+        "service_driving_license"
+      ],
+      "predicted_services": [
+        "3a23c85a61499d17"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": true,
+      "missing_facts": [],
+      "numeric_consistent": true,
+      "missing_numbers": [],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 5188.95,
+      "retrieval_ms": 30.15,
+      "rerank_ms": 1994.51,
+      "generation_ms": 3160.71,
+      "generated_answer": "رسم بدل فاقد لرخصة القيادة هو 15 دينار أردني، وفقاً للمادة المتعلقة بالفحص الطبي الإلزامي في دليل إصدار وتجديد رخص القيادة [1]."
+    },
+    {
+      "id": "trap_02_lost_family_book",
+      "category": "disambiguation_trap",
+      "question": "ما هو رسم استخراج بدل فاقد لدفتر العائلة؟",
+      "expected_services": [
+        "service_family_book"
+      ],
+      "predicted_services": [
+        "e871edb729590933"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": false,
+      "missing_facts": [
+        "10 دنانير",
+        "عشرة دنانير"
+      ],
+      "numeric_consistent": false,
+      "missing_numbers": [
+        "10"
+      ],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 5022.14,
+      "retrieval_ms": 31.54,
+      "rerank_ms": 1747.52,
+      "generation_ms": 3238.98,
+      "generated_answer": "رسم استخراج بدل فاقد لدفتر العائلة هو 3 دنانير أردنية، بشرط توقيع إقرار خطي بالفقدان، وذلك وفقاً للوثيقة المذكورة [1]."
+    },
+    {
+      "id": "trap_03_min_age_license_vs_id",
+      "category": "disambiguation_trap",
+      "question": "ما هو السن القانوني للحصول على رخصة القيادة الخصوصية مقارنة بسن إصدار البطاقة الشخصية؟",
+      "expected_services": [
+        "service_driving_license",
+        "service_smart_id"
+      ],
+      "predicted_services": [
+        "58fc2563cb6e046d"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": false,
+      "missing_facts": [
+        "18 عاماً لرخصة القيادة",
+        "16 عاماً للبطاقة الشخصية"
+      ],
+      "numeric_consistent": false,
+      "missing_numbers": [
+        "16"
+      ],
+      "citation_count": 2,
+      "citation_valid": true,
+      "latency_ms": 8781.28,
+      "retrieval_ms": 48.16,
+      "rerank_ms": 5257.45,
+      "generation_ms": 3472.07,
+      "generated_answer": "يُعد سن 18 عاماً القانوني للحصول على رخصة قيادة خصوصية لأول مرة، بينما يُعد إصدار البطاقة الشخصية الذكية إلزامياً لكل مواطن أردني أتم السادسة عشرة من عمره [2][1]."
+    },
+    {
+      "id": "trap_04_driving_renew_normal",
+      "category": "disambiguation_trap",
+      "question": "كم رسم تجديد رخصة القيادة الفئة الثالثة العادية لمدة 10 سنوات؟",
+      "expected_services": [
+        "service_driving_license"
+      ],
+      "predicted_services": [
+        "3a23c85a61499d17"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": false,
+      "missing_facts": [
+        "27 ديناراً",
+        "سبعة وعشرون"
+      ],
+      "numeric_consistent": false,
+      "missing_numbers": [
+        "27"
+      ],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 5397.61,
+      "retrieval_ms": 31.0,
+      "rerank_ms": 1976.39,
+      "generation_ms": 3386.99,
+      "generated_answer": "لا يمكن تجديد رخصة القيادة للفئة الثالثة لمدة 10 سنوات، حيث أن الحد الأقصى للمدة هو سنتان فقط للأشخاص الذين تجاوزوا سن الـ 65 عاماً، أو سنة واحدة للغير من هذه الفئة العمرية [1]."
+    },
+    {
+      "id": "trap_05_non_conviction_english",
+      "category": "disambiguation_trap",
+      "question": "كم رسم إصدار شهادة عدم المحكومية باللغة الإنجليزية في وزارة العدل؟",
+      "expected_services": [
+        "service_non_conviction"
+      ],
+      "predicted_services": [
+        "01d014736f059404"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": true,
+      "missing_facts": [],
+      "numeric_consistent": true,
+      "missing_numbers": [],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 4750.56,
+      "retrieval_ms": 42.06,
+      "rerank_ms": 1672.06,
+      "generation_ms": 3031.71,
+      "generated_answer": "رسم إصدار شهادة عدم المحكومية باللغة الإنجليزية هو 7 دنانير أردنية [1]."
+    },
+    {
+      "id": "trap_06_building_commercial_sqm_fee",
+      "category": "disambiguation_trap",
+      "question": "ما هي رسوم ترخيص المتر المربع للأبنية التجارية لدى البلدية أو الأمانة؟",
+      "expected_services": [
+        "service_building_permit"
+      ],
+      "predicted_services": [
+        "eec52fc302979ba7"
+      ],
+      "service_hit_1": false,
+      "service_recall_2": false,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": true,
+      "abstention_correct": false,
+      "answer_correct": false,
+      "missing_facts": [
+        "8 دنانير",
+        "ثمانية دنانير"
+      ],
+      "numeric_consistent": false,
+      "missing_numbers": [
+        "8"
+      ],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 5967.46,
+      "retrieval_ms": 49.26,
+      "rerank_ms": 2608.85,
+      "generation_ms": 3305.04,
+      "generated_answer": "لم أجد في الوثائق المتاحة ما يحدد رسوم ترخيص المتر المربع للأبنية التجارية لدى البلدية أو الأمانة، حيث تغطي الوثيقة المذكورة فقط إجراءات ترخيص ونقل ملكية المركبات والفحص الفني [1]."
+    },
+    {
+      "id": "comp_01_id_vs_passport_lost_fee",
+      "category": "comparison",
+      "question": "قارن بين رسم بدل الفاقد للمرة الأولى بين البطاقة الشخصية الذكية وجواز السفر؟",
+      "expected_services": [
+        "service_smart_id",
+        "service_passport"
+      ],
+      "predicted_services": [
+        "58fc2563cb6e046d"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": false,
+      "missing_facts": [
+        "البطاقة الشخصية 25 ديناراً",
+        "جواز السفر 100 دينار"
+      ],
+      "numeric_consistent": false,
+      "missing_numbers": [
+        "25",
+        "100"
+      ],
+      "citation_count": 2,
+      "citation_valid": true,
+      "latency_ms": 9161.85,
+      "retrieval_ms": 37.45,
+      "rerank_ms": 5167.76,
+      "generation_ms": 3951.2,
+      "generated_answer": "رسم بدل الفاقد للمرة الأولى لجواز السفر الأردني الدائم هو 50 دينار أردنيًا [2]. أما رسم بدل الفاقد للمرة الأولى للبطاقة الشخصية الذكية فهو 10 دنانير أردنية [1]."
+    },
+    {
+      "id": "comp_02_building_res_vs_comm_fee",
+      "category": "comparison",
+      "question": "ما الفرق في رسم ترخيص المتر المربع بين البناء السكني والبناء التجاري؟",
+      "expected_services": [
+        "service_building_permit"
+      ],
+      "predicted_services": [
+        "eec52fc302979ba7"
+      ],
+      "service_hit_1": false,
+      "service_recall_2": false,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": true,
+      "missing_facts": [],
+      "numeric_consistent": true,
+      "missing_numbers": [],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 12010.91,
+      "retrieval_ms": 36.8,
+      "rerank_ms": 7403.28,
+      "generation_ms": 4564.46,
+      "generated_answer": "يختلف رسم ترخيص البناء المتر مربع بين السكني والتجاري كالتالي:\n\n*   **البناء السكني:** يُفرض رسم قدره 3 دنانير أردنية لكل متر مربع مرخص [2].\n*   **البناء التجاري:** يُفرض رسم قدره 8 دنانير أردنية لكل متر مربع مرخص [2]."
+    },
+    {
+      "id": "comp_03_first_time_id_vs_family_book",
+      "category": "comparison",
+      "question": "قارن بين رسم إصدار البطاقة الشخصية لأول مرة ورسم إصدار دفتر العائلة لأول مرة؟",
+      "expected_services": [
+        "service_smart_id",
+        "service_family_book"
+      ],
+      "predicted_services": [
+        "58fc2563cb6e046d"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": true,
+      "missing_facts": [],
+      "numeric_consistent": true,
+      "missing_numbers": [],
+      "citation_count": 2,
+      "citation_valid": true,
+      "latency_ms": 10968.96,
+      "retrieval_ms": 66.04,
+      "rerank_ms": 7094.58,
+      "generation_ms": 3800.44,
+      "generated_answer": "رسم إصدار البطاقة الشخصية الذكية لأول مرة هو 2 دينار أردنيان [1]. أما رسم إصدار دفتر العائلة لأول مرة عند الزواج فهو 10 دينار أردنيان [2]."
+    },
+    {
+      "id": "comp_04_building_deposit_res_vs_comm",
+      "category": "comparison",
+      "question": "ما الفرق بين مبلغ تأمين حسن التنفيذ للأبنية السكنية مقارنة بالأبنية التجارية؟",
+      "expected_services": [
+        "service_building_permit"
+      ],
+      "predicted_services": [
+        "34d11eea56a29304"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": true,
+      "missing_facts": [],
+      "numeric_consistent": true,
+      "missing_numbers": [],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 10559.95,
+      "retrieval_ms": 81.31,
+      "rerank_ms": 5962.15,
+      "generation_ms": 4508.97,
+      "generated_answer": "يختلف مبلغ تأمين حسن التنفيذ بين الأبنية السكنية والأبنية التجارية كالتالي:\n\n*   **للأبنية السكنية:** يُقدر بـ 500 دينار أردني للأبنية السكنية [1].\n*   **للأبنية التجارية:** يُقدر بـ 1500 دينار أردني للأبنية التجارية [1]."
+    },
+    {
+      "id": "comp_05_passport_vs_non_conviction_validity",
+      "category": "comparison",
+      "question": "قارن بين مدة صلاحية جواز السفر للبالغين ومدة صلاحية شهادة عدم المحكومية؟",
+      "expected_services": [
+        "service_passport",
+        "service_non_conviction"
+      ],
+      "predicted_services": [
+        "ca0a836e8ae429ff"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": true,
+      "missing_facts": [],
+      "numeric_consistent": false,
+      "missing_numbers": [
+        "5"
+      ],
+      "citation_count": 2,
+      "citation_valid": true,
+      "latency_ms": 8719.56,
+      "retrieval_ms": 48.7,
+      "rerank_ms": 5092.32,
+      "generation_ms": 3572.03,
+      "generated_answer": "مدة صلاحية جواز السفر الأردني الدائم للبالغين (فوق 16 عاماً) هي 3 سنوات [1]. أما مدة صلاحية شهادة عدم المحكومية فهي 2 أشهر من تاريخ إصدارها [2]."
+    },
+    {
+      "id": "out_01_yacht_import_aqaba",
+      "category": "out_of_corpus",
+      "question": "كم تبلغ رسوم استيراد اليخوت البحرية في منطقة العقبة الاقتصادية الخاصة؟",
+      "expected_services": [],
+      "predicted_services": [],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": true,
+      "is_abstained": true,
+      "abstention_correct": true,
+      "answer_correct": true,
+      "missing_facts": [],
+      "numeric_consistent": true,
+      "missing_numbers": [],
+      "citation_count": 0,
+      "citation_valid": true,
+      "latency_ms": 37881.37,
+      "retrieval_ms": 76.4,
+      "rerank_ms": 33516.78,
+      "generation_ms": 4278.09,
+      "generated_answer": "لم أجد في الوثائق المتاحة ما يحدد رسوم استيراد اليخوت البحرية في منطقة العقبة الاقتصادية الخاصة."
+    },
+    {
+      "id": "out_02_helicopter_license",
+      "category": "out_of_corpus",
+      "question": "ما هي شروط ورسوم الحصول على رخصة طيار هليكوبتر مدني في الأردن؟",
+      "expected_services": [],
+      "predicted_services": [
+        "3a23c85a61499d17"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": true,
+      "is_abstained": true,
+      "abstention_correct": true,
+      "answer_correct": true,
+      "missing_facts": [],
+      "numeric_consistent": true,
+      "missing_numbers": [],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 6129.69,
+      "retrieval_ms": 99.77,
+      "rerank_ms": 2502.07,
+      "generation_ms": 3520.47,
+      "generated_answer": "لم أجد في الوثائق المتاحة ما يحدد شروط ورسوم الحصول على رخصة طيار هليكوبتر مدني، حيث تقتصر المعلومات الواردة في المرجع [1] على رخص القيادة الخاصة بالمركبات الأرضية (الفئة الثالثة) فقط."
+    },
+    {
+      "id": "out_03_dubai_property_tax",
+      "category": "out_of_corpus",
+      "question": "ما هي ضريبة بيع وشراء العقارات في إمارة دبي لعام 2026؟",
+      "expected_services": [],
+      "predicted_services": [],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": true,
+      "is_abstained": true,
+      "abstention_correct": true,
+      "answer_correct": true,
+      "missing_facts": [],
+      "numeric_consistent": true,
+      "missing_numbers": [],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 34626.91,
+      "retrieval_ms": 63.28,
+      "rerank_ms": 30338.75,
+      "generation_ms": 4216.37,
+      "generated_answer": "لم أجد في الوثائق المتاحة ما يحدد ذلك، حيث تتناول الوثيقة المذكورة [1] إصدار وتجديد رخص المهن التجارية والصناعية في الأردن فقط ولا تذكر ضرائب بيع وشراء العقارات في إمارة دبي لعام 2026."
+    },
+    {
+      "id": "out_04_gold_price_today",
+      "category": "out_of_corpus",
+      "question": "كم سعر غرام الذهب عيار 21 اليوم في السوق الأردني؟",
+      "expected_services": [],
+      "predicted_services": [
+        "ca0a836e8ae429ff"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": true,
+      "is_abstained": true,
+      "abstention_correct": true,
+      "answer_correct": true,
+      "missing_facts": [],
+      "numeric_consistent": true,
+      "missing_numbers": [],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 6343.39,
+      "retrieval_ms": 69.1,
+      "rerank_ms": 2472.9,
+      "generation_ms": 3793.79,
+      "generated_answer": "لم أجد في الوثائق المتاحة ما يحدد سعر غرام الذهب عيار 21 في السوق الأردني، حيث تركز الوثيقة المذكورة حصراً على شروط ورسوم إصدار وتجديد جواز السفر الأردني الدائم [1]."
+    },
+    {
+      "id": "out_05_japan_visa_requirements",
+      "category": "out_of_corpus",
+      "question": "ما هي متطلبات تأشيرة الدخول السياحية إلى اليابان لحاملي الجواز الأردني؟",
+      "expected_services": [],
+      "predicted_services": [
+        "ca0a836e8ae429ff"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": true,
+      "is_abstained": true,
+      "abstention_correct": true,
+      "answer_correct": true,
+      "missing_facts": [],
+      "numeric_consistent": true,
+      "missing_numbers": [],
+      "citation_count": 0,
+      "citation_valid": true,
+      "latency_ms": 5484.76,
+      "retrieval_ms": 70.3,
+      "rerank_ms": 2459.33,
+      "generation_ms": 2950.7,
+      "generated_answer": "لم أجد في الوثائق المتاحة ما يحدد متطلبات تأشيرة الدخول السياحية إلى اليابان لحاملي الجواز الأردني."
+    },
+    {
+      "id": "colloq_01_first_smart_id",
+      "category": "colloquial",
+      "question": "بدي اطلع هوية اول مرة شو اجيب معي وكم بتكلف؟",
+      "expected_services": [
+        "service_smart_id"
+      ],
+      "predicted_services": [
+        "58fc2563cb6e046d"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": true,
+      "missing_facts": [],
+      "numeric_consistent": true,
+      "missing_numbers": [],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 7529.36,
+      "retrieval_ms": 58.21,
+      "rerank_ms": 3153.44,
+      "generation_ms": 4310.09,
+      "generated_answer": "للحصول على بطاقة شخصية ذكية لأول مرة، يجب تقديم المستندات التالية: شهادة الميلاد الأصلية الصادرة عن دائرة الأحوال المدنية وتحمل الرقم الوطني، ودفتر عائلة الوالد الأصلي مسجل فيه صاحب الطلب، وصورتين شخصيتين حديثتين ملونتين بقياس 6×4 سم بخلفية بيضاء، وحضور ولي الأمر (الأب أو الجد لأب في حال وفاة الأب) للتعريف وإعطاء الموافقة الخطية [1].\n\nرسم إصدار البطاقة لأول مرة هو 2 دينار أردنيان [1]."
+    },
+    {
+      "id": "colloq_02_urgent_passport",
+      "category": "colloquial",
+      "question": "قديش بكلفني اطلع جواز سفر بسرعة مستعجل بنفس اليوم؟",
+      "expected_services": [
+        "service_passport"
+      ],
+      "predicted_services": [
+        "ca0a836e8ae429ff"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": true,
+      "missing_facts": [],
+      "numeric_consistent": true,
+      "missing_numbers": [],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 5787.19,
+      "retrieval_ms": 56.14,
+      "rerank_ms": 2412.61,
+      "generation_ms": 3301.66,
+      "generated_answer": "لا يمكن إصدار جواز السفر المستعجل بنفس اليوم، حيث أن رسم الخدمة المستعجل هو 100 دينار أردني وتتم خلال ساعة واحدة فقط [1]."
+    },
+    {
+      "id": "colloq_03_lost_family_book",
+      "category": "colloquial",
+      "question": "ضاع مني دفتر العيلة شو الرسوم عشان اطلع بديل؟",
+      "expected_services": [
+        "service_family_book"
+      ],
+      "predicted_services": [
+        "e871edb729590933"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": false,
+      "missing_facts": [
+        "10 دنانير",
+        "بدل فاقد"
+      ],
+      "numeric_consistent": false,
+      "missing_numbers": [
+        "10"
+      ],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 5702.61,
+      "retrieval_ms": 54.11,
+      "rerank_ms": 2138.47,
+      "generation_ms": 3504.92,
+      "generated_answer": "يُفرض رسم قدره 5 دنانير أردنية لإصدار بدل تالف لدفتر العائلة، بشرط تسليم الدفتر التالف مع توقيع إقرار خطي بالفقدان [1]."
+    },
+    {
+      "id": "follow_01_passport_urgent",
+      "category": "follow_up",
+      "question": "وكم رسوم المستعجل منه؟",
+      "expected_services": [
+        "service_passport"
+      ],
+      "predicted_services": [
+        "ca0a836e8ae429ff"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": true,
+      "missing_facts": [],
+      "numeric_consistent": true,
+      "missing_numbers": [],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 9829.55,
+      "retrieval_ms": 39.45,
+      "rerank_ms": 2392.96,
+      "generation_ms": 3101.21,
+      "generated_answer": "رسوم إصدار جواز السفر المستعجل هي 100 دينار أردني، وتطبق على جميع الحالات دون تمييز حسب العمر أو الحالة [1]."
+    },
+    {
+      "id": "follow_02_building_deposit",
+      "category": "follow_up",
+      "question": "وكم يبلغ التأمين المسترد له؟",
+      "expected_services": [
+        "service_building_permit"
+      ],
+      "predicted_services": [
+        "eec52fc302979ba7"
+      ],
+      "service_hit_1": false,
+      "service_recall_2": false,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": true,
+      "abstention_correct": false,
+      "answer_correct": false,
+      "missing_facts": [
+        "500 دينار"
+      ],
+      "numeric_consistent": false,
+      "missing_numbers": [
+        "500"
+      ],
+      "citation_count": 0,
+      "citation_valid": true,
+      "latency_ms": 6175.4,
+      "retrieval_ms": 46.51,
+      "rerank_ms": 3226.16,
+      "generation_ms": 2885.22,
+      "generated_answer": "لم أجد في الوثائق المتاحة ما يحدد قيمة التأمين المسترد له."
+    },
+    {
+      "id": "follow_03_smart_id_damaged",
+      "category": "follow_up",
+      "question": "وماذا عن بدل التالف لها؟",
+      "expected_services": [
+        "service_smart_id"
+      ],
+      "predicted_services": [
+        "58fc2563cb6e046d"
+      ],
+      "service_hit_1": true,
+      "service_recall_2": true,
+      "evidence_recall": true,
+      "must_abstain": false,
+      "is_abstained": false,
+      "abstention_correct": true,
+      "answer_correct": false,
+      "missing_facts": [
+        "10 دنانير"
+      ],
+      "numeric_consistent": false,
+      "missing_numbers": [
+        "10"
+      ],
+      "citation_count": 1,
+      "citation_valid": true,
+      "latency_ms": 9916.88,
+      "retrieval_ms": 39.58,
+      "rerank_ms": 2976.68,
+      "generation_ms": 3164.0,
+      "generated_answer": "يُحدد رسم بدل التالف للبطاقة الشخصية الذكية بقيمة 5 دنانير أردنية، ويُطبق هذا الرسم في حال تلف البطاقة وتغييرها إلى أخرى جديدة [1]."
+    }
+  ]
+}

@@ -29,6 +29,13 @@ SERVICE_ANCHOR_PATTERNS = [
     re.compile(r"^(?:اسم\s+الخدمة|اسم\s+الخدمه|عنوان\s+الخدمة|عنوان\s+الخدمه)[:\s]+(.+)$", re.IGNORECASE),
     re.compile(r"^(?:بطاقة\s+الخدمة|بطاقه\s+الخدمه|دليل\s+الخدمة|دليل\s+الخدمه)[:\s]+(.+)$", re.IGNORECASE),
     re.compile(r"^(?:خدمة|خدمه)\s+(إصدار|اصدار|تجديد|الحصول\s+على|طلب|استخراج|إلغاء|الغاء|نقل|تسجيل|شطب)\s+(.+)$", re.IGNORECASE),
+    re.compile(
+        r"^(?:\d{4}\s+)?(?:دليل|تعليمات|إجراءات|اجراءات|بطاقة|بطاقه|خدمة|خدمه|نظام)"
+        r"(?:\s+(?:إجراءات|اجراءات|تعليمات|شروط|نظام))?\s+"
+        r"(?:إصدار|اصدار|تجديد|ترخيص|نقل|الاشتراك|اشتراك|طلب|الحصول|شهادة|شهاده|استخراج|إلغاء|الغاء|تسجيل|شطب|معاملات|معاملة|معامله|بدل)\s+(.+)$",
+        re.IGNORECASE,
+    ),
+    re.compile(r".*الخدم[ةه]\s+رقم\s*(\d+).*", re.IGNORECASE),
 ]
 
 SECTION_KEYWORDS = {
@@ -48,8 +55,11 @@ def is_service_boundary_line(line: str) -> Tuple[bool, Optional[str]]:
     for pat in SERVICE_ANCHOR_PATTERNS:
         m = pat.match(clean)
         if m:
-            title = m.group(1).strip() if len(m.groups()) == 1 else clean
-            title = re.sub(r"[:：\-ـ\s]+$", "", title).strip()
+            clean_no_year = re.sub(r"^\d{4}\s+", "", clean)
+            clean_no_prefix = re.sub(
+                r"^(?:اسم|عنوان|بطاقة|بطاقه|دليل)\s+الخدم[ةه][:\s]+", "", clean_no_year
+            ).strip()
+            title = re.sub(r"[:：\-ـ\s]+$", "", clean_no_prefix).strip()
             return True, title
 
     # Check Markdown H1 (# ...) that is not a generic section keyword
@@ -123,8 +133,14 @@ class ServiceSegmenter:
             page_num = doc.metadata.get("page_number", 1)
             lines = doc.text.split("\n")
             for line_idx, line in enumerate(lines):
-                is_anchor, title = is_service_boundary_line(line)
+                clean = line.strip()
+                is_anchor, title = is_service_boundary_line(clean)
                 if is_anchor and title:
+                    # If anchor title was a generic marker like "الخدمة رقم" or number, inspect next line
+                    if ("الخدمة رقم" in title or "الخدمه رقم" in title) and line_idx + 1 < len(lines):
+                        next_line = lines[line_idx + 1].strip()
+                        if next_line and len(next_line.split()) >= 2:
+                            title = next_line
                     anchors.append({
                         "page_number": page_num,
                         "line_index": line_idx,
@@ -135,21 +151,30 @@ class ServiceSegmenter:
         return anchors
 
     def _infer_service_title(self, documents: List[Document], filename: str) -> str:
-        # Check first heading in text
+        HEADER_NOISE = {
+            "المملكة الأردنية", "المملكه الاردنيه", "وثيقة حكومية", "وثيقه حكوميه",
+            "الصفحة", "الصفحه", "بوابة الحكومة", "بوابه الحكومه", "سند", "حقوق النشر",
+        }
+        # Check first heading or title line in text
         for doc in documents:
             for line in doc.text.split("\n"):
                 clean = line.strip()
                 if not clean or clean.startswith("["):
                     continue
-                is_head, title, _ = is_arabic_heading(clean)
-                if is_head and title:
-                    norm = normalize_arabic(title)
-                    if not any(kw in norm for kw in SECTION_KEYWORDS):
-                        return title
+                clean_no_digits = re.sub(r"^\d{4}\s+", "", clean)
+                norm = normalize_arabic(clean_no_digits)
+                if any(noise in norm for noise in HEADER_NOISE):
+                    continue
+                if any(kw in norm for kw in SECTION_KEYWORDS):
+                    continue
+                words = clean_no_digits.split()
+                if 2 <= len(words) <= 18:
+                    return clean_no_digits
 
         # Fallback to cleaned filename
         stem = Path(filename).stem
-        clean_stem = re.sub(r"^[0-9a-fA-F]{8}_", "", stem)  # remove prefix hash if any
+        clean_stem = re.sub(r"^[0-9a-fA-F]{8}_", "", stem)
+        clean_stem = re.sub(r"^\d+_", "", clean_stem)
         return clean_stem.replace("_", " ").replace("-", " ").strip()
 
     def _build_single_service(
@@ -399,7 +424,10 @@ class ServiceSegmenter:
         return services
 
 
-def service_records_to_chunks(services: List[ServiceRecord]) -> List[Chunk]:
+def service_records_to_chunks(
+    services: List[ServiceRecord],
+    default_source: Optional[str] = None,
+) -> List[Chunk]:
     """Converts a collection of ServiceRecords into canonical Chunks with 100% metadata parity."""
     chunks = []
     for service in services:
@@ -415,9 +443,7 @@ def service_records_to_chunks(services: List[ServiceRecord]) -> List[Chunk]:
             breadcrumb = " > ".join(heading_path)
             chunk_text = f"[{breadcrumb}]\n{text}"
 
-            chunk_id = hashlib.sha256(
-                f"{service.service_id}:{sec['section_id']}:{sec['order']}".encode("utf-8")
-            ).hexdigest()
+            src_val = default_source or span.get("filename", "")
 
             metadata = {
                 "document_id": service.document_id,
@@ -427,7 +453,7 @@ def service_records_to_chunks(services: List[ServiceRecord]) -> List[Chunk]:
                 "section_type": sec.get("section_type", "other"),
                 "section_id": sec.get("section_id", ""),
                 "filename": span.get("filename", ""),
-                "source": span.get("filename", ""),
+                "source": src_val,
                 "page_number": span.get("page_number"),
                 "heading_path": heading_path,
                 "extraction_method": span.get("extraction_method", "digital_pdf"),
@@ -436,12 +462,11 @@ def service_records_to_chunks(services: List[ServiceRecord]) -> List[Chunk]:
 
             chk = Chunk(
                 text=chunk_text,
-                source=span.get("filename", ""),
-                file_type="pdf" if "pdf" in span.get("filename", "") else "docx",
+                source=src_val,
+                file_type="pdf" if "pdf" in str(src_val).lower() else "docx",
                 chunk_index=sec.get("order", 0),
                 chunking_strategy="arabic_service_section",
                 metadata=metadata,
             )
-            chk.chunk_id = chunk_id
             chunks.append(chk)
     return chunks
