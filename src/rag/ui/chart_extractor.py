@@ -165,18 +165,32 @@ def extract_charts_from_markdown_table(
     if not rows or len(headers) < 2:
         return []
 
-    label_idx = 0
+    NON_METRIC_KEYWORDS = [
+        "مراجع", "مرجع", "reference", "citation",
+        "فئة", "فئات", "حالة", "شروط", "شرط", "متطلب", "ملاحظ",
+        "شكل مخرج", "مخرج", "category", "condition", "status", "notes"
+    ]
+
+    # Check if primary label column (col 0) has duplicate labels that need qualification from col 1
+    col0_vals = [r[0].strip() for r in rows]
+    has_col0_dups = len(col0_vals) != len(set(col0_vals))
+
     # Evaluate each candidate numeric column
     for col_idx in range(1, len(headers)):
         col_header = headers[col_idx]
         header_lower = col_header.lower()
-        # Skip citations / reference column
-        if any(k in header_lower or k in col_header for k in ["مراجع", "مرجع", "reference", "citation"]):
+        # Skip citations and qualifying non-metric metadata columns
+        if any(k in header_lower or k in col_header for k in NON_METRIC_KEYWORDS):
             continue
 
         data: list[dict[str, Any]] = []
         for r in rows:
-            lbl = re.sub(r"[*_`\[\]\d]", "", r[label_idx]).strip()
+            lbl = r[0].strip()
+            # If col 0 is identical across rows (e.g. 'إصدار وتجديد عادي'), qualify with col 1
+            if has_col0_dups and len(r) > 1 and r[1] and r[1] not in ("ال يوجد", "لا يوجد", "-"):
+                lbl = f"{r[0].strip()} ({r[1].strip()})"
+            lbl = re.sub(r"\[\d+\]", "", lbl).strip()
+            lbl = re.sub(r"[*_`]", "", lbl).strip()
             val = parse_arabic_number(r[col_idx])
             if val is not None and lbl:
                 data.append({"label": lbl, "value": val})

@@ -958,28 +958,22 @@ def build_chunk_text_map(trace: dict | None, evidence_list: list | None = None) 
     return chunk_map
 
 
-def wrap_label_multiline(text: str, max_chars_per_line: int = 16) -> str:
-    """Wraps label words into multiple lines using newline characters."""
-    text = re.sub(r"[*_`]", "", str(text)).strip()
-    if len(text) <= max_chars_per_line:
-        return text
-    words = text.split()
-    lines = []
-    cur_line = []
-    cur_len = 0
-    for w in words:
-        if cur_len + len(w) > max_chars_per_line and cur_line:
-            lines.append(" ".join(cur_line))
-            cur_line = [w]
-            cur_len = len(w)
-        else:
-            cur_line.append(w)
-            cur_len += len(w) + 1
-    if cur_line:
-        lines.append(" ".join(cur_line))
-    if len(lines) > 3:
-        lines = lines[:2] + ["..."]
-    return "\n".join(lines)
+def shorten_chart_label(text: str) -> str:
+    """Creates a concise, clean single-line label for chart axis so it sits strictly underneath each column."""
+    lbl = re.sub(r"[*_`]", "", str(text)).strip()
+    lbl = re.sub(r"\[\d+\]", "", lbl).strip()
+    # Government service label cleanups for visual clarity
+    lbl = re.sub(r"^(خدمة\s+|إجراء\s+)", "", lbl)
+    lbl = re.sub(r"إصدار\s+وتجديد\s+عادي", "إصدار عادي", lbl)
+    lbl = re.sub(r"إصدار\s+جواز\s+سفر\s+مستعجل", "جواز مستعجل", lbl)
+    lbl = re.sub(r"\(خدمة\s+VIP\)", "(VIP)", lbl, flags=re.IGNORECASE)
+    lbl = re.sub(r"لمن\s+أتم\s+(\d+)\s+عاماً?\s+فما\s+فوق", r"فوق \1 سنة", lbl)
+    lbl = re.sub(r"لمن\s+هم\s+دون\s+(\d+)\s+عاماً?", r"دون \1 سنة", lbl)
+    lbl = re.sub(r"للمرة\s+الأولى\s+وما\s+فوق", "أول مرة", lbl)
+    lbl = re.sub(r"\s+", " ", lbl).strip()
+    if len(lbl) > 28:
+        lbl = lbl[:26].strip() + "…"
+    return lbl
 
 
 def render_single_chart(chart_spec: dict, is_ar: bool = False, color: str = "#002D62"):
@@ -1004,7 +998,7 @@ def render_single_chart(chart_spec: dict, is_ar: bool = False, color: str = "#00
                 raw_lbl = str(row["label"]).strip()
                 clean_rows.append({
                     "raw_label": raw_lbl,
-                    "label": wrap_label_multiline(raw_lbl, max_chars_per_line=16),
+                    "label": shorten_chart_label(raw_lbl),
                     "value": val,
                 })
             except Exception:
@@ -1035,7 +1029,7 @@ def render_single_chart(chart_spec: dict, is_ar: bool = False, color: str = "#00
 
     # Label configuration so text sits strictly UNDERNEATH each column
     num_cols = len(df)
-    label_angle = 0 if num_cols <= 5 else -25
+    label_angle = 0 if num_cols <= 4 else -25
     label_align = "center" if label_angle == 0 else "right"
 
     # Base column bars
@@ -1048,7 +1042,6 @@ def render_single_chart(chart_spec: dict, is_ar: bool = False, color: str = "#00
                 sort=None,
                 axis=alt.Axis(
                     title=None,
-                    labelExpr="split(datum.label, '\n')",
                     labelAngle=label_angle,
                     labelBaseline="top",
                     labelAlign=label_align,
@@ -1056,6 +1049,7 @@ def render_single_chart(chart_spec: dict, is_ar: bool = False, color: str = "#00
                     labelFontSize=11.5,
                     labelFontWeight="bold",
                     labelColor="#002D62",
+                    labelLimit=250,
                     tickColor="#CBD5E1",
                     domainColor="#94A3B8",
                     domainWidth=1.5,
