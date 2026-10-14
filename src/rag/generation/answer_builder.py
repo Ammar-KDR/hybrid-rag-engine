@@ -24,6 +24,14 @@ class AnswerBuilder:
         for reference in references:
             block = context.get_block(reference)
 
+            if block is None and context.blocks:
+                # If reference is out of bounds (e.g. model cited [2] when only 1 block provided),
+                # resolve to the nearest available context block
+                if 1 <= reference <= len(context.blocks):
+                    block = context.blocks[reference - 1]
+                else:
+                    block = context.blocks[0]
+
             if block is None:
                 unresolved_references.append(reference)
                 continue

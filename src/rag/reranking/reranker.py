@@ -25,7 +25,9 @@ class CrossEncoderReranker:
 
         query_chunk_pairs=[]
         for candidate in candidates:
-            query_chunk_pairs.append((query, candidate.text))
+            # Use concise prefix (up to 350 chars) for ultra-fast CPU CrossEncoder inference
+            text_prefix = candidate.text[:350] if len(candidate.text) > 350 else candidate.text
+            query_chunk_pairs.append((query, text_prefix))
 
 
         # model.predict(...)

@@ -28,7 +28,7 @@ COMPARISON_KEYWORDS = {
 }
 
 GENERIC_SERVICE_TITLE_WORDS = {
-    "دليل", "اصدار", "إصدار", "تجديد", "خدمة", "خدمه", "طلب", "الحصول",
+    "دليل", "خدمة", "خدمه", "الحصول",
     "على", "في", "من", "الى", "إلى", "عن", "مع", "كافة", "جميع", "المملكة", "الاردنية",
     "الهاشمية", "معاملات", "معاملة", "معامله", "اجراءات", "إجراءات"
 }
@@ -127,17 +127,23 @@ class ServiceRouter:
                     routing_reason="exact_title",
                 )
 
-        # 4. Alias matching
+        # 4. Alias matching (prefer longest/most specific matching alias)
+        alias_matches: List[Tuple[int, ServiceRecord]] = []
         for svc in self.services:
             for alias in svc.aliases:
                 norm_alias = normalize_arabic(alias)
                 if norm_alias and norm_alias in norm_query:
-                    return RouteResult(
-                        routed_services=[svc],
-                        service_ids=(svc.service_id,),
-                        confidence=0.95,
-                        routing_reason="alias_match",
-                    )
+                    alias_matches.append((len(norm_alias), svc))
+
+        if alias_matches:
+            alias_matches.sort(key=lambda x: x[0], reverse=True)
+            best_svc = alias_matches[0][1]
+            return RouteResult(
+                routed_services=[best_svc],
+                service_ids=(best_svc.service_id,),
+                confidence=0.95,
+                routing_reason="alias_match",
+            )
 
         # 5. Token overlap / lexical score ranking
         scored: List[Tuple[float, ServiceRecord]] = []

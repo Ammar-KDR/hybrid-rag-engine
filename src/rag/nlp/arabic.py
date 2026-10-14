@@ -65,13 +65,22 @@ def remove_tatweel(text: str) -> str:
     return TATWEEL_REGEX.sub("", text)
 
 
+REVERSED_ARABIC_KEYWORDS = {
+    "بلط", "هاجتا", "ترك", "موسر", "طورش", "قئاثو", "ءافعا", "دقع",
+    "ليجست", "عوفدم", "غلبم", "تايافنلا", "لقنلا", "ماعلا", "ةمدخلا", "طقفلا",
+}
+EXCEPTIONS_LA_ENDINGS = {"كلا", "هلا", "لولا", "إلا", "الا", "ماعدا", "علا"}
+
+
 def fix_visual_arabic(text: str) -> str:
     """Detects and fixes reversed visual-order Arabic text common in exported government PDFs.
 
     In visual Arabic encoding (e.g., from certain government form generators), words are
-    stored backwards (e.g., 'ةمدخلا' instead of 'الخدمة').
-    Since no valid Arabic word ever starts with Taa Marbuta ('ة'), its presence at the start
-    of words is a definitive indicator of visual byte reversal.
+    stored backwards (e.g., 'ةمدخلا' instead of 'الخدمة', or 'بلط' instead of 'طلب').
+    Detects reversal via:
+    1. Words starting with Taa Marbuta ('ة' / 'ـة')
+    2. Known reversed root keywords
+    3. Multiple words ending with 'لا' (reversed definite article 'ال')
     """
     if not text:
         return text
@@ -84,20 +93,32 @@ def fix_visual_arabic(text: str) -> str:
             fixed_lines.append(line)
             continue
 
-        arabic_words = [w for w in words if ARABIC_CHAR_REGEX.search(w)]
+        arabic_words = [re.sub(r"^[^\w]+|[^\w]+$", "", w) for w in words if ARABIC_CHAR_REGEX.search(w)]
         if not arabic_words:
             fixed_lines.append(line)
             continue
 
-        # Indicator: Arabic word starting with Taa Marbuta
-        has_reversed_indicator = any(
-            w.startswith(("ة", "ـة")) for w in arabic_words
+        # Indicator 1: Arabic word starting with Taa Marbuta (must be a substantial word, len >= 3)
+        has_taa_marbuta_start = any(
+            w.startswith(("ة", "ـة")) and len(w) >= 3 for w in arabic_words
         )
-        if has_reversed_indicator:
+        # Indicator 2: Presence of common reversed administrative keywords
+        has_reversed_keyword = any(
+            w in REVERSED_ARABIC_KEYWORDS for w in arabic_words
+        )
+        # Indicator 3: Multiple words ending with 'لا' (reversed 'ال') exceeding normal 'ال' prefixes
+        la_count = sum(1 for w in arabic_words if w.endswith("لا") and len(w) >= 3 and w not in EXCEPTIONS_LA_ENDINGS)
+        al_count = sum(1 for w in arabic_words if w.startswith(("ال", "الـ")) and len(w) >= 3)
+        has_reversed_al = (la_count > 0 and la_count > al_count)
+
+        if has_taa_marbuta_start or has_reversed_keyword or has_reversed_al:
             corrected_words = []
             for w in words:
                 if ARABIC_CHAR_REGEX.search(w):
-                    corrected_words.append(w[::-1])
+                    # Reverse letters while keeping numeric digits left-to-right
+                    parts = re.split(r"(\d+(?:\.\d+)?)", w)
+                    rev_parts = [p if re.match(r"^\d+(?:\.\d+)?$", p) else p[::-1] for p in parts]
+                    corrected_words.append("".join(reversed(rev_parts)))
                 else:
                     corrected_words.append(w)
             fixed_lines.append(" ".join(reversed(corrected_words)))

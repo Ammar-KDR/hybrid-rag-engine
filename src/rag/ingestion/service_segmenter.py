@@ -76,6 +76,14 @@ class ServiceSegmenter:
     """Segments extracted documents into typed, stable ServiceRecords."""
 
     def __init__(self, overrides_path: Optional[Path] = None):
+        if overrides_path is None:
+            for candidate in [
+                Path("data/evaluation/segmentation_overrides.json"),
+                Path("data/segmentation_overrides.json"),
+            ]:
+                if candidate.exists():
+                    overrides_path = candidate
+                    break
         self.overrides_path = overrides_path
         self._overrides_data = self._load_overrides()
 

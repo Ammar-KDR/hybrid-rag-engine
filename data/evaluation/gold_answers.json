@@ -1,0 +1,607 @@
+[
+  {
+    "question_id": "Q001",
+    "source_ids": [
+      "P01"
+    ],
+    "difficulty": "easy",
+    "category": "fee_lookup",
+    "question_ar": "كم رسم كرت الاتجاه للمركبة الصغيرة دون تأخير؟",
+    "expected_answer_ar": "200 دينار أردني، وفق بطاقة الخدمة.",
+    "evidence_locator": "صفحة 1: قيمة الرسوم",
+    "notes": ""
+  },
+  {
+    "question_id": "Q002",
+    "source_ids": [
+      "P01"
+    ],
+    "difficulty": "hard",
+    "category": "conditional_arithmetic",
+    "question_ar": "عندي حافلة متوسطة وتأخرت ثلاثة أشهر في كرت الاتجاه. كم أدفع بحسب الوثيقة؟",
+    "expected_answer_ar": "250 + (12.5 × 3) = 287.5 دينار أردني، بافتراض تطبيق رسم البطاقة وغرامة التأخير المذكورين فقط.",
+    "evidence_locator": "صفحة 1: قيمة الرسوم",
+    "notes": ""
+  },
+  {
+    "question_id": "Q003",
+    "source_ids": [
+      "P01"
+    ],
+    "difficulty": "medium",
+    "category": "conditional_arithmetic",
+    "question_ar": "إذا كانت حافلة كبيرة وتأخرت شهرين، كم الرسوم وغرامة التأخير؟",
+    "expected_answer_ar": "300 + (15 × 2) = 330 دينار أردني، وفق البنود المذكورة.",
+    "evidence_locator": "صفحة 1: قيمة الرسوم",
+    "notes": ""
+  },
+  {
+    "question_id": "Q004",
+    "source_ids": [
+      "P01"
+    ],
+    "difficulty": "medium",
+    "category": "eligibility",
+    "question_ar": "هل يجب أن تكون رخصة المركبة سارية المفعول لإصدار كرت الاتجاه؟",
+    "expected_answer_ar": "نعم، تنص بطاقة الخدمة المعروضة على أن رخصة المركبة يجب أن تكون سارية المفعول.",
+    "evidence_locator": "صفحة 1: شروط تقديم الخدمة",
+    "notes": "مهم: استخراج نص الـPDF آلياً قد يعكس الشرط؛ تأكد من الصورة الأصلية."
+  },
+  {
+    "question_id": "Q005",
+    "source_ids": [
+      "P02"
+    ],
+    "difficulty": "easy",
+    "category": "fee_lookup",
+    "question_ar": "ما رسوم الحصول على صورة طبق الأصل من عقد الإيجار؟",
+    "expected_answer_ar": "1 دينار رسوم طوابع.",
+    "evidence_locator": "صفحة 1: قيمة الرسوم",
+    "notes": ""
+  },
+  {
+    "question_id": "Q006",
+    "source_ids": [
+      "P02"
+    ],
+    "difficulty": "medium",
+    "category": "eligibility",
+    "question_ar": "هل يمكن استخراج صورة طبق الأصل من عقد إيجار غير مصدق لدى أمانة عمان؟",
+    "expected_answer_ar": "لا وفق شروط الخدمة؛ يجب أن يكون عقد الإيجار مصدقاً لدى الأمانة.",
+    "evidence_locator": "صفحة 1: شروط تقديم الخدمة",
+    "notes": ""
+  },
+  {
+    "question_id": "Q007",
+    "source_ids": [
+      "P02"
+    ],
+    "difficulty": "medium",
+    "category": "duration",
+    "question_ar": "كم يستغرق إصدار صورة طبق الأصل من عقد الإيجار وهل يشترط أن يكون العقد بعد 1989؟",
+    "expected_answer_ar": "الزمن المعياري يوم عمل واحد، والخدمة تشمل العقود قبل عام 1989 وبعده.",
+    "evidence_locator": "صفحة 1: وصف الخدمة والزمن المعياري",
+    "notes": ""
+  },
+  {
+    "question_id": "Q008",
+    "source_ids": [
+      "P03"
+    ],
+    "difficulty": "hard",
+    "category": "conditional_eligibility",
+    "question_ar": "عندي ملكية مشتركة وحصتي 50%، هل أستطيع تقديم طلب تسجيل عقد إيجار وفق الشروط؟",
+    "expected_answer_ar": "لا؛ في الملكية المشتركة يجب أن تتجاوز حصة مقدم الطلب 51%.",
+    "evidence_locator": "صفحة 1: شروط تقديم الخدمة",
+    "notes": ""
+  },
+  {
+    "question_id": "Q009",
+    "source_ids": [
+      "P03"
+    ],
+    "difficulty": "medium",
+    "category": "conditional_eligibility",
+    "question_ar": "بدي أعمل ملحق عقد إيجار لكن العقد الأصلي منتهي، هل يقبل؟",
+    "expected_answer_ar": "لا وفق بطاقة الخدمة؛ لإضافة ملحق يجب أن يكون العقد الأصلي مسجلاً لدى الأمانة وفعالاً وغير منتهي المدة.",
+    "evidence_locator": "صفحة 1: شروط تقديم الخدمة",
+    "notes": ""
+  },
+  {
+    "question_id": "Q010",
+    "source_ids": [
+      "P03"
+    ],
+    "difficulty": "medium",
+    "category": "duration",
+    "question_ar": "كم الزمن المعياري لتسجيل عقد الإيجار أو ملحقه؟",
+    "expected_answer_ar": "ساعتان عمل.",
+    "evidence_locator": "صفحة 2: الزمن المعياري",
+    "notes": ""
+  },
+  {
+    "question_id": "Q011",
+    "source_ids": [
+      "P03"
+    ],
+    "difficulty": "hard",
+    "category": "fee_formula",
+    "question_ar": "كم نسبة رسم تسجيل عقد الإيجار وما الحد الأعلى للجزء المرتبط بقيمة العقد السنوية؟",
+    "expected_answer_ar": "0.005 من قيمة العقد السنوية وبحد أعلى 15 ديناراً لهذا الجزء، إضافة إلى رسوم طوابع 0.003 من القيمة الإجمالية للعقد، وقد تنطبق غرامات على العقود من سنوات سابقة.",
+    "evidence_locator": "صفحة 2: قيمة الرسوم",
+    "notes": ""
+  },
+  {
+    "question_id": "Q012",
+    "source_ids": [
+      "P04"
+    ],
+    "difficulty": "medium",
+    "category": "conditional_documents",
+    "question_ar": "أغلقت منشأتي وأريد الإعفاء من رسوم النفايات. ما المستند الذي يثبت سبب الإغلاق؟",
+    "expected_answer_ar": "كشف استهلاك الكهرباء الذي يبين كمية الاستهلاك خلال فترة الإغلاق.",
+    "evidence_locator": "صفحة 1: الوثائق المطلوبة",
+    "notes": ""
+  },
+  {
+    "question_id": "Q013",
+    "source_ids": [
+      "P04"
+    ],
+    "difficulty": "hard",
+    "category": "conditional_documents",
+    "question_ar": "إذا متعاقد مع شركة خاصة لنقل النفايات، شو أوراق الإثبات ذات العلاقة؟",
+    "expected_answer_ar": "وفق الجدول: كشف الوصلات المالية، كشف حساب تفصيلي مع الشركة المتعاقدة، ورخصة مهن للشركة الناقلة ضمن الوثائق المرتبطة بهذا السبب.",
+    "evidence_locator": "صفحة 1: الوثائق المطلوبة",
+    "notes": ""
+  },
+  {
+    "question_id": "Q014",
+    "source_ids": [
+      "P04"
+    ],
+    "difficulty": "medium",
+    "category": "eligibility",
+    "question_ar": "هل خدمة الإعفاء من رسوم نقل وطمر النفايات متاحة للأفراد أم لفئة الأعمال؟",
+    "expected_answer_ar": "فئة متلقي الخدمة المذكورة هي الأعمال، وتشمل الشركات والمؤسسات والجمعيات وغيرها من الفئات التجارية المبينة.",
+    "evidence_locator": "صفحة 1: فئة متلقي الخدمة",
+    "notes": ""
+  },
+  {
+    "question_id": "Q015",
+    "source_ids": [
+      "P04"
+    ],
+    "difficulty": "medium",
+    "category": "conditional_documents",
+    "question_ar": "إذا كنت دفعت رسوم النفايات ضمن فاتورة الكهرباء، ما الوثيقة المتعلقة بهذا السبب؟",
+    "expected_answer_ar": "كتاب تغطية من شركة الكهرباء يبين سداد رسوم خدمات نقل النفايات إلى شركة الكهرباء.",
+    "evidence_locator": "صفحة 1: الوثائق المطلوبة",
+    "notes": ""
+  },
+  {
+    "question_id": "Q016",
+    "source_ids": [
+      "P05"
+    ],
+    "difficulty": "hard",
+    "category": "fee_vs_fine",
+    "question_ar": "هل يوجد رسم منفصل لتقديم طلب كف الطلب عن مخالفات البيع العشوائي؟",
+    "expected_answer_ar": "لا، خانة قيمة الرسوم في بطاقة الخدمة تنص على «لا يوجد»؛ أما قيمة المخالفة نفسها فتُعرض وتُسدد وفق الخطوات المذكورة.",
+    "evidence_locator": "صفحة 1: قيمة الرسوم وإجراءات الخدمة",
+    "notes": ""
+  },
+  {
+    "question_id": "Q017",
+    "source_ids": [
+      "P05"
+    ],
+    "difficulty": "easy",
+    "category": "duration",
+    "question_ar": "كم تستغرق خدمة كف الطلب عن مخالفات البيع العشوائي؟",
+    "expected_answer_ar": "من 5 إلى 10 دقائق.",
+    "evidence_locator": "صفحة 1: الزمن المعياري",
+    "notes": ""
+  },
+  {
+    "question_id": "Q018",
+    "source_ids": [
+      "P05"
+    ],
+    "difficulty": "medium",
+    "category": "procedure",
+    "question_ar": "ما الذي يحصل بعد دفع المخالفة في خدمة كف الطلب؟",
+    "expected_answer_ar": "تُلغى المطالبات المالية المترتبة وتصل رسالة نصية برفع التعميم.",
+    "evidence_locator": "صفحة 1: إجراءات الخدمة",
+    "notes": ""
+  },
+  {
+    "question_id": "Q019",
+    "source_ids": [
+      "P06"
+    ],
+    "difficulty": "medium",
+    "category": "conditional_documents",
+    "question_ar": "ما الإثبات المذكور للإعفاء من رسوم رخصة المهن عن سنوات لم تُمارس فيها المهنة؟",
+    "expected_answer_ar": "كتاب أو كشف فواتير من شركة الكهرباء يبين فصل التيار عن الموقع أو عدم وجود استهلاك خلال الفترة المطلوبة، شريطة المطابقة.",
+    "evidence_locator": "بطاقة «إعفاء من رسوم سنوات سابقة»: الوثائق",
+    "notes": ""
+  },
+  {
+    "question_id": "Q020",
+    "source_ids": [
+      "P06"
+    ],
+    "difficulty": "medium",
+    "category": "service_scope",
+    "question_ar": "هل خدمة الإعفاء من رسوم سنوات سابقة عليها رسوم طلب؟",
+    "expected_answer_ar": "لا توجد رسوم على تقديم الخدمة بحسب بطاقة الإعفاء.",
+    "evidence_locator": "بطاقة «إعفاء من رسوم سنوات سابقة»: قيمة الرسوم",
+    "notes": ""
+  },
+  {
+    "question_id": "Q021",
+    "source_ids": [
+      "P06"
+    ],
+    "difficulty": "medium",
+    "category": "duration",
+    "question_ar": "كم الزمن المعياري لخدمة إصدار رخصة المهن في هذا الملف؟",
+    "expected_answer_ar": "7 أيام عمل وفق بطاقة إصدار رخصة مهن الواردة في الملف.",
+    "evidence_locator": "بطاقة «إصدار رخصة مهن»: الزمن المعياري",
+    "notes": ""
+  },
+  {
+    "question_id": "Q022",
+    "source_ids": [
+      "P06"
+    ],
+    "difficulty": "hard",
+    "category": "abstention",
+    "question_ar": "أعطني قيمة مالية ثابتة لإصدار رخصة المهن من هذه البطاقة.",
+    "expected_answer_ar": "لا تحدد البطاقة رقماً ثابتاً؛ ذكرت أن الرسوم «حسب قانون رخص المهن»، ولذلك لا يصح اختلاق رقم.",
+    "evidence_locator": "بطاقة «إصدار رخصة مهن»: قيمة الرسوم",
+    "notes": ""
+  },
+  {
+    "question_id": "Q023",
+    "source_ids": [
+      "P07"
+    ],
+    "difficulty": "easy",
+    "category": "fee_lookup",
+    "question_ar": "هل خدمة طلب رد مبلغ مدفوع بالخطأ لها رسوم؟",
+    "expected_answer_ar": "لا يوجد رسم للخدمة.",
+    "evidence_locator": "بطاقة «طلب رد مبلغ مدفوع»: قيمة الرسوم",
+    "notes": ""
+  },
+  {
+    "question_id": "Q024",
+    "source_ids": [
+      "P07"
+    ],
+    "difficulty": "medium",
+    "category": "process",
+    "question_ar": "كيف يُسلّم المبلغ في حال الموافقة على طلب رد مبلغ مدفوع؟",
+    "expected_answer_ar": "يُستلم شيك بالقيمة المالية وفق إجراءات البطاقة.",
+    "evidence_locator": "بطاقة «طلب رد مبلغ مدفوع»: الإجراءات ومخرج الخدمة",
+    "notes": ""
+  },
+  {
+    "question_id": "Q025",
+    "source_ids": [
+      "P07"
+    ],
+    "difficulty": "medium",
+    "category": "documents",
+    "question_ar": "ما وثيقة إثبات الشخصية المقبولة عند تقديم طلب رد مبلغ مدفوع بالخطأ؟",
+    "expected_answer_ar": "إثبات شخصية مثل هوية الأحوال المدنية أو جواز السفر.",
+    "evidence_locator": "بطاقة «طلب رد مبلغ مدفوع»: الوثائق",
+    "notes": ""
+  },
+  {
+    "question_id": "Q026",
+    "source_ids": [
+      "P08"
+    ],
+    "difficulty": "easy",
+    "category": "fee_lookup",
+    "question_ar": "كم تبلغ قيمة تأمينات الترشح للانتخابات البرلمانية في البطاقة؟",
+    "expected_answer_ar": "500 دينار أردني وفق بطاقة الخدمة الخاصة بانتخابات 2024.",
+    "evidence_locator": "قيمة الرسوم",
+    "notes": ""
+  },
+  {
+    "question_id": "Q027",
+    "source_ids": [
+      "P08"
+    ],
+    "difficulty": "medium",
+    "category": "duration",
+    "question_ar": "كم الزمن المعياري لإتمام طلب دفع تأمينات الترشح، وما مخرج الخدمة؟",
+    "expected_answer_ar": "20 دقيقة؛ المخرج وصل مالي إلكتروني بالمبلغ المدفوع.",
+    "evidence_locator": "الزمن المعياري ومخرج الخدمة",
+    "notes": ""
+  },
+  {
+    "question_id": "Q028",
+    "source_ids": [
+      "P08"
+    ],
+    "difficulty": "hard",
+    "category": "temporal_scope",
+    "question_ar": "هل الخدمة المذكورة متاحة على مدار الساعة طوال السنة؟",
+    "expected_answer_ar": "لا يمكن استنتاج ذلك؛ البطاقة تنص على 24 ساعة خلال فترة الترشح للانتخابات البرلمانية، واسم المسار يشير إلى انتخابات 2024.",
+    "evidence_locator": "أوقات تقديم الخدمة ومراحل تقديم الخدمة",
+    "notes": ""
+  },
+  {
+    "question_id": "Q029",
+    "source_ids": [
+      "P09"
+    ],
+    "difficulty": "hard",
+    "category": "conditional_eligibility",
+    "question_ar": "مر 14 شهراً على إصدار ترخيص مقترح، هل يمكنني إلغاء الترخيص بهذه الخدمة؟",
+    "expected_answer_ar": "لا؛ يجب تقديم طلب إلغاء الترخيص خلال مدة لا تتجاوز سنة من تاريخ صدوره.",
+    "evidence_locator": "صفحة 11 تقريباً: شروط إلغاء ترخيص مقترح",
+    "notes": ""
+  },
+  {
+    "question_id": "Q030",
+    "source_ids": [
+      "P09"
+    ],
+    "difficulty": "hard",
+    "category": "conditional_eligibility",
+    "question_ar": "هل يمكن إلغاء ترخيص مقترح مع وجود تصريح حفر ساري؟",
+    "expected_answer_ar": "لا؛ من شروط الخدمة عدم وجود تصريح حفر ساري المفعول.",
+    "evidence_locator": "صفحة 11: الشروط",
+    "notes": ""
+  },
+  {
+    "question_id": "Q031",
+    "source_ids": [
+      "P09"
+    ],
+    "difficulty": "medium",
+    "category": "duration",
+    "question_ar": "كم يستغرق طلب إلغاء ترخيص مقترح، وهل عليه رسم طلب؟",
+    "expected_answer_ar": "من 21 إلى 30 يوماً؛ قيمة رسوم الخدمة «لا يوجد».",
+    "evidence_locator": "صفحة 11: الزمن المعياري والرسوم",
+    "notes": ""
+  },
+  {
+    "question_id": "Q032",
+    "source_ids": [
+      "P09"
+    ],
+    "difficulty": "hard",
+    "category": "service_disambiguation",
+    "question_ar": "هل مدة إصدار رخصة إنشائية هي نفسها المدة المعيارية لإلغاء ترخيص مقترح؟",
+    "expected_answer_ar": "لا يصح الخلط بينهما. المدة المذكورة لإلغاء ترخيص مقترح هي 21–30 يوماً؛ إصدار الرخصة الإنشائية خدمة مختلفة ولها حقولها الخاصة.",
+    "evidence_locator": "صفحتا 1 و11: أسماء الخدمات وزمن الإلغاء",
+    "notes": ""
+  },
+  {
+    "question_id": "Q033",
+    "source_ids": [
+      "P10"
+    ],
+    "difficulty": "hard",
+    "category": "conditional_discount",
+    "question_ar": "كم خصم طلب خارطة جغرافية إذا كان الطالب يستخدمها لأغراض البحث العلمي؟",
+    "expected_answer_ar": "90% وفق وصف خدمة إصدار خارطة في الصفحة الأولى.",
+    "evidence_locator": "صفحة 1: وصف خدمة إصدار خارطة",
+    "notes": ""
+  },
+  {
+    "question_id": "Q034",
+    "source_ids": [
+      "P10"
+    ],
+    "difficulty": "hard",
+    "category": "service_disambiguation",
+    "question_ar": "هل خصم طلب البيانات الرقمية للطلاب يساوي خصم الخارطة للبحث العلمي؟",
+    "expected_answer_ar": "لا؛ بيانات GIS الرقمية للطلاب مذكور لها خصم 70%، بينما الخارطة للأغراض البحثية المذكور لها خصم 90%.",
+    "evidence_locator": "صفحة 1: خدمات خارطة / بيانات رقمية للطلاب",
+    "notes": ""
+  },
+  {
+    "question_id": "Q035",
+    "source_ids": [
+      "H01"
+    ],
+    "difficulty": "medium",
+    "category": "conditional_documents",
+    "question_ar": "إذا ضاعت بطاقتي الذكية للمرة الثالثة، ما المستند الإضافي المرتبط بالتحقيق؟",
+    "expected_answer_ar": "محضر إفادة بالفقدان من لجنة التحقيق، وتذكر البطاقة أيضاً كفالة مالية للمرة الثالثة.",
+    "evidence_locator": "الوثائق المطلوبة",
+    "notes": ""
+  },
+  {
+    "question_id": "Q036",
+    "source_ids": [
+      "H01"
+    ],
+    "difficulty": "hard",
+    "category": "conditional_fee",
+    "question_ar": "إذا فقدت البطاقة الذكية للمرة الثالثة، كم قيمة الكفالة المالية وحدها؟",
+    "expected_answer_ar": "50 ديناراً كفالة مالية، غير رسوم الإصدار أو قيمة التعهدات السابقة التي قد تُستوفى وفق الشروط.",
+    "evidence_locator": "ملاحظات (المرة الثالثة)",
+    "notes": ""
+  },
+  {
+    "question_id": "Q037",
+    "source_ids": [
+      "H01"
+    ],
+    "difficulty": "hard",
+    "category": "conditional_fee",
+    "question_ar": "إذا فقدتها للمرة الثانية خلال أقل من ثلاث سنوات، هل تُقبل المعاملة دون دفع قيمة التعهد؟",
+    "expected_answer_ar": "لا؛ بحسب الملاحظة لا يقبل الطلب إلا بعد دفع قيمة التعهد الخطي (10 دنانير).",
+    "evidence_locator": "ملاحظات (المرة الثانية)",
+    "notes": ""
+  },
+  {
+    "question_id": "Q038",
+    "source_ids": [
+      "H01"
+    ],
+    "difficulty": "medium",
+    "category": "procedural_time",
+    "question_ar": "هل تُسلّم البطاقة الذكية بدل الفاقد فوراً بعد إبلاغ الشرطة؟",
+    "expected_answer_ar": "لا؛ الدليل يذكر أنها لا تُصرف إلا بعد أسبوعين من تاريخ إبلاغ الشرطة وبموافقة مدير المديرية.",
+    "evidence_locator": "ملاحظات",
+    "notes": ""
+  },
+  {
+    "question_id": "Q039",
+    "source_ids": [
+      "H02"
+    ],
+    "difficulty": "easy",
+    "category": "fee_lookup",
+    "question_ar": "كم رسوم إصدار البطاقة الشخصية الذكية لأول مرة؟",
+    "expected_answer_ar": "ديناران وفق دليل الخدمة.",
+    "evidence_locator": "الرسوم",
+    "notes": ""
+  },
+  {
+    "question_id": "Q040",
+    "source_ids": [
+      "H02"
+    ],
+    "difficulty": "hard",
+    "category": "conditional_fee",
+    "question_ar": "إذا بلغ المتقدم 18 عاماً ولم يصدر البطاقة الذكية، هل توجد غرامة تأخير في الدليل؟",
+    "expected_answer_ar": "نعم، يذكر الدليل غرامة تأخير 10 دنانير إذا أتم 18 عاماً ولم يصدر بطاقة شخصية.",
+    "evidence_locator": "الرسوم",
+    "notes": ""
+  },
+  {
+    "question_id": "Q041",
+    "source_ids": [
+      "H02"
+    ],
+    "difficulty": "medium",
+    "category": "conditional_documents",
+    "question_ar": "ما الشرط الإضافي للمتقدم لإصدار البطاقة الذكية أول مرة إذا كان دون 16 سنة؟",
+    "expected_answer_ar": "موافقة ولي الأمر.",
+    "evidence_locator": "الوثائق المطلوبة",
+    "notes": ""
+  },
+  {
+    "question_id": "Q042",
+    "source_ids": [
+      "H03"
+    ],
+    "difficulty": "easy",
+    "category": "fee_lookup",
+    "question_ar": "ما رسوم تجديد البطاقة الشخصية الذكية؟",
+    "expected_answer_ar": "ديناران وفق دليل التجديد.",
+    "evidence_locator": "الرسوم",
+    "notes": ""
+  },
+  {
+    "question_id": "Q043",
+    "source_ids": [
+      "H03"
+    ],
+    "difficulty": "medium",
+    "category": "conditional_documents",
+    "question_ar": "إذا كانت صورة الهوية القديمة غير واضحة عند التجديد، ما البديل لإثبات الشخصية؟",
+    "expected_answer_ar": "إثبات شخصية بجواز سفر أو إحضار معرف من الدرجة الأولى.",
+    "evidence_locator": "شروط تقديم الخدمة",
+    "notes": ""
+  },
+  {
+    "question_id": "Q044",
+    "source_ids": [
+      "H01",
+      "H02",
+      "H03"
+    ],
+    "difficulty": "hard",
+    "category": "cross_service_comparison",
+    "question_ar": "قارن الرسوم الأساسية لإصدار البطاقة الذكية أول مرة وتجديدها وبدل فاقد.",
+    "expected_answer_ar": "أول مرة: 2 دينار، التجديد: 2 دينار، بدل فاقد: 5 دنانير؛ وقد تضاف مبالغ مشروطة عند تكرار الفقد أو التأخر بحسب الدليل.",
+    "evidence_locator": "الرسوم في الصفحات الثلاث",
+    "notes": ""
+  },
+  {
+    "question_id": "Q045",
+    "source_ids": [
+      "P02",
+      "P03"
+    ],
+    "difficulty": "hard",
+    "category": "cross_service_disambiguation",
+    "question_ar": "بدي أسجل عقد إيجار لأول مرة، هل خدمة طلب صورة طبق الأصل هي نفسها؟",
+    "expected_answer_ar": "لا؛ تسجيل العقد أو ملحقه خدمة مستقلة (P03)، بينما الحصول على صورة طبق الأصل يفترض وجود عقد مصدق سابقاً (P02).",
+    "evidence_locator": "اسما الخدمتين وشروط كل واحدة",
+    "notes": ""
+  },
+  {
+    "question_id": "Q046",
+    "source_ids": [
+      "P04",
+      "P06"
+    ],
+    "difficulty": "hard",
+    "category": "cross_service_disambiguation",
+    "question_ar": "هل أوراق إثبات إغلاق المنشأة للإعفاء من رسوم النفايات هي نفس وثائق الإعفاء من رسوم رخصة المهن لسنوات سابقة؟",
+    "expected_answer_ar": "هما خدمتان مختلفتان. كلتاهما قد تطلب دليل كهرباء، لكن خدمة النفايات تذكر كشف الاستهلاك خلال الإغلاق، بينما إعفاء رسوم سنوات المهن يذكر كتاباً أو كشف فواتير يثبت فصل التيار أو عدم استهلاكه؛ يجب الالتزام بقائمة كل خدمة.",
+    "evidence_locator": "بطاقات خدمة النفايات ورسوم المهن",
+    "notes": ""
+  },
+  {
+    "question_id": "Q047",
+    "source_ids": [
+      "P07",
+      "P09"
+    ],
+    "difficulty": "hard",
+    "category": "cross_service_disambiguation",
+    "question_ar": "هل رد مبلغ مدفوع خطأ هو نفسه استرداد رسوم عند إلغاء ترخيص مقترح؟",
+    "expected_answer_ar": "لا؛ رد المبلغ المدفوع خطأ خدمة مستقلة، أما استرداد الرسوم بعد إلغاء ترخيص مقترح فمرتبط بموافقة الإلغاء وشروطه.",
+    "evidence_locator": "بطاقتا رد المبلغ وإلغاء الترخيص",
+    "notes": ""
+  },
+  {
+    "question_id": "Q048",
+    "source_ids": [
+      "P08"
+    ],
+    "difficulty": "hard",
+    "category": "abstention",
+    "question_ar": "هل رسوم التأمينات للانتخابات البرلمانية القادمة في 2028 ستكون 500 دينار؟",
+    "expected_answer_ar": "لا يمكن الجزم من بطاقة انتخابات 2024 بقيمة أو قواعد انتخابات 2028؛ لا توجد أدلة كافية في هذه الوثيقة.",
+    "evidence_locator": "بطاقة خدمة انتخابات 2024",
+    "notes": ""
+  },
+  {
+    "question_id": "Q049",
+    "source_ids": [
+      "H02"
+    ],
+    "difficulty": "hard",
+    "category": "abstention",
+    "question_ar": "هل يمكن إصدار البطاقة الذكية أول مرة عن طريق واتساب دون مراجعة المكتب؟",
+    "expected_answer_ar": "الدليل لا يذكر قناة واتساب، فلا يمكن الجزم بإتاحتها اعتماداً على هذه الوثائق.",
+    "evidence_locator": "القنوات المذكورة في دليل أول إصدار",
+    "notes": ""
+  },
+  {
+    "question_id": "Q050",
+    "source_ids": [
+      "P03"
+    ],
+    "difficulty": "hard",
+    "category": "abstention",
+    "question_ar": "هل يعفى عقد الإيجار إذا كان أحد الأطراف طالباً جامعياً من الرسوم؟",
+    "expected_answer_ar": "لا تتضمن بطاقة تسجيل العقد المعتمدة في الاختبار حكماً بهذا الإعفاء، فلا يمكن إثباته من الوثيقة.",
+    "evidence_locator": "بطاقة تسجيل عقد إيجار",
+    "notes": ""
+  }
+]

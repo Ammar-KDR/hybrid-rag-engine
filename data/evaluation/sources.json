@@ -1,0 +1,119 @@
+[
+  {
+    "source_id": "P01",
+    "title_ar": "إصدار كرت اتجاه لوسائط النقل العام",
+    "format": "pdf",
+    "url": "https://www.ammancity.gov.jo/ar/gameservices/docs/daleeldepts/14.pdf?23332=",
+    "group": "core",
+    "notes": "صفحتان؛ رسوم مختلفة وغرامات تأخير حسب فئة المركبة.",
+    "local_filename": "P01.pdf"
+  },
+  {
+    "source_id": "P02",
+    "title_ar": "طلب صورة طبق الأصل من عقد الإيجار",
+    "format": "pdf",
+    "url": "https://www.ammancity.gov.jo/ar/gameservices/docs/daleeldepts/121.pdf?23332=",
+    "group": "core",
+    "notes": "صفحة واحدة؛ يشترط تصديق عقد الإيجار مسبقاً؛ رسم طوابع 1 دينار.",
+    "local_filename": "P02.pdf"
+  },
+  {
+    "source_id": "P03",
+    "title_ar": "تسجيل وتصديق عقد إيجار أو ملحق",
+    "format": "pdf",
+    "url": "https://www.ammancity.gov.jo/ar/gameservices/docs/daleeldepts/52.pdf?23332=",
+    "group": "core",
+    "notes": "صفحتان؛ شروط الملكية المشتركة وملحق العقد ورسوم نسبية.",
+    "local_filename": "P03.pdf"
+  },
+  {
+    "source_id": "P04",
+    "title_ar": "طلب الإعفاء من رسوم نقل وطمر النفايات",
+    "format": "pdf",
+    "url": "https://www.ammancity.gov.jo/ar/gameservices/docs/daleeldepts/84.pdf?23332=",
+    "group": "core",
+    "notes": "صفحتان؛ وثائق مختلفة باختلاف سبب الإعفاء.",
+    "local_filename": "P04.pdf"
+  },
+  {
+    "source_id": "P05",
+    "title_ar": "كف الطلب عن مخالفات البيع العشوائي",
+    "format": "pdf",
+    "url": "https://www.ammancity.gov.jo/ar/gameservices/docs/daleeldepts/92.pdf?23332=",
+    "group": "core",
+    "notes": "صفحة واحدة؛ فصل رسوم الخدمة عن قيمة المخالفة.",
+    "local_filename": "P05.pdf"
+  },
+  {
+    "source_id": "P06",
+    "title_ar": "ملف الخدمات 130: إعفاء من رسوم سابقة وإصدار رخصة مهن وغيرها",
+    "format": "pdf",
+    "url": "https://www.ammancity.gov.jo/ar/gameservices/docs/daleeldepts/130.pdf?23332=",
+    "group": "stress",
+    "notes": "ملف يتضمن معلومات عن أكثر من خدمة بحسب الفهرسة؛ اختبر الفصل بين الخدمات.",
+    "local_filename": "P06.pdf"
+  },
+  {
+    "source_id": "P07",
+    "title_ar": "طلب رد مبلغ مدفوع بالخطأ",
+    "format": "pdf",
+    "url": "https://www.ammancity.gov.jo/ar/gameservices/docs/daleeldepts/138.pdf?23332=",
+    "group": "core",
+    "notes": "يشمل شيك استرداد ومدة صلاحية، وهو مستقل عن إعفاء رسوم سابقة.",
+    "local_filename": "P07.pdf"
+  },
+  {
+    "source_id": "P08",
+    "title_ar": "طلب دفع تأمينات الترشح للانتخابات البرلمانية",
+    "format": "pdf",
+    "url": "https://www.ammancity.gov.jo/ar/gameservices/docs/daleeldepts/300.pdf?23332=",
+    "group": "core",
+    "notes": "بطاقة مؤرخة مرتبطة بفترة الترشح للانتخابات البرلمانية 2024.",
+    "local_filename": "P08.pdf"
+  },
+  {
+    "source_id": "P09",
+    "title_ar": "ملف تراخيص الأبنية: عدة بطاقات منها إلغاء ترخيص مقترح",
+    "format": "pdf",
+    "url": "https://www.ammancity.gov.jo/ar/gameservices/docs/daleeldepts/131.pdf?23332=",
+    "group": "stress",
+    "notes": "12 صفحة؛ خدمة إلغاء ترخيص مقترح في صفحة 11 تقريباً؛ يفصل بين الخدمات.",
+    "local_filename": "P09.pdf"
+  },
+  {
+    "source_id": "P10",
+    "title_ar": "ملف خدمات GIS وطلب خرائط وبيانات جغرافية",
+    "format": "pdf",
+    "url": "https://www.ammancity.gov.jo/ar/gameservices/docs/daleeldepts/134.pdf?23332=",
+    "group": "stress",
+    "notes": "7 صفحات؛ خصومات مختلفة لخارطة بحثية وبيانات رقمية للطلاب.",
+    "local_filename": "P10.pdf"
+  },
+  {
+    "source_id": "H01",
+    "title_ar": "البطاقة الذكية بدل فاقد",
+    "format": "html",
+    "url": "https://www.cspd.gov.jo/AR/ListDetails/_%D8%AF%D9%84%D9%8A%D9%84__%D8%A7%D9%84%D8%AE%D8%AF%D9%85%D8%A7%D8%AA/41/32",
+    "group": "core",
+    "notes": "مصدر رسمي لدائرة الأحوال؛ المرة الثالثة والتعهدات والكفالة.",
+    "local_filename": "H01.html"
+  },
+  {
+    "source_id": "H02",
+    "title_ar": "إصدار البطاقة الذكية لأول مرة",
+    "format": "html",
+    "url": "https://www.cspd.gov.jo/AR/ListDetails/_%D8%AF%D9%84%D9%8A%D9%84__%D8%A7%D9%84%D8%AE%D8%AF%D9%85%D8%A7%D8%AA/41/34",
+    "group": "core",
+    "notes": "مصدر رسمي؛ رسوم وغرامة تأخير للعمر المذكور.",
+    "local_filename": "H02.html"
+  },
+  {
+    "source_id": "H03",
+    "title_ar": "تجديد البطاقة الذكية",
+    "format": "html",
+    "url": "https://www.cspd.gov.jo/AR/ListDetails/_%D8%AF%D9%84%D9%8A%D9%84__%D8%A7%D9%84%D8%AE%D8%AF%D9%85%D8%A7%D8%AA/41/36",
+    "group": "core",
+    "notes": "مصدر رسمي؛ إثباتات التجديد والرسوم.",
+    "local_filename": "H03.html"
+  }
+]

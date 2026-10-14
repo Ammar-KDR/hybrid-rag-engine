@@ -95,14 +95,12 @@ class RankFusionReranker:
         # Run the normal cross-encoder reranker across ALL
         # candidates.
         #
-        # We explicitly request len(candidates), because the
-        # fusion stage needs every candidate's CE rank.
-        # --------------------------------------------------
-
+        # Cap candidate pool for cross-encoder on CPU to maintain sub-5s latency
+        rerank_pool = candidates[: max(top_k + 3, 8)]
         ce_results = self.reranker.rerank(
             query=query,
-            candidates=candidates,
-            top_k=len(candidates),
+            candidates=rerank_pool,
+            top_k=len(rerank_pool),
         )
 
 

@@ -1,4 +1,6 @@
 from pathlib import Path
+import re
+import unicodedata
 
 from bs4 import BeautifulSoup
 from pypdf import PdfReader
@@ -14,11 +16,36 @@ from .table_serializer import (
 SUPPORTED_EXTENSIONS = {".txt", ".md", ".html", ".htm", ".pdf", ".docx"}
 
 
+MUNICIPAL_FONT_REPAIRS = [
+    (re.compile(r"الراض\s*ي?اء"), "الكهرباء"),
+    (re.compile(r"\bة\s+الكهرباء"), "شركة الكهرباء"),
+    (re.compile(r"\bشيف\b"), "كشف"),
+    (re.compile(r"\bاسيباة\b"), "استهلاك"),
+    (re.compile(r"\bاالدة\b"), "الإغلاق"),
+    (re.compile(r"ادة\s+المنش"), "إغلاق المنشأة"),
+    (re.compile(r"\bادلق\b"), "أغلق"),
+    (re.compile(r"\bمب\s*اقد\b"), "متعاقد"),
+    (re.compile(r"\bال\s*قيد\b"), "العقد"),
+    (re.compile(r"\bت\s*ااقد\b"), "تعاقد"),
+    (re.compile(r"ر\s*ي(?:ة)?\s+الماين"), "رخصة المهن"),
+    (re.compile(r"بيا\s+ت\s*طنية"), "كتاب تغطية"),
+    (re.compile(r"الوصيوالت\s+المالنية"), "الوصلات المالية"),
+    (re.compile(r"شيف\s+أيا"), "كشف حساب"),
+    (re.compile(r"ال\s*ي\s*ة\s+الناقلية?"), "الشركة الناقلة"),
+    (re.compile(r"\bأعما\b"), "الأعمال"),
+    (re.compile(r"مؤسأات\s+نراية"), "مؤسسات فردية"),
+    (re.compile(r"م\s*اتب\s+ماننة"), "مكاتب مهنية"),
+    (re.compile(r"المناطق\s+ال\s*ر"), "المناطق الحرة"),
+    (re.compile(r"جم\s*نات\s+ت\s*اوننة"), "جمعيات تعاونية"),
+]
+
+
 def normalize_text(text: str) -> str:
     """
     Normalize line endings and Unicode canonical compatibility (NFKC).
     Converts Arabic presentation forms / ligatures to standard Unicode characters,
-    fixes reversed visual Arabic from government PDF exporters, and strips excessive tatweels.
+    fixes reversed visual Arabic from government PDF exporters, strips excessive tatweels,
+    and repairs known PDF font encoding corruptions.
     """
     import unicodedata
     import re
@@ -33,6 +60,8 @@ def normalize_text(text: str) -> str:
     # Strip tatweel and collapse excessive repeated letters (>=3 repetitions)
     text = re.sub(r"ـ+", "", text)
     text = re.sub(r"([\u0600-\u06FF])\1{2,}", r"\1", text)
+    for pattern, repl in MUNICIPAL_FONT_REPAIRS:
+        text = pattern.sub(repl, text)
     return text.strip()
 
 
@@ -53,9 +82,12 @@ def load_html_document(path: Path) -> list[Document]:
 
     soup = BeautifulSoup(html, "lxml")
 
-    # These normally don't contain useful knowledge for our corpus.
-    for element in soup(["script", "style", "noscript"]):
+    # Decompose non-content elements and website boilerplate
+    for element in soup(["script", "style", "noscript", "meta", "link", "input", "nav", "header", "footer"]):
         element.decompose()
+    for sel in [".mean-container", ".mobile-menu", ".top-header", ".main-header", ".footer", ".breadcrumb"]:
+        for el in soup.select(sel):
+            el.decompose()
 
     text = soup.get_text(separator="\n", strip=True)
 
