@@ -52,10 +52,35 @@ HIGH_CONTRAST_PSUT_CSS = """
     border-right: 1.5px solid #E2E8F0 !important;
 }
 
-/* Hide default streamlit headers and footer */
+/* Hide default streamlit headers and footer while keeping collapsedControl visible */
 #MainMenu {visibility: hidden;}
 footer {visibility: hidden;}
-header {visibility: hidden;}
+header {
+    background: transparent !important;
+}
+
+[data-testid="collapsedControl"] {
+    visibility: visible !important;
+    display: flex !important;
+    color: #002D62 !important;
+    background-color: #FFFFFF !important;
+    border: 1.5px solid #CBD5E1 !important;
+    border-radius: 8px !important;
+    margin: 8px 12px !important;
+    box-shadow: 0 2px 6px rgba(0, 45, 98, 0.08) !important;
+    transition: all 140ms ease !important;
+    z-index: 999999 !important;
+}
+
+[data-testid="collapsedControl"]:hover {
+    border-color: #002D62 !important;
+    background-color: #EFF6FF !important;
+    box-shadow: 0 4px 10px rgba(0, 45, 98, 0.14) !important;
+}
+
+[data-testid="stSidebarCollapseButton"] button {
+    color: #002D62 !important;
+}
 
 /* Universal text visibility overrides - High Contrast */
 h1, h2, h3, h4, h5, h6 {
@@ -605,6 +630,44 @@ li[role="option"][aria-selected="true"],
     background-color: #EFF6FF !important;
     color: #002D62 !important;
 }
+
+/* Sidebar Feature Navigation Radio Cards */
+[data-testid="stSidebar"] [data-testid="stRadio"] > div {
+    gap: 8px !important;
+}
+
+[data-testid="stSidebar"] [data-testid="stRadio"] label {
+    background: #FFFFFF !important;
+    border: 1.5px solid #CBD5E1 !important;
+    border-radius: 8px !important;
+    padding: 10px 14px !important;
+    transition: all 140ms ease !important;
+    cursor: pointer !important;
+    width: 100% !important;
+    box-shadow: 0 1px 3px rgba(0, 45, 98, 0.03) !important;
+}
+
+[data-testid="stSidebar"] [data-testid="stRadio"] label:hover {
+    background: #EFF6FF !important;
+    border-color: #002D62 !important;
+    box-shadow: 0 2px 6px rgba(0, 45, 98, 0.08) !important;
+    transform: translateY(-1px);
+}
+
+[data-testid="stSidebar"] [data-testid="stRadio"] label[data-checked="true"],
+[data-testid="stSidebar"] [data-testid="stRadio"] label:has(input:checked) {
+    background: #EFF6FF !important;
+    border-color: #002D62 !important;
+    border-left: 4px solid #002D62 !important;
+    box-shadow: 0 0 0 2px rgba(0, 45, 98, 0.12) !important;
+}
+
+[data-testid="stSidebar"] [data-testid="stRadio"] label p {
+    color: #002D62 !important;
+    font-weight: 700 !important;
+    font-size: 0.88rem !important;
+    margin: 0 !important;
+}
 </style>
 """
 
@@ -1113,6 +1176,31 @@ with st.sidebar:
     if is_ar:
         st.markdown(ARABIC_RTL_CSS, unsafe_allow_html=True)
 
+    # Feature Navigation Menu
+    st.markdown(
+        f'<div class="sidebar-section-title">{"🧭 اختيار الوظيفة والميزة" if is_ar else "🧭 Feature & Module Selection"}</div>',
+        unsafe_allow_html=True,
+    )
+    feature_labels = [
+        "🔍 المحادثة ومستكشف الأدلة" if is_ar else "🔍 Interactive Chat & Evidence",
+        "⚖️ محقق تعارض وتناقض الوثائق" if is_ar else "⚖️ Document Conflict Detective",
+        "📋 الإيجاز والتقارير التنفيذية" if is_ar else "📋 Executive Briefings & Reports",
+        "📁 مستودع المعرفة والتشخيص الفني" if is_ar else "📁 Knowledge Repository & Diagnostics",
+    ]
+
+    if "selected_feature_idx" not in st.session_state:
+        st.session_state["selected_feature_idx"] = 0
+
+    selected_feature_idx = st.radio(
+        "اختر الميزة" if is_ar else "Select Feature",
+        options=list(range(len(feature_labels))),
+        format_func=lambda idx: feature_labels[idx],
+        index=st.session_state["selected_feature_idx"],
+        key="feature_selector_radio",
+        label_visibility="collapsed",
+    )
+    st.session_state["selected_feature_idx"] = selected_feature_idx
+
     st.markdown(
         f'<div class="sidebar-section-title">{"حالة الأنظمة السيادية" if is_ar else "System Status"}</div>',
         unsafe_allow_html=True,
@@ -1247,24 +1335,37 @@ else:
 
 
 # =========================================================
-# Top-Level Institutional Tabs
+# Active Feature Workspace
 # =========================================================
 
-tab_titles = [
-    "🔍 المحادثة التفاعلية ومستكشف الأدلة" if is_ar else "🔍 Interactive Chat & Evidence",
-    "⚖️ محقق تعارض وتناقض الوثائق" if is_ar else "⚖️ Document Conflict Detective",
-    "📋 الإيجازات والتقارير التنفيذية" if is_ar else "📋 Executive Briefings",
-    "📁 مستودع المعرفة والتشخيص الفني" if is_ar else "📁 Knowledge Repository & Diagnostics",
+feature_headers = [
+    ("🔍 المحادثة التفاعلية ومستكشف الأدلة الرسمية", "🔍 Interactive Chat & Grounded Evidence Explorer"),
+    ("⚖️ محقق تعارض وتناقض الوثائق والسياسات", "⚖️ Document Conflict & Policy Discrepancy Detective"),
+    ("📋 الإيجاز والاستخبارات التنفيذية متعددة الوثائق", "📋 Multi-Document Executive Briefing & Intelligence Reports"),
+    ("📁 مستودع المعرفة السيادي والتشخيص الفني", "📁 Sovereign Knowledge Repository & Live System Diagnostics"),
 ]
 
-tab_qa, tab_compare, tab_briefing, tab_repo = st.tabs(tab_titles)
+cur_header = feature_headers[selected_feature_idx][0] if is_ar else feature_headers[selected_feature_idx][1]
 
+st.markdown(
+    f"""
+    <div style="display:flex; justify-content:space-between; align-items:center; background:#FFFFFF; border:1.5px solid #CBD5E1; border-top:4px solid #002D62; border-radius:10px; padding:12px 20px; margin-bottom:20px; box-shadow:0 2px 8px rgba(0,45,98,0.04); flex-wrap:wrap; gap:8px;">
+        <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-size:1.12rem; font-weight:800; color:#002D62;">{cur_header}</span>
+        </div>
+        <span style="font-size:0.78rem; font-weight:700; color:#64748B; background:#F8FAFC; padding:4px 10px; border-radius:6px; border:1px solid #E2E8F0;">
+            {'💡 يمكنك تصغير الشريط الجانبي (◀) لتوسيع مساحة العمل' if is_ar else '💡 Tip: Collapse side panel (◀) for maximum full-width view'}
+        </span>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
 # =========================================================
-# TAB 1: INTERACTIVE CHAT & EVIDENCE EXPLORER
+# FEATURE 1: INTERACTIVE CHAT & EVIDENCE EXPLORER
 # =========================================================
 
-with tab_qa:
+if selected_feature_idx == 0:
     # Preset Starter Inquiries
     if is_ar:
         st.markdown(
@@ -1580,10 +1681,10 @@ with tab_qa:
 
 
 # =========================================================
-# TAB 2: DOCUMENT CONFLICT DETECTIVE (STAR DEMO FEATURE)
+# FEATURE 2: DOCUMENT CONFLICT DETECTIVE (STAR DEMO FEATURE)
 # =========================================================
 
-with tab_compare:
+elif selected_feature_idx == 1:
     st.subheader("⚖️ محقق تعارض وتناقض الوثائق والسياسات" if is_ar else "⚖️ Document Conflict Detective")
     st.caption(
         "مقارنة دقيقة ومعزولة بين وثيقتين لاكتشاف التناقضات أو الفروقات الإجرائية أو التوافق التام."
@@ -1807,10 +1908,10 @@ with tab_compare:
 
 
 # =========================================================
-# TAB 3: EXECUTIVE BRIEFINGS (MULTI-DOC MAP-REDUCE)
+# FEATURE 3: EXECUTIVE BRIEFINGS (MULTI-DOC MAP-REDUCE)
 # =========================================================
 
-with tab_briefing:
+elif selected_feature_idx == 2:
     st.subheader("📋 الإيجاز والتقارير التنفيذية متعددة الوثائق" if is_ar else "📋 Multi-Document Executive Briefing")
     st.caption(
         "توليد إيجاز تركيبي استراتيجي يغطي عدة وثائق حكومية مع تصنيف النتائج وتوثيق المراجع."
@@ -2052,10 +2153,10 @@ with tab_briefing:
 
 
 # =========================================================
-# TAB 4: KNOWLEDGE REPOSITORY & SYSTEM DIAGNOSTICS
+# FEATURE 4: KNOWLEDGE REPOSITORY & SYSTEM DIAGNOSTICS
 # =========================================================
 
-with tab_repo:
+elif selected_feature_idx == 3:
     st.subheader("📁 مستودع المعرفة السيادي والتشخيص الفني" if is_ar else "📁 Sovereign Knowledge Repository & Diagnostics")
     st.caption("دليل البيانات المحلي المعزول، وفهرسة الوثائق، وتتبع سلامة البنية التحتية المحلية." if is_ar else "Air-gapped data catalog, document ingestion, and live local infrastructure diagnostics.")
 
