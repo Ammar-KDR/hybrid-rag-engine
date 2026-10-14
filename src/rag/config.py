@@ -57,13 +57,6 @@ class Settings:
         "local",
     ).lower()
 
-    QDRANT_LOCAL_PATH = Path(
-        os.getenv(
-            "QDRANT_LOCAL_PATH",
-            "data/qdrant_storage",
-        )
-    )
-
     # ============================================================
     # Models
     # ============================================================
@@ -78,26 +71,63 @@ class Settings:
         "BAAI/bge-reranker-v2-m3",
     )
 
-    DATA_PATH = Path(
-        os.getenv(
-            "DATA_PATH",
-            "data/raw",
-        )
+    # ============================================================
+    # Hackathon Corpus Root & Isolation Profile
+    # ============================================================
+    _corpus_root = os.getenv("HACKATHON_CORPUS_ROOT")
+
+    DATA_PATH = (
+        Path(_corpus_root) / "raw"
+        if _corpus_root
+        else Path(os.getenv("DATA_PATH", "data/raw"))
     )
 
-    CHUNK_STORE_PATH = Path(
-        os.getenv(
-            "CHUNK_STORE_PATH",
-            "data/indexes/chunks.jsonl",
-        )
+    CHUNK_STORE_PATH = (
+        Path(_corpus_root) / "indexes/chunks.jsonl"
+        if _corpus_root
+        else Path(os.getenv("CHUNK_STORE_PATH", "data/indexes/chunks.jsonl"))
     )
 
-    REGISTRY_PATH = Path(
-        os.getenv(
-            "REGISTRY_PATH",
-            "data/registry.json",
-        )
+    REGISTRY_PATH = (
+        Path(_corpus_root) / "registry.json"
+        if _corpus_root
+        else Path(os.getenv("REGISTRY_PATH", "data/registry.json"))
     )
+
+    SERVICES_MANIFEST_PATH = (
+        Path(_corpus_root) / "services_manifest.json"
+        if _corpus_root
+        else Path(os.getenv("SERVICES_MANIFEST_PATH", "data/services_manifest.json"))
+    )
+
+    QDRANT_LOCAL_PATH = (
+        Path(_corpus_root) / "qdrant_storage"
+        if _corpus_root
+        else Path(os.getenv("QDRANT_LOCAL_PATH", "data/qdrant_storage"))
+    )
+
+    # ============================================================
+    # Competition Accuracy & Grounding Modes
+    # ============================================================
+    GOV_SERVICE_MODE = os.getenv(
+        "GOV_SERVICE_MODE", "true"
+    ).lower() in ("true", "1", "yes")
+
+    STRICT_CITATIONS = os.getenv(
+        "STRICT_CITATIONS", "true"
+    ).lower() in ("true", "1", "yes")
+
+    ENABLE_CHARTS = os.getenv(
+        "ENABLE_CHARTS", "false"
+    ).lower() in ("true", "1", "yes")
+
+    OCR_ENABLED = os.getenv(
+        "OCR_ENABLED", "false"
+    ).lower() in ("true", "1", "yes")
+
+    RERANKER_ENABLED = os.getenv(
+        "RERANKER_ENABLED", "true"
+    ).lower() in ("true", "1", "yes")
 
     LOG_LEVEL = os.getenv(
         "LOG_LEVEL",
