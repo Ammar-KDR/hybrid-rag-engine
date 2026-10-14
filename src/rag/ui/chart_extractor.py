@@ -237,3 +237,10 @@ def extract_all_charts(text: str, is_ar: bool = True) -> tuple[str, list[dict[st
     # Heuristic fallback: check markdown tables
     table_charts = extract_charts_from_markdown_table(clean_text, is_ar=is_ar)
     return clean_text, table_charts
+
+
+def extract_chart_spec(text: str, is_ar: bool = True) -> tuple[str, dict[str, Any] | None]:
+    """Backward-compatible helper returning the first extracted chart or None."""
+    clean_text, charts = extract_all_charts(text, is_ar=is_ar)
+    return clean_text, charts[0] if charts else None
+

@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 
 from rag.ui.client import RAGAPIClient
 from rag.nlp.arabic import is_arabic_text
-from rag.ui.chart_extractor import extract_all_charts
+from rag.ui.chart_extractor import extract_all_charts, extract_chart_spec
 
 load_dotenv()
 
@@ -1122,6 +1122,12 @@ def render_charts(charts: list[dict], is_ar: bool = False):
             render_single_chart(chart, is_ar=is_ar, color=colors[idx % len(colors)])
 
 
+def render_chart_spec(chart_spec: dict, is_ar: bool = False):
+    """Backward-compatible helper to render a single chart spec."""
+    if chart_spec:
+        render_single_chart(chart_spec, is_ar=is_ar)
+
+
 def generate_executive_brief_export(
     question: str,
     result: dict,
@@ -2020,7 +2026,7 @@ elif selected_feature_idx == 2:
                     analyzed_label = "تم التحليل عبر" if is_ar else "Analyzed across"
                     docs_label = "وثائق رسمية:" if is_ar else "documents:"
 
-                    clean_exec_summary, brief_chart_spec = extract_chart_spec(brief_res.get("executive_summary", ""))
+                    clean_exec_summary, brief_charts = extract_all_charts(brief_res.get("executive_summary", ""), is_ar=is_ar)
 
                     st.markdown(
                         f"""
@@ -2040,8 +2046,8 @@ elif selected_feature_idx == 2:
                     )
 
                     # Dynamic comparative chart in summary if present
-                    if brief_chart_spec:
-                        render_chart_spec(brief_chart_spec, is_ar=is_ar)
+                    if brief_charts:
+                        render_charts(brief_charts, is_ar=is_ar)
 
                     # Findings List & Category Visualization
                     findings = brief_res.get("findings", [])
