@@ -1392,31 +1392,6 @@ if logo_b64:
 else:
     st.title("🏛️ جامعة الأميرة سمية للتكنولوجيا - الذكاء الاصطناعي السيادي" if is_ar else "🏛️ PSUT Sovereign Hybrid RAG")
 
-# Trust Badges
-if is_ar:
-    st.markdown(
-        """
-        <div class="badge-row">
-            <span class="trust-badge badge-green">🛡️ صفر تسريب سحابي (ZERO EXFILTRATION)</span>
-            <span class="trust-badge badge-navy">🏛️ معايير الحوكمة والامتثال الحكومي</span>
-            <span class="trust-badge badge-blue">⚡ استرجاع هجين RRF + معيد ترتيب BGE</span>
-            <span class="trust-badge badge-amber">🧠 توليد محلي عالي الدقة QWEN 3.5 4B</span>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-else:
-    st.markdown(
-        """
-        <div class="badge-row">
-            <span class="trust-badge badge-green">🛡️ ZERO CLOUD EXFILTRATION</span>
-            <span class="trust-badge badge-navy">🏛️ GOVERNMENT COMPLIANCE & AUDIT</span>
-            <span class="trust-badge badge-blue">⚡ HYBRID RRF + BGE CROSS-ENCODER</span>
-            <span class="trust-badge badge-amber">🧠 LOCAL HIGH-PRECISION QWEN 3.5 4B</span>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
 
 
 # =========================================================
