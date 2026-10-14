@@ -65,6 +65,48 @@ def remove_tatweel(text: str) -> str:
     return TATWEEL_REGEX.sub("", text)
 
 
+def fix_visual_arabic(text: str) -> str:
+    """Detects and fixes reversed visual-order Arabic text common in exported government PDFs.
+
+    In visual Arabic encoding (e.g., from certain government form generators), words are
+    stored backwards (e.g., 'ةمدخلا' instead of 'الخدمة').
+    Since no valid Arabic word ever starts with Taa Marbuta ('ة'), its presence at the start
+    of words is a definitive indicator of visual byte reversal.
+    """
+    if not text:
+        return text
+
+    lines = text.split("\n")
+    fixed_lines = []
+    for line in lines:
+        words = line.split()
+        if not words:
+            fixed_lines.append(line)
+            continue
+
+        arabic_words = [w for w in words if ARABIC_CHAR_REGEX.search(w)]
+        if not arabic_words:
+            fixed_lines.append(line)
+            continue
+
+        # Indicator: Arabic word starting with Taa Marbuta
+        has_reversed_indicator = any(
+            w.startswith(("ة", "ـة")) for w in arabic_words
+        )
+        if has_reversed_indicator:
+            corrected_words = []
+            for w in words:
+                if ARABIC_CHAR_REGEX.search(w):
+                    corrected_words.append(w[::-1])
+                else:
+                    corrected_words.append(w)
+            fixed_lines.append(" ".join(reversed(corrected_words)))
+        else:
+            fixed_lines.append(line)
+
+    return "\n".join(fixed_lines)
+
+
 def normalize_arabic(text: str) -> str:
     """
     Standardizes Arabic text variations:

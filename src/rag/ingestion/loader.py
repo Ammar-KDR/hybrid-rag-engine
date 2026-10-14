@@ -17,16 +17,23 @@ SUPPORTED_EXTENSIONS = {".txt", ".md", ".html", ".htm", ".pdf", ".docx"}
 def normalize_text(text: str) -> str:
     """
     Normalize line endings and Unicode canonical compatibility (NFKC).
-    Converts Arabic presentation forms / ligatures to standard Unicode characters.
+    Converts Arabic presentation forms / ligatures to standard Unicode characters,
+    fixes reversed visual Arabic from government PDF exporters, and strips excessive tatweels.
     """
     import unicodedata
+    import re
+    from rag.nlp.arabic import fix_visual_arabic
 
-    return (
+    text = (
         unicodedata.normalize("NFKC", text)
         .replace("\r\n", "\n")
         .replace("\r", "\n")
-        .strip()
     )
+    text = fix_visual_arabic(text)
+    # Strip tatweel and collapse excessive repeated letters (>=3 repetitions)
+    text = re.sub(r"ـ+", "", text)
+    text = re.sub(r"([\u0600-\u06FF])\1{2,}", r"\1", text)
+    return text.strip()
 
 
 def load_text_document(path: Path) -> list[Document]:

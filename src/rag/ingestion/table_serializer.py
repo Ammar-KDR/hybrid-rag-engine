@@ -5,6 +5,7 @@ guaranteeing that fees, SLAs, and conditions remain strictly bound to their corr
 """
 
 from typing import Any
+from rag.nlp.arabic import fix_visual_arabic
 
 
 def serialize_table_to_records(
@@ -18,7 +19,10 @@ def serialize_table_to_records(
     [جدول 1]
     الخدمة: إصدار بدل فاقد | المرة الأولى: 10 دنانير | المرة الثانية: 50 دينار
     """
-    clean_headers = [str(h).strip().replace("\n", " ") if h else f"عمود {i+1}" for i, h in enumerate(headers)]
+    clean_headers = [
+        fix_visual_arabic(str(h).strip().replace("\n", " ")) if h else f"عمود {i+1}"
+        for i, h in enumerate(headers)
+    ]
     
     serialized_lines = [f"[جدول {table_index}]"]
     
@@ -26,7 +30,7 @@ def serialize_table_to_records(
     for row in rows:
         row_parts = []
         for h, cell in zip(clean_headers, row):
-            c_text = str(cell).strip().replace("\n", " ") if cell is not None else ""
+            c_text = fix_visual_arabic(str(cell).strip().replace("\n", " ")) if cell is not None else ""
             if c_text:
                 if h:
                     row_parts.append(f"{h}: {c_text}")

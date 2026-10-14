@@ -2231,17 +2231,15 @@ elif selected_feature_idx == 3:
                 chunk_cnt = result.get("chunk_count", 0)
                 if result.get("duplicate"):
                     st.info(
-                        f"ℹ️ الوثيقة <code dir='ltr'>{uploaded_file.name}</code> مفهرسة مسبقاً ({chunk_cnt} مقطع). جاهزة للبحث والمقارنة والإيجاز!"
+                        f"ℹ️ الوثيقة `{uploaded_file.name}` مفهرسة مسبقاً ({chunk_cnt} مقطع). جاهزة للبحث والمقارنة والإيجاز!"
                         if is_ar
-                        else f"ℹ️ Document <code dir='ltr'>{uploaded_file.name}</code> is already indexed ({chunk_cnt} chunks). Ready for search, conflict detection, and briefings!",
-                        unsafe_allow_html=True,
+                        else f"ℹ️ Document `{uploaded_file.name}` is already indexed ({chunk_cnt} chunks). Ready for search, conflict detection, and briefings!"
                     )
                 else:
                     st.success(
-                        f"✅ تمت فهرسة وثيقة <code dir='ltr'>{uploaded_file.name}</code> بنجاح بعدد ({chunk_cnt} مقطع)!"
+                        f"✅ تمت فهرسة وثيقة `{uploaded_file.name}` بنجاح بعدد ({chunk_cnt} مقطع)!"
                         if is_ar
-                        else f"✅ Successfully indexed <code dir='ltr'>{uploaded_file.name}</code> ({chunk_cnt} chunks) into the vector store!",
-                        unsafe_allow_html=True,
+                        else f"✅ Successfully indexed `{uploaded_file.name}` ({chunk_cnt} chunks) into the vector store!"
                     )
                     st.session_state["documents"] = client.list_documents()
                     st.rerun()
