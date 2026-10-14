@@ -1344,14 +1344,6 @@ if logo_b64:
                             </div>
                         </div>
                     </div>
-                    <div style="display:flex; flex-direction:column; align-items:flex-start; gap:6px;">
-                        <span style="background:#ECFDF5; color:#047857; font-size:0.75rem; font-weight:800; padding:5px 12px; border-radius:6px; border:1px solid #A7F3D0; letter-spacing:0.03em;">
-                            🔒 بيئة سيادية معزولة 100% (AIR-GAPPED)
-                        </span>
-                        <span style="background:#EFF6FF; color:#1E40AF; font-size:0.75rem; font-weight:700; padding:5px 12px; border-radius:6px; border:1px solid #BFDBFE;">
-                            ⚡ تسريع محلي كارت الشاشة RTX 3060 CUDA
-                        </span>
-                    </div>
                 </div>
             </div>
             """,
@@ -1375,14 +1367,6 @@ if logo_b64:
                                 100% Air-Gapped Local Infrastructure • Sovereign Public Services • Verifiable Evidence
                             </div>
                         </div>
-                    </div>
-                    <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px;">
-                        <span style="background:#ECFDF5; color:#047857; font-size:0.75rem; font-weight:800; padding:5px 12px; border-radius:6px; border:1px solid #A7F3D0; letter-spacing:0.03em;">
-                            🔒 100% AIR-GAPPED SOVEREIGN
-                        </span>
-                        <span style="background:#EFF6FF; color:#1E40AF; font-size:0.75rem; font-weight:700; padding:5px 12px; border-radius:6px; border:1px solid #BFDBFE;">
-                            ⚡ RTX 3060 CUDA ACCELERATED
-                        </span>
                     </div>
                 </div>
             </div>
