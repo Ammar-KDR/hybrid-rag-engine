@@ -6,6 +6,7 @@ import textwrap
 import time
 from datetime import datetime
 from pathlib import Path
+import altair as alt
 import pandas as pd
 import streamlit as st
 from dotenv import load_dotenv
@@ -957,8 +958,32 @@ def build_chunk_text_map(trace: dict | None, evidence_list: list | None = None) 
     return chunk_map
 
 
+def wrap_label_multiline(text: str, max_chars_per_line: int = 16) -> str | list[str]:
+    """Wraps label words into multiple lines for Vega-Lite underneath rendering."""
+    text = re.sub(r"[*_`]", "", str(text)).strip()
+    if len(text) <= max_chars_per_line:
+        return text
+    words = text.split()
+    lines = []
+    cur_line = []
+    cur_len = 0
+    for w in words:
+        if cur_len + len(w) > max_chars_per_line and cur_line:
+            lines.append(" ".join(cur_line))
+            cur_line = [w]
+            cur_len = len(w)
+        else:
+            cur_line.append(w)
+            cur_len += len(w) + 1
+    if cur_line:
+        lines.append(" ".join(cur_line))
+    if len(lines) > 3:
+        lines = lines[:2] + ["..."]
+    return lines if len(lines) > 1 else text
+
+
 def render_single_chart(chart_spec: dict, is_ar: bool = False, color: str = "#002D62"):
-    """Renders a single institutional PSUT-themed bar chart."""
+    """Renders a single institutional PSUT-themed bar chart with labels strictly underneath."""
     if not chart_spec or not chart_spec.get("data"):
         return
 
@@ -976,7 +1001,12 @@ def render_single_chart(chart_spec: dict, is_ar: bool = False, color: str = "#00
                 else:
                     val_str = re.sub(r"[^\d.]", "", str(val_raw))
                     val = float(val_str) if val_str else 0.0
-                clean_rows.append({"label": str(row["label"]), metric_label: val})
+                raw_lbl = str(row["label"]).strip()
+                clean_rows.append({
+                    "raw_label": raw_lbl,
+                    "label": wrap_label_multiline(raw_lbl, max_chars_per_line=16),
+                    "value": val,
+                })
             except Exception:
                 continue
 
@@ -1002,12 +1032,73 @@ def render_single_chart(chart_spec: dict, is_ar: bool = False, color: str = "#00
 """).strip()
 
     st.markdown(chart_header_html, unsafe_allow_html=True)
-    st.bar_chart(
-        df.set_index("label"),
-        color=color,
-        height=280,
-        use_container_width=True,
+
+    # Label configuration so text sits strictly UNDERNEATH each column
+    num_cols = len(df)
+    label_angle = 0 if num_cols <= 5 else -25
+    label_align = "center" if label_angle == 0 else "right"
+
+    # Base column bars
+    bars = (
+        alt.Chart(df)
+        .mark_bar(cornerRadiusTopLeft=6, cornerRadiusTopRight=6, color=color)
+        .encode(
+            x=alt.X(
+                "label:N",
+                sort=None,
+                axis=alt.Axis(
+                    title=None,
+                    labelAngle=label_angle,
+                    labelBaseline="top",
+                    labelAlign=label_align,
+                    labelPadding=14,
+                    labelFontSize=11.5,
+                    labelFontWeight="bold",
+                    labelColor="#002D62",
+                    tickColor="#CBD5E1",
+                    domainColor="#94A3B8",
+                    domainWidth=1.5,
+                ),
+            ),
+            y=alt.Y(
+                "value:Q",
+                axis=alt.Axis(
+                    title=metric_label,
+                    titleColor="#002D62",
+                    titleFontWeight="bold",
+                    titleFontSize=12,
+                    titlePadding=12,
+                    gridColor="#F1F5F9",
+                    tickColor="#CBD5E1",
+                    domainColor="#94A3B8",
+                ),
+            ),
+            tooltip=[
+                alt.Tooltip("raw_label:N", title="الخدمة / البيان" if is_ar else "Item / Service"),
+                alt.Tooltip("value:Q", title=metric_label, format=".2f" if any(r["value"] % 1 != 0 for r in clean_rows) else ".0f"),
+            ],
+        )
     )
+
+    # Value numbers overlaid on top of each bar
+    val_format = ".2f" if any(r["value"] % 1 != 0 for r in clean_rows) else ".0f"
+    text_overlay = (
+        alt.Chart(df)
+        .mark_text(
+            dy=-10,
+            color=color,
+            fontSize=12,
+            fontWeight="bold",
+        )
+        .encode(
+            x=alt.X("label:N", sort=None),
+            y=alt.Y("value:Q"),
+            text=alt.Text("value:Q", format=val_format),
+        )
+    )
+
+    final_chart = (bars + text_overlay).properties(height=320)
+    st.altair_chart(final_chart, use_container_width=True)
 
 
 def render_charts(charts: list[dict], is_ar: bool = False):
