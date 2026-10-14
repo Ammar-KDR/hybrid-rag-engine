@@ -33,19 +33,28 @@ class BM25Retriever:
         query_tokens = tokenize(query)
         scores = self.index.get_scores(query_tokens)
 
-        if filter is not None and getattr(filter, "document_ids", None):
-            target_ids = set(filter.document_ids)
-            candidate_indices = [
-                i for i, chunk in enumerate(self.chunks)
-                if (
-                    chunk.metadata.get("document_id") in target_ids
-                    or getattr(chunk, "document_id", None) in target_ids
-                    or chunk.metadata.get("doc_id") in target_ids
-                    or getattr(chunk, "source", "") in target_ids
+        candidate_indices = []
+        for i, chunk in enumerate(self.chunks):
+            # Check document_ids filter
+            if filter is not None and getattr(filter, "document_ids", None):
+                target_doc_ids = set(filter.document_ids)
+                doc_id = (
+                    chunk.metadata.get("document_id")
+                    or getattr(chunk, "document_id", None)
+                    or chunk.metadata.get("doc_id")
+                    or getattr(chunk, "source", "")
                 )
-            ]
-        else:
-            candidate_indices = list(range(len(scores)))
+                if doc_id not in target_doc_ids:
+                    continue
+
+            # Check service_ids filter
+            if filter is not None and getattr(filter, "service_ids", None):
+                target_svc_ids = set(filter.service_ids)
+                svc_id = chunk.metadata.get("service_id")
+                if svc_id not in target_svc_ids:
+                    continue
+
+            candidate_indices.append(i)
 
         ranked_indices = sorted(
             candidate_indices,

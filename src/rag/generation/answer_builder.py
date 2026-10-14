@@ -1,11 +1,12 @@
 import re
-from .model import GenerationResult, BuiltContext, GeneratedAnswer , Citation
+from .model import GenerationResult, BuiltContext, GeneratedAnswer, Citation
 from rag.citation import extract_references
+from rag.config import settings
+from rag.nlp.arabic import is_arabic_text
+from rag.verification.numeric_guard import validate_numeric_support
 
 
 class AnswerBuilder:
-
-    
 
     def build(
         self,
@@ -19,7 +20,7 @@ class AnswerBuilder:
         )
 
         citations = []
-        unresolved_references=[]
+        unresolved_references = []
         for reference in references:
             block = context.get_block(reference)
 
@@ -46,21 +47,25 @@ class AnswerBuilder:
             or "غير كافٍ" in answer_text
             or "لا توجد أدلة" in answer_text
             or "لا توجد معلومات" in answer_text
+            or "لم أجد في الوثائق" in answer_text
+            or "لم اجد في الوثائق" in answer_text
         )
 
-        # Fallback: If model generated an answer based on evidence but omitted brackets
-        if not citations and context.blocks and not is_insufficient:
-            top_block = context.blocks[0]
-            citation = Citation(
-                reference=top_block.reference,
-                chunk_id=top_block.chunk_id,
-                source=top_block.source,
-                page_number=top_block.page_number,
-                heading_path=top_block.heading_path,
-            )
-            citations.append(citation)
-            if f"[{top_block.reference}]" not in answer_text:
-                answer_text = f"{answer_text} [{top_block.reference}]"
+        # In strict competition mode, NEVER attach an unverified citation to top evidence
+        # Only in legacy mode do we keep the fallback
+        if not settings.STRICT_CITATIONS:
+            if not citations and context.blocks and not is_insufficient:
+                top_block = context.blocks[0]
+                citation = Citation(
+                    reference=top_block.reference,
+                    chunk_id=top_block.chunk_id,
+                    source=top_block.source,
+                    page_number=top_block.page_number,
+                    heading_path=top_block.heading_path,
+                )
+                citations.append(citation)
+                if f"[{top_block.reference}]" not in answer_text:
+                    answer_text = f"{answer_text} [{top_block.reference}]"
 
         return GeneratedAnswer(
             question=question,

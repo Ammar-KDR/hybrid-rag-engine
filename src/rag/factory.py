@@ -137,6 +137,18 @@ def create_rag_pipeline() -> RAGPipeline:
     else:
         verification_pipeline = None
 
+    service_router = None
+    service_context_builder = None
+    if settings.GOV_SERVICE_MODE:
+        from rag.retrieval.service_router import ServiceRouter
+        from rag.generation.service_context_builder import ServiceContextBuilder
+
+        if settings.SERVICES_MANIFEST_PATH.exists():
+            service_router = ServiceRouter.from_manifest(settings.SERVICES_MANIFEST_PATH)
+        else:
+            service_router = ServiceRouter([])
+        service_context_builder = ServiceContextBuilder()
+
     pipeline = RAGPipeline(
         retriever=hybrid_retriever,
         reranker=rank_fusion_reranker,
@@ -147,6 +159,9 @@ def create_rag_pipeline() -> RAGPipeline:
         verification_pipeline=verification_pipeline,
         candidate_k=20,
         enable_verification=settings.ENABLE_VERIFICATION,
+        service_router=service_router,
+        service_context_builder=service_context_builder,
     )
 
-    return pipeline
+    return pipeline
+

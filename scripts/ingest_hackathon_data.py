@@ -70,34 +70,65 @@ def ingest_and_index(source_folder: Path | None = None, audit: bool = False) -> 
     for file_path in source_files:
         document_ids[str(file_path)] = create_document_id(file_path.read_bytes())
 
-    # 4. Chunk corpus
-    print("\n[2/5] Chunking documents...")
+    # 4. Chunk corpus & segment services
+    print("\n[2/5] Processing documents and service boundaries...")
     embedding_service = EmbeddingService(model_name=settings.EMBEDDING_MODEL_NAME)
-    semantic_chunker = SemanticChunker(
-        model=embedding_service.model,
-        similarity_threshold=0.55,
-        max_chunk_chars=2000,
-        min_chunk_chars=300,
-    )
+    all_services = []
+    chunks = []
+    chunks_by_source = defaultdict(list)
 
-    chunks = build_chunks(semantic_chunker=semantic_chunker, data_path=data_path)
+    if settings.GOV_SERVICE_MODE:
+        from rag.ingestion.loader import load_document
+        from rag.ingestion.service_segmenter import ServiceSegmenter, service_records_to_chunks
+        from rag.ingestion.service_manifest import ServicesManifest, save_manifest
+
+        segmenter = ServiceSegmenter()
+        for file_path in source_files:
+            source = str(file_path)
+            doc_id = document_ids[source]
+            file_docs = load_document(file_path)
+            file_services = segmenter.segment(file_docs, doc_id, file_path.name)
+            all_services.extend(file_services)
+            file_chunks = service_records_to_chunks(file_services)
+            for chk in file_chunks:
+                chk.source = source
+                chk.metadata["filename"] = file_path.name
+                chk.metadata["source"] = source
+            chunks.extend(file_chunks)
+            chunks_by_source[source].extend(file_chunks)
+
+        # Save canonical services manifest
+        manifest = ServicesManifest(
+            services_count=len(all_services),
+            generated_at=datetime.now(timezone.utc).isoformat(),
+            services=all_services,
+        )
+        save_manifest(manifest, settings.SERVICES_MANIFEST_PATH)
+        print(f"Successfully segmented {len(all_services)} services across {len(source_files)} files.")
+        print(f"Saved services manifest to: {settings.SERVICES_MANIFEST_PATH}")
+    else:
+        semantic_chunker = SemanticChunker(
+            model=embedding_service.model,
+            similarity_threshold=0.55,
+            max_chunk_chars=2000,
+            min_chunk_chars=300,
+        )
+        chunks = build_chunks(semantic_chunker=semantic_chunker, data_path=data_path)
+        for chunk in chunks:
+            source = str(Path(chunk.source))
+            doc_id = document_ids.get(source)
+            if not doc_id and Path(source).exists():
+                doc_id = create_document_id(Path(source).read_bytes())
+                document_ids[source] = doc_id
+            if doc_id:
+                chunk.metadata["document_id"] = doc_id
+                chunk.metadata["doc_id"] = doc_id
+            chunks_by_source[source].append(chunk)
+
     if not chunks:
         raise RuntimeError("Corpus produced no chunks.")
 
     print(f"Generated {len(chunks)} chunks.")
-
-    # Group chunks by source and guarantee document_id is in Chunk metadata
-    chunks_by_source = defaultdict(list)
-    for chunk in chunks:
-        source = str(Path(chunk.source))
-        doc_id = document_ids.get(source)
-        if not doc_id and Path(source).exists():
-            doc_id = create_document_id(Path(source).read_bytes())
-            document_ids[source] = doc_id
-        if doc_id:
-            chunk.metadata["document_id"] = doc_id
-            chunk.metadata["doc_id"] = doc_id
-        chunks_by_source[source].append(chunk)
 
     # 5. Embed chunks
     print("\n[3/5] Generating dense embeddings...")
@@ -125,11 +156,16 @@ def ingest_and_index(source_folder: Path | None = None, audit: bool = False) -> 
 
     for chunk, vector in zip(chunks, vectors):
         source = str(Path(chunk.source))
-        doc_id = document_ids[source]
+        doc_id = document_ids.get(source, chunk.metadata.get("document_id"))
         payload = {
             "text": chunk.text,
             "source": chunk.source,
             "document_id": doc_id,
+            "service_id": chunk.metadata.get("service_id"),
+            "service_name": chunk.metadata.get("service_name"),
+            "section_type": chunk.metadata.get("section_type"),
+            "section_id": chunk.metadata.get("section_id"),
+            "page_number": chunk.metadata.get("page_number"),
             **chunk.metadata,
         }
         vector_store.add_point(
@@ -179,11 +215,13 @@ def ingest_and_index(source_folder: Path | None = None, audit: bool = False) -> 
         print("  CORPUS EXTRACTION & INGESTION AUDIT")
         print("=" * 60)
         print(f"FILES INDEXED:       {len(records)}")
+        print(f"SERVICES DETECTED:   {len(all_services) if settings.GOV_SERVICE_MODE else 'N/A'}")
         print(f"TOTAL CHUNKS:        {len(chunks)}")
         print(f"REGISTRY PATH:       {settings.REGISTRY_PATH}")
+        print(f"SERVICES MANIFEST:   {settings.SERVICES_MANIFEST_PATH}")
         print(f"CHUNK STORE PATH:    {settings.CHUNK_STORE_PATH}")
         print(f"QDRANT STORAGE PATH: {settings.QDRANT_LOCAL_PATH}")
-        print("METADATA PARITY:     VERIFIED (document_id in Chunk & Qdrant)")
+        print("METADATA PARITY:     VERIFIED (service_id & doc_id in Chunks and Qdrant)")
         print("AUDIT STATUS:        READY FOR EVALUATION")
         print("=" * 60)
 

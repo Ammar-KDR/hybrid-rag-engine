@@ -10,14 +10,22 @@ ARABIC_CHAR_REGEX = re.compile(r"[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-
 # Government Service Heading Keywords
 GOV_HEADING_KEYWORDS = (
     "شروط",
+    "الشروط",
     "متطلبات",
+    "المتطلبات",
     "الوثائق",
+    "وثائق",
     "المستندات",
+    "مستندات",
     "الأوراق",
+    "الأوراق المطلوبة",
     "الاوراق",
     "إجراءات",
+    "الإجراءات",
     "اجراءات",
+    "الاجراءات",
     "خطوات",
+    "الخطوات",
     "مسار",
     "الرسوم",
     "رسوم",
@@ -25,10 +33,14 @@ GOV_HEADING_KEYWORDS = (
     "المده",
     "الوقت",
     "قنوات",
+    "القنوات",
     "الفئات",
     "المستفيدون",
+    "المستفيدين",
     "ملاحظات",
+    "الملاحظات",
     "استثناءات",
+    "الاستثناءات",
     "المعايير",
 )
 
@@ -129,13 +141,19 @@ def is_arabic_heading(line: str) -> Tuple[bool, str, int]:
 
     # 3. Government Service Guide Sections
     norm_line = normalize_arabic(stripped)
+    stem_line = norm_line[2:] if norm_line.startswith("ال") else norm_line
+
     for kw in GOV_HEADING_KEYWORDS:
-        if norm_line.startswith(kw):
-            # Must end with punctuation, or be a standalone line under 60 chars
-            if (
-                stripped.endswith((":", "：", "-", "ـ"))
-                or len(stripped.split()) <= 6
-            ):
+        norm_kw = normalize_arabic(kw)
+        if norm_line.startswith(norm_kw) or stem_line.startswith(norm_kw):
+            # Must end with punctuation or be a concise standalone label
+            is_explicit_punct = stripped.endswith((":", "：", "-", "ـ"))
+            is_concise_label = (
+                len(stripped.split()) <= 5
+                and not stripped.endswith((".", "!", "؟", "?"))
+                and not any(c.isdigit() for c in stripped)
+            )
+            if is_explicit_punct or is_concise_label:
                 clean_title = re.sub(r"[:：\-ـ\s]+$", "", stripped).strip()
                 return True, clean_title, 2
 

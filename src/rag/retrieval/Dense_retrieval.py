@@ -16,26 +16,44 @@ class DenseRetriever:
         qdrant_filter = None
         if isinstance(filter, Filter):
             qdrant_filter = filter
-        elif filter is not None and getattr(filter, "document_ids", None):
-            doc_ids = list(filter.document_ids)
-            if len(doc_ids) == 1:
-                qdrant_filter = Filter(
-                    must=[
+        elif filter is not None:
+            must_conditions = []
+            if getattr(filter, "document_ids", None):
+                doc_ids = list(filter.document_ids)
+                if len(doc_ids) == 1:
+                    must_conditions.append(
                         FieldCondition(
                             key="document_id",
                             match=MatchValue(value=doc_ids[0]),
                         )
-                    ]
-                )
-            elif len(doc_ids) > 1:
-                qdrant_filter = Filter(
-                    must=[
+                    )
+                elif len(doc_ids) > 1:
+                    must_conditions.append(
                         FieldCondition(
                             key="document_id",
                             match=MatchAny(any=doc_ids),
                         )
-                    ]
-                )
+                    )
+
+            if getattr(filter, "service_ids", None):
+                svc_ids = list(filter.service_ids)
+                if len(svc_ids) == 1:
+                    must_conditions.append(
+                        FieldCondition(
+                            key="service_id",
+                            match=MatchValue(value=svc_ids[0]),
+                        )
+                    )
+                elif len(svc_ids) > 1:
+                    must_conditions.append(
+                        FieldCondition(
+                            key="service_id",
+                            match=MatchAny(any=svc_ids),
+                        )
+                    )
+
+            if must_conditions:
+                qdrant_filter = Filter(must=must_conditions)
 
         qdrant_points = self.vector_store.search(
             self.collection_name,

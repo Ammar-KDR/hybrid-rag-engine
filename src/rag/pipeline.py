@@ -20,10 +20,16 @@ from rag.verification.pipeline import AnswerVerificationPipeline
 
 
 
+from rag.nlp.arabic import is_arabic_text
+from rag.retrieval.model import RetrievalFilter
+from rag.retrieval.service_router import ServiceRouter, RouteResult
+from rag.generation.service_context_builder import ServiceContextBuilder
+
+
 @dataclass
 class RAGPipelineResult:
     answer: GeneratedAnswer
-    verified_answer:VerifiedAnswer
+    verified_answer: VerifiedAnswer
 
     retrieval_latency_ms: float
     reranking_latency_ms: float
@@ -31,11 +37,11 @@ class RAGPipelineResult:
     verification_latency_ms: float
     total_latency_ms: float
 
-
     candidate_count: int
     evidence_count: int
     candidates: list
     reranked_chunks: list
+    route_result: RouteResult | None = None
 
 
 class RAGPipeline:
@@ -51,6 +57,8 @@ class RAGPipeline:
         verification_pipeline: AnswerVerificationPipeline | None = None,
         candidate_k: int = 20,
         enable_verification: bool | None = None,
+        service_router: ServiceRouter | None = None,
+        service_context_builder: ServiceContextBuilder | None = None,
     ):
         self.retriever = retriever
         self.reranker = reranker
@@ -67,19 +75,38 @@ class RAGPipeline:
         )
 
         self.candidate_k = candidate_k
+        self.service_router = service_router
+        self.service_context_builder = service_context_builder
 
 
     def run(
         self,
         question: str,
         filter=None,
+        history=None,
     ) -> RAGPipelineResult:
-
 
         if not question.strip():
             raise ValueError("question cannot be empty")
 
         total_start = time.perf_counter()
+
+        # --------------------------------------------------
+        # 0. Service Routing (GOV_SERVICE_MODE)
+        # --------------------------------------------------
+        route_res: RouteResult | None = None
+        active_filter = filter
+
+        if settings.GOV_SERVICE_MODE and self.service_router is not None:
+            # If caller didn't pass explicit service_ids, route automatically
+            if filter is None or not getattr(filter, "service_ids", None):
+                route_res = self.service_router.route(question, history=history)
+                if route_res.service_ids:
+                    doc_ids = getattr(filter, "document_ids", ()) if filter else ()
+                    active_filter = RetrievalFilter(
+                        document_ids=doc_ids,
+                        service_ids=route_res.service_ids,
+                    )
 
         # --------------------------------------------------
         # 1. Retrieval
@@ -90,7 +117,7 @@ class RAGPipeline:
         candidates = self.retriever.retrieve(
             query=question,
             top_k=self.candidate_k,
-            filter=filter,
+            filter=active_filter,
         )
 
         retrieval_latency_ms = (
@@ -98,9 +125,14 @@ class RAGPipeline:
         ) * 1000
 
         if not candidates:
+            empty_msg = (
+                "لم أجد في الوثائق المتاحة ما يحدد ذلك."
+                if is_arabic_text(question)
+                else "The knowledge base is currently empty or contains no relevant documents."
+            )
             empty_answer = GeneratedAnswer(
                 question=question,
-                answer="The knowledge base is currently empty or contains no relevant documents.",
+                answer=empty_msg,
                 citations=[],
                 unresolved_references=[],
                 evidence=[],
@@ -129,8 +161,8 @@ class RAGPipeline:
                 evidence_count=0,
                 candidates=[],
                 reranked_chunks=[],
+                route_result=route_res,
             )
-
 
         # --------------------------------------------------
         # 2. Reranking
@@ -147,14 +179,28 @@ class RAGPipeline:
             time.perf_counter() - reranking_start
         ) * 1000
 
-
         # --------------------------------------------------
-        # 3. Context construction
+        # 3. Context construction (Service-Aware or General)
         # --------------------------------------------------
 
-        context = self.context_builder.build(
-            reranked_chunks
-        )
+        if (
+            settings.GOV_SERVICE_MODE
+            and self.service_context_builder is not None
+            and route_res is not None
+            and route_res.routed_services
+        ):
+            if len(route_res.routed_services) >= 2:
+                context = self.service_context_builder.build_comparison(
+                    route_res.routed_services, question
+                )
+            else:
+                context = self.service_context_builder.build_from_service(
+                    route_res.primary_service, question, reranked_chunks
+                )
+        else:
+            context = self.context_builder.build(
+                reranked_chunks
+            )
 
 
         # --------------------------------------------------
