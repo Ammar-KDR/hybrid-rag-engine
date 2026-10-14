@@ -1397,9 +1397,6 @@ st.markdown(
         <div style="display:flex; align-items:center; gap:10px;">
             <span style="font-size:1.12rem; font-weight:800; color:#002D62;">{cur_header}</span>
         </div>
-        <span style="font-size:0.78rem; font-weight:700; color:#64748B; background:#F8FAFC; padding:4px 10px; border-radius:6px; border:1px solid #E2E8F0;">
-            {'💡 يمكنك تصغير الشريط الجانبي (◀) لتوسيع مساحة العمل' if is_ar else '💡 Tip: Collapse side panel (◀) for maximum full-width view'}
-        </span>
     </div>
     """,
     unsafe_allow_html=True,
