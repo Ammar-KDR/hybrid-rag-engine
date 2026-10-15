@@ -1413,335 +1413,252 @@ st.markdown(
 # =========================================================
 
 if selected_feature_idx == 0:
-    # Preset Starter Inquiries
+    if "chat_turns" not in st.session_state:
+        st.session_state["chat_turns"] = []
+
+    # Preset Starter Inquiries (Tailored to Official Competition Documents)
     if is_ar:
         st.markdown(
             "<span style='font-size:0.82rem; font-weight:800; color:#002D62; text-transform:uppercase; letter-spacing:0.04em;'>"
-            "نماذج أسئلة الخدمات الحكومية (انقر للاختبار الفوري)"
+            "⚡ سيناريوهات العرض السريعة (انقر للاختبار الفوري والتوليد اللحظي):"
             "</span>",
             unsafe_allow_html=True,
         )
         preset_cols = st.columns(4)
         with preset_cols[0]:
-            if st.button("🛂 وثائق ورسوم الجواز", key="preset_gov_1", use_container_width=True):
-                st.session_state["question_input"] = "ما هي الوثائق المطلوبة والرسوم المقررة لإصدار أو تجديد جواز السفر الأردني؟"
-                st.session_state["trigger_ask"] = True
+            if st.button("🛂 رسوم التجديد حسب السن", key="preset_gov_1", use_container_width=True):
+                st.session_state["pending_preset"] = "عمري 17 سنة وجوازي باقي عليه 3 شهور، قديش رسوم التجديد؟"
                 st.rerun()
 
         with preset_cols[1]:
-            if st.button("⚡ المعاملة المستعجلة", key="preset_gov_2", use_container_width=True):
-                st.session_state["question_input"] = "ما هي رسوم إصدار جواز السفر المستعجل وما هي المدة الزمنية لإنجازه ومواقع الخدمة؟"
-                st.session_state["trigger_ask"] = True
+            if st.button("⚖️ فاقد ثانٍ vs تالف", key="preset_gov_2", use_container_width=True):
+                st.session_state["pending_preset"] = "أيهما أغلى: جواز سفر بدل فاقد للمرة الثانية أم بدل تالف؟"
                 st.rerun()
 
         with preset_cols[2]:
-            if st.button("📱 الهوية الرقمية وسند", key="preset_gov_3", use_container_width=True):
-                st.session_state["question_input"] = "هل تقبل الهوية الرقمية الصادرة عبر تطبيق سند رسمياً كإثبات شخصية لفتح المعاملة المستعجلة؟"
-                st.session_state["trigger_ask"] = True
+            if st.button("📑 فقدان الهوية للمرة الثالثة", key="preset_gov_3", use_container_width=True):
+                st.session_state["pending_preset"] = "الهوية الذكية تبعتي ضاعت وهاي ثالث مرة، شو الإجراء والرسوم والكفالة المطلوبة؟"
                 st.rerun()
 
         with preset_cols[3]:
-            if st.button("📊 مقارنة الرسوم والمدد", key="preset_gov_4", use_container_width=True):
-                st.session_state["question_input"] = "قارن في جدول ورسم بياني بين رسوم المسار العادي والمسار المستعجل ومدة إنجاز كل منهما"
-                st.session_state["trigger_ask"] = True
+            if st.button("📊 مقارنة رسوم الوثائق الثلاث", key="preset_gov_4", use_container_width=True):
+                st.session_state["pending_preset"] = "قارن في جدول ورسم بياني بين رسوم إصدار جواز السفر والبطاقة الذكية ودفتر العائلة لأول مرة"
                 st.rerun()
     else:
         st.markdown(
             "<span style='font-size:0.82rem; font-weight:800; color:#002D62; text-transform:uppercase; letter-spacing:0.04em;'>"
-            "Sample Queries (Click to Test Instantly)"
+            "⚡ Instant Demo Scenarios (Click to test grounded generation):"
             "</span>",
             unsafe_allow_html=True,
         )
         preset_cols = st.columns(4)
         with preset_cols[0]:
-            if st.button("🔍 DB Timeout Issue", key="preset_db", use_container_width=True):
-                st.session_state["question_input"] = "How do we troubleshoot and resolve database connection timeout errors?"
-                st.session_state["trigger_ask"] = True
+            if st.button("🛂 Renewal Fee by Age", key="preset_gov_1", use_container_width=True):
+                st.session_state["pending_preset"] = "How much is passport renewal fee for a 17-year-old with 3 months remaining validity?"
                 st.rerun()
 
         with preset_cols[1]:
-            if st.button("🌐 DNS Guidelines", key="preset_dns", use_container_width=True):
-                st.session_state["question_input"] = "What are the recommended DNS configuration guidelines and resolver steps?"
-                st.session_state["trigger_ask"] = True
+            if st.button("⚖️ 2nd Lost vs Damaged", key="preset_gov_2", use_container_width=True):
+                st.session_state["pending_preset"] = "Which is more expensive: a second-time lost passport or a damaged passport?"
                 st.rerun()
 
         with preset_cols[2]:
-            if st.button("🐳 Docker Restarts", key="preset_docker", use_container_width=True):
-                st.session_state["question_input"] = "What are the container restart policies and memory limit configurations in Docker?"
-                st.session_state["trigger_ask"] = True
+            if st.button("📑 Third ID Card Loss", key="preset_gov_3", use_container_width=True):
+                st.session_state["pending_preset"] = "I lost my smart ID card for the third time. What are the procedures, fees, and financial guarantee?"
                 st.rerun()
 
         with preset_cols[3]:
-            if st.button("📊 Fees & SLA Chart", key="preset_chart", use_container_width=True):
-                st.session_state["question_input"] = "Compare normal and expedited passport renewal fees and processing timelines in a table and chart"
-                st.session_state["trigger_ask"] = True
+            if st.button("📊 Compare Document Fees", key="preset_gov_4", use_container_width=True):
+                st.session_state["pending_preset"] = "Compare first-issue fees for passport, smart ID card, and family book in a table and chart"
                 st.rerun()
 
-    # Scope Selection: All Documents or Single Document
+    # Scope & Advanced Filters Expander
     docs = st.session_state.get("documents", [])
-    all_label = "جميع الوثائق المفهرسة" if is_ar else "All Ingested Documents"
+    all_label = "جميع الوثائق الـ 12 المعتمدة (نطاق كامل)" if is_ar else "All 12 Ingested Documents (Full Scope)"
     doc_options = [all_label] + [f"{clean_source_name(d.get('filename'))[0]} ({d.get('document_id')[:8]})" for d in docs]
-    scope_prompt = "نطاق البحث واسترجاع الوثائق" if is_ar else "Document Retrieval Scope"
-    selected_scope_label = st.selectbox(scope_prompt, options=doc_options, index=0)
-
-    selected_doc_ids = None
-    if selected_scope_label != all_label:
-        selected_idx = doc_options.index(selected_scope_label) - 1
-        selected_doc_ids = [docs[selected_idx]["document_id"]]
-
-    # Query Input Area
-    query_text = st.text_area(
-        "الاستفسار / السؤال المطلوب تحليله:" if is_ar else "Inquiry / Prompt",
-        value=st.session_state["question_input"],
-        height=85,
-        placeholder=(
-            "اطرح استفسارك حول شروط المعاملات الحكومية، الوثائق المطلوبة، الرسوم، أو الإجراءات الرسمية..."
-            if is_ar
-            else "Ask any question regarding system architecture, operations, policies, or follow-up..."
-        ),
-        key="main_query_text_area",
-    )
-
-    action_col1, action_col2, action_col3 = st.columns([2, 1, 1])
-    with action_col1:
-        ask_button = st.button(
-            "🚀 تشغيل التحليل والاسترجاع السيادي" if is_ar else "🚀 Run Intelligence Analysis",
-            type="primary",
-            use_container_width=True,
-        )
-    with action_col2:
-        include_trace = st.checkbox(
-            "تضمين سجل تدقيق معيد الترتيب" if is_ar else "Include Reranker Audit Trace",
-            value=True,
-        )
-    with action_col3:
-        if st.button("🧹 مسح المدخلات" if is_ar else "🧹 Clear Input", use_container_width=True):
-            st.session_state["question_input"] = ""
-            st.session_state["last_result"] = None
-            st.session_state["last_question"] = ""
-            st.session_state["trigger_ask"] = False
-            st.rerun()
-
-    should_run = ask_button or st.session_state["trigger_ask"]
-
-    if should_run:
-        active_question = query_text.strip() or st.session_state.get("question_input", "").strip()
-
-        if not active_question:
-            st.warning(
-                "يرجى إدخال استفسار أو اختيار أحد النماذج المقترحة."
-                if is_ar
-                else "Please enter a question or choose an inquiry preset."
+    
+    with st.expander("⚙️ " + ("إعدادات نطاق البحث وأدوات التدقيق" if is_ar else "Retrieval Scope & Audit Controls"), expanded=False):
+        c_scope, c_trace, c_clear = st.columns([2, 1, 1])
+        with c_scope:
+            scope_prompt = "نطاق استرجاع الوثائق" if is_ar else "Document Scope"
+            selected_scope_label = st.selectbox(scope_prompt, options=doc_options, index=0)
+            selected_doc_ids = None
+            if selected_scope_label != all_label:
+                selected_idx = doc_options.index(selected_scope_label) - 1
+                selected_doc_ids = [docs[selected_idx]["document_id"]]
+        with c_trace:
+            include_trace = st.checkbox(
+                "تضمين سجل تدقيق معيد الترتيب" if is_ar else "Include Reranker Trace",
+                value=True,
             )
-            st.session_state["trigger_ask"] = False
-        else:
-            st.session_state["trigger_ask"] = False
-            st.session_state["question_input"] = active_question
-            st.session_state["last_question"] = active_question
+        with c_clear:
+            st.markdown("<div style='height: 25px;'></div>", unsafe_allow_html=True)
+            if st.button("🧹 مسح المحادثة" if is_ar else "🧹 Clear Chat", use_container_width=True):
+                st.session_state["chat_turns"] = []
+                st.session_state["chat_history"] = []
+                st.session_state["last_result"] = None
+                st.session_state["last_question"] = ""
+                st.rerun()
 
-            try:
-                with st.spinner(
-                    "جاري تنفيذ الاسترجاع الهجين والتحليل السيادي المقيد بالأدلة..."
-                    if is_ar
-                    else "Executing Hybrid RAG with Conversational Intent Resolution..."
-                ):
-                    # Pass history to rewriter
-                    history_payload = [
-                        {"role": m["role"], "content": m["content"]}
-                        for m in st.session_state.get("chat_history", [])[-4:]
-                    ]
+    if selected_scope_label == all_label:
+        selected_doc_ids = None
+
+    # Interactive Conversation Feed
+    if not st.session_state["chat_turns"]:
+        st.markdown(
+            f"""
+            <div class="grounded-result-card" style="margin-top: 15px; text-align: center; border-right: 5px solid #002D62; padding: 22px 28px;">
+                <div style="font-size: 2.2rem; margin-bottom: 8px;">🇯🇴</div>
+                <div style="font-size: 1.15rem; font-weight: 800; color: #002D62; margin-bottom: 6px;">
+                    {'المساعد الذكي السيادي لدائرة الأحوال المدنية والجوازات' if is_ar else 'Sovereign RAG Assistant for Jordan Public Services'}
+                </div>
+                <div style="color: #475569; font-size: 0.92rem; line-height: 1.7; max-width: 720px; margin: 0 auto;">
+                    {'أنا جاهز للإجابة بدقة مطلقة على استفساراتكم حول معاملات جواز السفر، البطاقة الذكية، ودفتر العائلة، مدعوماً بالسند القانوني والوثائق الـ 12 المعتمدة ومحرك Cohere Command R7B المحلي على كارت الشاشة GPU.' if is_ar else 'Ready to answer your queries regarding Jordanian Passport, Smart ID Card, and Family Book services with 100% official grounding and Cohere Command R7B Arabic running locally on GPU.'}
+                </div>
+                <div style="margin-top: 14px;">
+                    <span style="background: #EFF6FF; color: #002D62; font-size: 0.8rem; font-weight: 700; padding: 4px 12px; border-radius: 20px; border: 1px solid #BFDBFE;">
+                        {'⚡ اطرح سؤالك في الصندوق بالأسفل أو اختر أحد السيناريوهات السريعة بالأعلى' if is_ar else '⚡ Type your question below or click any scenario above to begin'}
+                    </span>
+                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+    else:
+        for idx_turn, turn in enumerate(st.session_state["chat_turns"], start=1):
+            with st.chat_message("user", avatar="👤"):
+                st.markdown(turn["question"])
+
+            with st.chat_message("assistant", avatar="🇯🇴"):
+                res = turn.get("result", {})
+                if not res:
+                    st.markdown(turn.get("content", ""))
+                    continue
+
+                trace = res.get("trace")
+                evidence_list = res.get("evidence", [])
+                chunk_map = build_chunk_text_map(trace, evidence_list)
+                citations = res.get("citations", [])
+                latency = res.get("latency", {})
+                abstained = res.get("abstained", False)
+                was_rewritten = res.get("was_rewritten", False)
+                retrieval_q = res.get("retrieval_question")
+
+                if was_rewritten and retrieval_q:
+                    st.info(
+                        f"ℹ️ **{'إعادة صياغة السؤال لسياق المحادثة:' if is_ar else 'Conversational Intent Resolved:'}** "
+                        f"{'تم تحسين الاستفسار إلى' if is_ar else 'Query reformulated to'} *\"{retrieval_q}\"*"
+                    )
+
+                if abstained:
+                    st.warning(
+                        "⚠️ **اعتذار النظام (امتناع آمن)**: لم يتم العثور على سند رسمي مطابق للتحقق. لا يتم توليد أي إجابة تكهنية غير مدعومة بوثائق رسمية."
+                        if is_ar
+                        else "⚠️ **System Abstained**: Retrieval confidence fell below safety threshold. No speculative answer generated."
+                    )
+                else:
+                    clean_answer, charts = extract_all_charts(res.get("answer", ""), is_ar=is_ar)
+                    selected_svc_name = res.get("selected_service_name")
+                    svc_badge_html = (
+                        f'<span style="background:#EFF6FF; color:#002D62; font-size:0.75rem; font-weight:800; padding:3px 8px; border-radius:4px; border:1px solid #BFDBFE; margin-right:8px;">🏛️ {selected_svc_name}</span>'
+                        if selected_svc_name
+                        else ""
+                    )
+                    
+                    st.markdown(f"{svc_badge_html}\n\n{clean_answer}", unsafe_allow_html=True)
+
+                    if charts:
+                        render_charts(charts, is_ar=is_ar)
+
+                # Collapsible Evidence & Citations
+                items = citations if citations else evidence_list
+                if items:
+                    with st.expander(
+                        f"📑 {'السند الرسمي والوثائق المسترجعة' if is_ar else 'Verified Official Evidence'} ({len(items)} {'بنود رسمية' if is_ar else 'items'}) • ⚡ {latency.get('total_ms', 0):.0f}ms",
+                        expanded=False,
+                    ):
+                        for idx, cit in enumerate(items, start=1):
+                            ref = cit.get("reference", idx)
+                            raw_src = cit.get("source", "Document")
+                            clean_name, base_src = clean_source_name(raw_src)
+                            page = cit.get("page_number")
+                            cid = cit.get("chunk_id", "")
+                            doc_id = cit.get("document_id", "")
+                            heading = " → ".join(cit.get("heading_path") or [])
+                            svc_name = cit.get("service_name")
+                            sec_type = cit.get("section_type")
+                            raw_text = cit.get("text") or chunk_map.get(cid)
+
+                            page_label = f" • {'صفحة' if is_ar else 'Page'} {page}" if page is not None else ""
+                            svc_label = f" • 🏛️ {svc_name}" if svc_name else ""
+                            sec_label = f" • [{sec_type}]" if sec_type else ""
+                            st.markdown(f"**📌 [{ref}] {clean_name}{svc_label}{page_label}{sec_label}**")
+                            if raw_text:
+                                st.markdown(f"<div class='source-pill-quote' dir='auto'>\"{raw_text.strip()}\"</div>", unsafe_allow_html=True)
+
+                # Optional Reranker Audit Trace
+                if turn.get("include_trace") and trace:
+                    trace_header = "🔍 " + ("سجل تدقيق معيد الترتيب (Reranker Trace)" if is_ar else "Reranker Audit Trace")
+                    with st.expander(trace_header, expanded=False):
+                        cand_list = trace.get("candidates", [])
+                        if cand_list:
+                            trace_rows = []
+                            for c_idx, c in enumerate(cand_list[:10], start=1):
+                                c_src, _ = clean_source_name(c.get("source", ""))
+                                trace_rows.append({
+                                    "#" if is_ar else "Rank": c_idx,
+                                    "الوثيقة" if is_ar else "Document": c_src,
+                                    "Rerank Score": f"{c.get('score', 0):.4f}" if c.get("score") is not None else "N/A",
+                                    "Dense Score": f"{c.get('dense_score', 0):.4f}" if c.get("dense_score") is not None else "N/A",
+                                    "BM25 Score": f"{c.get('sparse_score', 0):.4f}" if c.get("sparse_score") is not None else "N/A",
+                                })
+                            st.dataframe(pd.DataFrame(trace_rows), use_container_width=True, hide_index=True)
+
+                # Download Executive Brief for this turn
+                export_content = generate_executive_brief_export(turn["question"], res, chunk_map, is_ar=is_ar)
+                st.download_button(
+                    label="📥 " + ("تصدير إيجاز تنفيذي لهذه النتيجة (.md)" if is_ar else "Export Turn Briefing (.md)"),
+                    data=export_content,
+                    file_name=f"briefing_turn_{idx_turn}_{res.get('request_id', 'audit')[:6]}.md",
+                    mime="text/markdown",
+                    key=f"dl_turn_{idx_turn}",
+                )
+
+    # Bottom Pinned Chat Input
+    pending_preset = st.session_state.pop("pending_preset", None)
+    chat_prompt = st.chat_input("اطرح استفسارك هنا باللغة العربية..." if is_ar else "Ask your question here in Arabic or English...")
+    active_question = pending_preset or chat_prompt
+
+    if active_question:
+        active_question = active_question.strip()
+        history_payload = [
+            {"role": m["role"], "content": m["content"]}
+            for m in st.session_state.get("chat_history", [])[-4:]
+        ]
+        with st.chat_message("user", avatar="👤"):
+            st.markdown(active_question)
+
+        with st.chat_message("assistant", avatar="🇯🇴"):
+            with st.spinner("جاري تنفيذ الاسترجاع الهجين والتحليل المقيد بالأدلة الرسمية..." if is_ar else "Retrieving official evidence & synthesizing grounded answer..."):
+                try:
                     res = client.ask(
                         question=active_question,
                         history=history_payload,
                         document_ids=selected_doc_ids,
                         include_trace=include_trace,
                     )
-                    st.session_state["last_result"] = res
-
-                    # Append to conversation
+                    st.session_state["chat_turns"].append({
+                        "question": active_question,
+                        "result": res,
+                        "include_trace": include_trace,
+                    })
                     st.session_state["chat_history"].append({"role": "user", "content": active_question})
                     st.session_state["chat_history"].append({"role": "assistant", "content": res.get("answer", "")})
-
-            except Exception as exc:
-                st.error(f"{'فشل التحليل والاسترجاع:' if is_ar else 'Analysis failed:'} {exc}")
-
-    result = st.session_state.get("last_result")
-    active_q = st.session_state.get("last_question", "")
-
-    if result:
-        st.markdown("<div style='margin-top: 15px;'></div>", unsafe_allow_html=True)
-        
-        trace = result.get("trace")
-        evidence_list = result.get("evidence", [])
-        chunk_map = build_chunk_text_map(trace, evidence_list)
-        citations = result.get("citations", [])
-        latency = result.get("latency", {})
-        abstained = result.get("abstained", False)
-        was_rewritten = result.get("was_rewritten", False)
-        retrieval_q = result.get("retrieval_question")
-
-        if was_rewritten and retrieval_q:
-            st.info(
-                f"ℹ️ **{'إعادة صياغة السؤال لسياق المحادثة:' if is_ar else 'Conversational Intent Resolved:'}** "
-                f"{'تم تحسين الاستفسار إلى' if is_ar else 'Query reformulated to'} *\"{retrieval_q}\"*"
-            )
-
-        if abstained:
-            st.warning(
-                "⚠️ **اعتذار النظام (امتناع آمن)**: انخفضت درجة الثقة ومطابقة الأدلة عن الحد الأدنى للأمان والامتثال. لم يتم توليد أي إجابة تكهنية غير مدعومة بوثائق رسمية."
-                if is_ar
-                else "⚠️ **System Abstained**: Retrieval confidence fell below safety threshold. No speculative answer generated."
-            )
-        else:
-            badge_title = "إجابة موثقة ومدعومة بالأدلة الرسمية المعتمدة" if is_ar else "Grounded & Evidence-Backed Synthesis"
-            req_label = "معرف الطلب:" if is_ar else "Request ID:"
-            req_id_short = result.get("request_id", "N/A")[:12]
-            verified_pill = "✅ مطابقة كاملة للأصل" if is_ar else "✅ 100% Grounded"
-            result_header = "📌 النتيجة والاستخلاص الذكي الموثق" if is_ar else "📌 Synthesized Intelligence & Verifiable Findings"
-            clean_answer, charts = extract_all_charts(result.get("answer", ""), is_ar=is_ar)
-            selected_svc_name = result.get("selected_service_name")
-            svc_badge_html = (
-                f'<span style="background:#EFF6FF; color:#002D62; font-size:0.78rem; font-weight:800; padding:3px 10px; border-radius:6px; border:1px solid #BFDBFE;">🏛️ {selected_svc_name}</span>'
-                if selected_svc_name
-                else ""
-            )
-
-            header_html = textwrap.dedent(f"""
-<div class="grounded-result-card" style="margin-bottom:12px; padding:16px 20px;">
-<div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1.5px solid #E2E8F0; padding-bottom:10px; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
-<div style="display:flex; align-items:center; gap:10px;">
-<span style="color:#047857; font-size:1.1rem; font-weight:800;">●</span>
-<span style="font-weight:800; color:#002D62; font-size:0.98rem;">{badge_title}</span>
-<span style="background:#ECFDF5; color:#047857; font-size:0.75rem; font-weight:800; padding:3px 8px; border-radius:4px; border:1px solid #A7F3D0;">{verified_pill}</span>
-{svc_badge_html}
-</div>
-<div>
-<span style="background:#EFF6FF; color:#002D62; font-size:0.78rem; font-weight:700; padding:4px 10px; border-radius:6px; border:1px solid #BFDBFE;" dir="ltr">{req_label} {req_id_short}</span>
-</div>
-</div>
-<div style="font-size:0.86rem; font-weight:800; color:#002D62; text-transform:uppercase; margin-bottom:4px;">{result_header}</div>
-</div>
-""").strip()
-
-            st.markdown(header_html, unsafe_allow_html=True)
-
-            with st.container():
-                st.markdown(clean_answer)
-
-            # Dynamic Comparison Charts if present
-            if charts:
-                render_charts(charts, is_ar=is_ar)
-
-        # Latency & Pipeline Metrics Bar
-        if latency:
-            l_col1, l_col2, l_col3, l_col4 = st.columns(4)
-            with l_col1:
-                st.metric("الزمن الإجمالي" if is_ar else "Total Latency", f"{latency.get('total_ms', 0):.0f} ms")
-            with l_col2:
-                st.metric("استرجاع هجين" if is_ar else "Hybrid Retrieval", f"{latency.get('retrieval_ms', 0):.0f} ms")
-            with l_col3:
-                st.metric("إعادة ترتيب BGE" if is_ar else "BGE Reranking", f"{latency.get('reranking_ms', 0):.0f} ms")
-            with l_col4:
-                st.metric("توليد محلي Ollama" if is_ar else "Local LLM Gen", f"{latency.get('generation_ms', 0):.0f} ms")
-
-        # Interactive Evidence Explorer & Source Drawer
-        if citations or evidence_list:
-            drawer_title = (
-                "📑 مستعرض الأدلة التفاعلي (انقر لمعاينة المصدر الأصلي وصفحة PDF)"
-                if is_ar
-                else "📑 Interactive Evidence Drawer (Click to Inspect Primary Source & PDF Preview)"
-            )
-            st.markdown(
-                f"<div style='font-size:0.85rem; font-weight:800; color:#002D62; text-transform:uppercase; letter-spacing:0.04em; margin-top:14px; margin-bottom:8px;'>"
-                f"{drawer_title}"
-                f"</div>",
-                unsafe_allow_html=True,
-            )
-
-            for idx, cit in enumerate(citations if citations else evidence_list, start=1):
-                ref = cit.get("reference", idx)
-                raw_src = cit.get("source", "Document")
-                clean_name, base_src = clean_source_name(raw_src)
-                page = cit.get("page_number")
-                cid = cit.get("chunk_id", "")
-                doc_id = cit.get("document_id", "")
-                heading = " → ".join(cit.get("heading_path") or [])
-                svc_name = cit.get("service_name")
-                sec_type = cit.get("section_type")
-
-                page_label = f" • {'صفحة' if is_ar else 'Page'} {page}" if page is not None else ""
-                svc_label = f" • 🏛️ {svc_name}" if svc_name else ""
-                sec_label = f" • [{sec_type}]" if sec_type else ""
-                exp_header = f"📄 {'الدليل' if is_ar else 'Evidence'} [{ref}]: {clean_name}{svc_label}{page_label}{sec_label}"
-                with st.expander(exp_header, expanded=(idx == 1)):
-                    c_left, c_right = st.columns([1.5, 1])
-                    with c_left:
-                        st.markdown(
-                            f"**{'الوثيقة:' if is_ar else 'Document:'}** <code dir='ltr'>{clean_name}</code> (<code dir='ltr'>{base_src}</code>)",
-                            unsafe_allow_html=True,
-                        )
-                        if svc_name:
-                            st.caption(f"**{'الخدمة الحكومية:' if is_ar else 'Service:'}** {svc_name}")
-                        if sec_type:
-                            st.caption(f"**{'نوع القسم:' if is_ar else 'Section:'}** `{sec_type}`")
-                        if heading:
-                            st.caption(f"**{'المسار / القسم:' if is_ar else 'Section Path:'}** {heading}")
-                        st.caption(
-                            f"**{'البصمة الرقمية للمقطع:' if is_ar else 'Chunk SHA-256:'}** <code dir='ltr'>{cid[:24]}...</code>",
-                            unsafe_allow_html=True,
-                        )
-
-                        raw_text = cit.get("text") or chunk_map.get(cid)
-                        if raw_text:
-                            st.markdown(
-                                f"<div class='source-pill-quote' dir='auto'>\"{raw_text.strip()}\"</div>",
-                                unsafe_allow_html=True,
-                            )
-
-                    with c_right:
-                        if page is not None and doc_id:
-                            st.caption("🖼️ " + ("معاينة صفحة PDF الرسمية" if is_ar else "High-Res PDF Page Preview"))
-                            img_bytes = client.get_page_preview(doc_id, page)
-                            if img_bytes:
-                                st.image(img_bytes, caption=f"{'صفحة' if is_ar else 'Page'} {page}", use_container_width=True)
-                            else:
-                                st.info("معاينة الصفحة متاحة في مستعرض PDF." if is_ar else f"Page {page} preview available in PDF viewer.")
-                        else:
-                            st.caption("📄 " + ("مستند نصي / ماركداون معتمد" if is_ar else "Markdown / Text Document Evidence"))
-                            st.success("مقطع موثق ومطابق للأصل في المستودع السيادي." if is_ar else "Verified verbatim passage in sovereign store.")
-
-        # Optional Reranker Audit Trace Expander
-        if include_trace and trace:
-            trace_header = "🔍 سجل تدقيق معيد الترتيب والمسار التشخيصي الكامل (Reranker Audit Trace)" if is_ar else "🔍 Reranker Audit Trace & Stage Telemetry"
-            with st.expander(trace_header, expanded=False):
-                cand_list = trace.get("candidates", [])
-                if cand_list:
-                    st.caption(
-                        f"{'المرشحات المسترجعة قبل وبعد إعادة الترتيب:' if is_ar else 'Candidates retrieved and scored across pipeline:'} ({len(cand_list)} {'مرشح' if is_ar else 'candidates'})"
-                    )
-                    trace_rows = []
-                    for c_idx, c in enumerate(cand_list[:10], start=1):
-                        c_src, _ = clean_source_name(c.get("source", ""))
-                        trace_rows.append({
-                            "#" if is_ar else "Rank": c_idx,
-                            "الوثيقة" if is_ar else "Document": c_src,
-                            "معيد الترتيب (Score)" if is_ar else "Rerank Score": f"{c.get('score', 0):.4f}" if c.get("score") is not None else "N/A",
-                            "البحث الكثيف (Dense)" if is_ar else "Dense Score": f"{c.get('dense_score', 0):.4f}" if c.get("dense_score") is not None else "N/A",
-                            "البحث المعجمي (BM25)" if is_ar else "BM25 Score": f"{c.get('sparse_score', 0):.4f}" if c.get("sparse_score") is not None else "N/A",
-                        })
-                    st.dataframe(pd.DataFrame(trace_rows), use_container_width=True, hide_index=True)
-
-        # Export Button
-        st.markdown("<div style='margin-top: 15px;'></div>", unsafe_allow_html=True)
-        export_content = generate_executive_brief_export(active_q, result, chunk_map, is_ar=is_ar)
-        st.download_button(
-            label="📥 تصدير الإيجاز التنفيذي (.md)" if is_ar else "📥 Export Executive Briefing (.md)",
-            data=export_content,
-            file_name=f"psut_executive_brief_{result.get('request_id', 'audit')[:8]}.md",
-            mime="text/markdown",
-            use_container_width=True,
-            type="secondary",
-        )
+                    st.session_state["last_result"] = res
+                    st.session_state["last_question"] = active_question
+                    st.rerun()
+                except Exception as exc:
+                    st.error(f"{'فشل التحليل والاسترجاع:' if is_ar else 'Analysis failed:'} {exc}")
 
 
 # =========================================================
