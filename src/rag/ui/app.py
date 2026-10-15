@@ -1388,23 +1388,18 @@ if logo_b64:
         st.markdown(
             f"""
             <div class="hero-institution-card">
-                <div style="display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap;">
-                    <div style="display:flex; align-items:center; gap:20px;">
-                        <img src="{logo_b64}" style="height:78px; max-width:190px; object-fit:contain; filter:drop-shadow(0 2px 4px rgba(0,45,98,0.06));" alt="Amrak Logo" />
-                        <div style="border-right:2.5px solid #E2E8F0; padding-right:20px;">
-                            <div style="font-size:0.8rem; font-weight:800; color:#1E40AF; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:2px;">
-                                المملكة الأردنية الهاشمية • دائرة الأحوال المدنية والجوازات
-                            </div>
-                            <h1 style="color:#002D62; font-size:1.75rem; font-weight:800; margin:0; line-height:1.25;">
-                                مَنَصَّة أَمْرَك | المنظومة الحكومية للاستشارات الإجرائية
-                            </h1>
-                            <div style="color:#475569; font-size:0.9rem; margin-top:4px; font-weight:600;">
-                                استجابة فورية مقيدة بالسند القانوني • خدمات المواطنين والوثائق الرسمية • بنية محلية آمنة 100%
-                            </div>
+                <div style="display:flex; align-items:center; gap:20px;">
+                    <img src="{logo_b64}" style="height:78px; max-width:190px; object-fit:contain; filter:drop-shadow(0 2px 4px rgba(0,45,98,0.06));" alt="Amrak Logo" />
+                    <div style="border-right:2.5px solid #E2E8F0; padding-right:20px;">
+                        <div style="font-size:0.8rem; font-weight:800; color:#1E40AF; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:2px;">
+                            المملكة الأردنية الهاشمية • دائرة الأحوال المدنية والجوازات
                         </div>
-                    </div>
-                    <div style="text-align:left; font-size:0.78rem; color:#64748B; line-height:1.4;">
-                        <span style="background:#E0F2FE; color:#0369A1; padding:4px 8px; border-radius:6px; font-weight:700;">🇯🇴 نظام وطني معتمد</span>
+                        <h1 style="color:#002D62; font-size:1.75rem; font-weight:800; margin:0; line-height:1.25;">
+                            مَنَصَّة أَمْرَك | المنظومة الحكومية للاستشارات الإجرائية
+                        </h1>
+                        <div style="color:#475569; font-size:0.9rem; margin-top:4px; font-weight:600;">
+                            استجابة فورية مقيدة بالسند القانوني • خدمات المواطنين والوثائق الرسمية • بنية محلية آمنة 100%
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1415,23 +1410,18 @@ if logo_b64:
         st.markdown(
             f"""
             <div class="hero-institution-card">
-                <div style="display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap;">
-                    <div style="display:flex; align-items:center; gap:20px;">
-                        <img src="{logo_b64}" style="height:78px; max-width:190px; object-fit:contain; filter:drop-shadow(0 2px 4px rgba(0,45,98,0.06));" alt="Amrak Logo" />
-                        <div style="border-left:2.5px solid #E2E8F0; padding-left:20px;">
-                            <div style="font-size:0.8rem; font-weight:800; color:#1E40AF; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:2px;">
-                                Hashemite Kingdom of Jordan • Civil Status & Passports Dept
-                            </div>
-                            <h1 style="color:#002D62; font-size:1.75rem; font-weight:800; margin:0; line-height:1.25;">
-                                AMRAK Platform | Sovereign Civic Advisory System
-                            </h1>
-                            <div style="color:#475569; font-size:0.9rem; margin-top:4px; font-weight:600;">
-                                100% Air-Gapped Local Infrastructure • Grounded Citizen Services • Verifiable Legal Basis
-                            </div>
+                <div style="display:flex; align-items:center; gap:20px;">
+                    <img src="{logo_b64}" style="height:78px; max-width:190px; object-fit:contain; filter:drop-shadow(0 2px 4px rgba(0,45,98,0.06));" alt="Amrak Logo" />
+                    <div style="border-left:2.5px solid #E2E8F0; padding-left:20px;">
+                        <div style="font-size:0.8rem; font-weight:800; color:#1E40AF; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:2px;">
+                            Hashemite Kingdom of Jordan • Civil Status & Passports Dept
                         </div>
-                    </div>
-                    <div style="text-align:right; font-size:0.78rem; color:#64748B; line-height:1.4;">
-                        <span style="background:#E0F2FE; color:#0369A1; padding:4px 8px; border-radius:6px; font-weight:700;">🇯🇴 Official Sovereign System</span>
+                        <h1 style="color:#002D62; font-size:1.75rem; font-weight:800; margin:0; line-height:1.25;">
+                            AMRAK Platform | Sovereign Civic Advisory System
+                        </h1>
+                        <div style="color:#475569; font-size:0.9rem; margin-top:4px; font-weight:600;">
+                            100% Air-Gapped Local Infrastructure • Grounded Citizen Services • Verifiable Legal Basis
+                        </div>
                     </div>
                 </div>
             </div>
