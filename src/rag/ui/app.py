@@ -22,8 +22,8 @@ load_dotenv()
 # =========================================================
 
 st.set_page_config(
-    page_title="PSUT | Sovereign Hybrid RAG",
-    page_icon="🎓",
+    page_title="أمرك | المنصة الذكية للخدمات والمعاملات الحكومية 🇯🇴",
+    page_icon="assets/amrak_logo.png",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -903,10 +903,9 @@ if "health_status" not in st.session_state:
 
 def get_logo_path() -> str | None:
     candidates = [
-        "assets/psut_logo.png",
-        "assets/psut_logo.jpg",
-        "assets/psut_logo.svg",
-        "assets/psut_crest.svg",
+        "assets/amrak_logo.png",
+        "assets/amrak_logo.jpg",
+        "assets/amrak_logo.svg",
     ]
     for c in candidates:
         if Path(c).is_file():
@@ -920,7 +919,7 @@ def get_logo_base64() -> str | None:
         try:
             with open(path, "rb") as f:
                 encoded = base64.b64encode(f.read()).decode("utf-8")
-                mime = "image/svg+xml" if path.endswith(".svg") else "image/png"
+                mime = "image/jpeg" if path.lower().endswith((".jpg", ".jpeg")) else "image/svg+xml" if path.endswith(".svg") else "image/png"
                 return f"data:{mime};base64,{encoded}"
         except Exception:
             pass
@@ -1144,12 +1143,13 @@ def generate_executive_brief_export(
 
     if is_ar or is_arabic_text(question):
         doc = [
-            "# 🏛️ جامعة الأميرة سمية للتكنولوجيا",
-            "## تقرير الإيجاز والاستخلاص الذكي السيادي",
-            f"**تاريخ التوليد:** {now_str} (بيئة عمل سيادية معزولة محلياً)",
-            "**التصنيف:** سري / استخبارات حكومية سيادية",
+            "# 🇯🇴 المملكة الأردنية الهاشمية - دائرة الأحوال المدنية والجوازات",
+            "## مَنَصَّة أَمْرَك | تقرير التدقيق والاستخلاص الحكومي الرسمي",
+            f"**تاريخ التوليد:** {now_str} (بيئة عمل حكومية سيادية معزولة محلياً)",
+            "**التصنيف:** رسمي / استشارة إجرائية معتمدة",
             f"**معرف الطلب:** `{req_id}`",
             f"**حالة التدقيق:** {'⚠️ اعتذار (أدلة غير كافية للتحقق)' if abstained else '✅ موثق ومطابق للأدلة الرسمية'}",
+            "**فريق التطوير:** عمار خضر (20230047) • عبدالله شحادات (20230417) • براء الصمادي (20230749)",
             "\n---\n",
             "## 🎯 الاستفسار الإجرائي / التنفيذي",
             f"> {question}",
@@ -1184,8 +1184,8 @@ def generate_executive_brief_export(
 
         doc.extend([
             "\n---\n",
-            "## 🛡️ سجل التدقيق والموثوقية السيادية",
-            "- **محرك الاسترجاع:** هجين (تضمين كثيف Dense + معجمي BM25 + دمج تراتبي RRF)",
+            "## 🛡️ سجل التدقيق والموثوقية الرسمية",
+            "- **محرك الاسترجاع:** استرجاع دقيق متعدد المراحل (تضمين كثيف + معجمي متقدم + مطابقة دلالية)",
             "- **معيد الترتيب:** Cross-Encoder (`BAAI/bge-reranker-base`) متعدد اللغات",
             "- **محرك التوليد المحلي:** Cohere Command R7B Arabic (`Ollama`)",
             "- **التسريع العتادي:** NVIDIA GeForce RTX 3060 Laptop GPU (CUDA مفعّل)",
@@ -1194,12 +1194,13 @@ def generate_executive_brief_export(
         ])
     else:
         doc = [
-            "# 🏛️ PRINCESS SUMAYA UNIVERSITY FOR TECHNOLOGY",
-            "## Sovereign Hybrid RAG Intelligence Briefing",
-            f"**Generated:** {now_str} (Air-Gapped Sovereign Workstation)",
-            "**Classification:** Confidential / Sovereign Enterprise Intelligence",
+            "# 🇯🇴 HASHEMITE KINGDOM OF JORDAN - CIVIL STATUS & PASSPORTS",
+            "## AMRAK PLATFORM | Official Government Advisory Report",
+            f"**Generated:** {now_str} (Air-Gapped Sovereign Local Workstation)",
+            "**Classification:** Official / Government Advisory",
             f"**Request Identifier:** `{req_id}`",
             f"**Audit Status:** {'⚠️ Abstained (Insufficient Evidence)' if abstained else '✅ Verified & Grounded'}",
+            "**Development Team:** Ammar Khader (20230047) • Abdallah Shhadat (20230417) • Bara Smadi (20230749)",
             "\n---\n",
             "## 🎯 Executive Inquiry",
             f"> {question}",
@@ -1234,8 +1235,8 @@ def generate_executive_brief_export(
 
         doc.extend([
             "\n---\n",
-            "## 🛡️ Reliability & Sovereignty Audit",
-            "- **Retrieval Pipeline:** Hybrid (Dense Vector + BM25 Lexical + Reciprocal Rank Fusion)",
+            "## 🛡️ Reliability & Official Audit",
+            "- **Retrieval Pipeline:** Multi-Stage Verifiable Corpus Retrieval & Precision Matcher",
             "- **Reranker:** Cross-Encoder (`BAAI/bge-reranker-base`)",
             "- **Local LLM Engine:** Cohere Command R7B Arabic (`Ollama`)",
             "- **Hardware Acceleration:** NVIDIA GeForce RTX 3060 Laptop GPU (CUDA Active)",
@@ -1254,6 +1255,13 @@ with st.sidebar:
     logo_file = get_logo_path()
     if logo_file:
         st.image(logo_file, use_container_width=True)
+
+    st.markdown("""
+    <div style="text-align: center; margin-top: -6px; margin-bottom: 14px;">
+        <div style="font-size: 1.35rem; font-weight: 900; color: #002D62; letter-spacing: -0.02em;">مَنَصَّة أَمْرَك | AMRAK</div>
+        <div style="font-size: 0.78rem; font-weight: 700; color: #0284C7; margin-top: 2px;">المنظومة الحكومية للاستشارات الإجرائية 🇯🇴</div>
+    </div>
+    """, unsafe_allow_html=True)
 
     st.markdown('<div class="sidebar-section-title">Language / لغة الواجهة</div>', unsafe_allow_html=True)
     ui_lang = st.radio(
@@ -1346,6 +1354,28 @@ with st.sidebar:
         st.session_state["last_question"] = ""
         st.rerun()
 
+    st.markdown("---")
+    st.markdown("""
+    <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px; margin-top: 10px;">
+        <div style="font-size: 0.8rem; font-weight: 800; color: #002D62; margin-bottom: 6px;">👥 فريق التطوير والابتكار:</div>
+        <div style="font-size: 0.77rem; color: #334155; line-height: 1.7;">
+            • <b>عمار خضر</b> (20230047)<br>
+            • <b>عبدالله شحادات</b> (20230417)<br>
+            • <b>براء الصمادي</b> (20230749)
+        </div>
+    </div>
+    """ if is_ar else """
+    <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px; margin-top: 10px;">
+        <div style="font-size: 0.8rem; font-weight: 800; color: #002D62; margin-bottom: 6px;">👥 Engineering Team:</div>
+        <div style="font-size: 0.77rem; color: #334155; line-height: 1.7;">
+            • <b>Ammar Khader</b> (20230047)<br>
+            • <b>Abdallah Shhadat</b> (20230417)<br>
+            • <b>Bara Smadi</b> (20230749)
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+
 
 # =========================================================
 # Main Institutional Header
@@ -1360,18 +1390,21 @@ if logo_b64:
             <div class="hero-institution-card">
                 <div style="display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap;">
                     <div style="display:flex; align-items:center; gap:20px;">
-                        <img src="{logo_b64}" style="height:74px; max-width:180px; object-fit:contain; filter:drop-shadow(0 2px 4px rgba(0,45,98,0.06));" alt="PSUT Logo" />
+                        <img src="{logo_b64}" style="height:78px; max-width:190px; object-fit:contain; filter:drop-shadow(0 2px 4px rgba(0,45,98,0.06));" alt="Amrak Logo" />
                         <div style="border-right:2.5px solid #E2E8F0; padding-right:20px;">
                             <div style="font-size:0.8rem; font-weight:800; color:#1E40AF; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:2px;">
-                                جامعة الأميرة سمية للتكنولوجيا • هاكاثون 42 إربد
+                                المملكة الأردنية الهاشمية • دائرة الأحوال المدنية والجوازات
                             </div>
                             <h1 style="color:#002D62; font-size:1.75rem; font-weight:800; margin:0; line-height:1.25;">
-                                نظام الاسترجاع الهجين والذكاء الاصطناعي السيادي
+                                مَنَصَّة أَمْرَك | المنظومة الحكومية للاستشارات الإجرائية
                             </h1>
                             <div style="color:#475569; font-size:0.9rem; margin-top:4px; font-weight:600;">
-                                بنية تحتية محلية معزولة 100% • قطاع الخدمات الحكومية والسيادية • استرجاع موثق ومطابق للأصل
+                                استجابة فورية مقيدة بالسند القانوني • خدمات المواطنين والوثائق الرسمية • بنية محلية آمنة 100%
                             </div>
                         </div>
+                    </div>
+                    <div style="text-align:left; font-size:0.78rem; color:#64748B; line-height:1.4;">
+                        <span style="background:#E0F2FE; color:#0369A1; padding:4px 8px; border-radius:6px; font-weight:700;">🇯🇴 نظام وطني معتمد</span>
                     </div>
                 </div>
             </div>
@@ -1384,18 +1417,21 @@ if logo_b64:
             <div class="hero-institution-card">
                 <div style="display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap;">
                     <div style="display:flex; align-items:center; gap:20px;">
-                        <img src="{logo_b64}" style="height:74px; max-width:180px; object-fit:contain; filter:drop-shadow(0 2px 4px rgba(0,45,98,0.06));" alt="PSUT Logo" />
+                        <img src="{logo_b64}" style="height:78px; max-width:190px; object-fit:contain; filter:drop-shadow(0 2px 4px rgba(0,45,98,0.06));" alt="Amrak Logo" />
                         <div style="border-left:2.5px solid #E2E8F0; padding-left:20px;">
                             <div style="font-size:0.8rem; font-weight:800; color:#1E40AF; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:2px;">
-                                Princess Sumaya University for Technology • 42 Irbid
+                                Hashemite Kingdom of Jordan • Civil Status & Passports Dept
                             </div>
                             <h1 style="color:#002D62; font-size:1.75rem; font-weight:800; margin:0; line-height:1.25;">
-                                Sovereign Hybrid RAG Engine
+                                AMRAK Platform | Sovereign Civic Advisory System
                             </h1>
                             <div style="color:#475569; font-size:0.9rem; margin-top:4px; font-weight:600;">
-                                100% Air-Gapped Local Infrastructure • Sovereign Public Services • Verifiable Evidence
+                                100% Air-Gapped Local Infrastructure • Grounded Citizen Services • Verifiable Legal Basis
                             </div>
                         </div>
+                    </div>
+                    <div style="text-align:right; font-size:0.78rem; color:#64748B; line-height:1.4;">
+                        <span style="background:#E0F2FE; color:#0369A1; padding:4px 8px; border-radius:6px; font-weight:700;">🇯🇴 Official Sovereign System</span>
                     </div>
                 </div>
             </div>
@@ -1403,7 +1439,7 @@ if logo_b64:
             unsafe_allow_html=True,
         )
 else:
-    st.title("🏛️ جامعة الأميرة سمية للتكنولوجيا - الذكاء الاصطناعي السيادي" if is_ar else "🏛️ PSUT Sovereign Hybrid RAG")
+    st.title("🇯🇴 مَنَصَّة أَمْرَك - المنظومة الحكومية للاستشارات الإجرائية" if is_ar else "🇯🇴 AMRAK - Sovereign Civic Advisory Platform")
 
 
 
@@ -1573,7 +1609,7 @@ if selected_feature_idx == 0:
             st.markdown(active_question)
 
         with st.chat_message("assistant", avatar="🇯🇴"):
-            with st.spinner("جاري تنفيذ الاسترجاع الهجين والتحليل المقيد بالأدلة الرسمية..." if is_ar else "Retrieving official evidence & synthesizing grounded answer..."):
+            with st.spinner("جاري استخراج السند القانوني وتحليل الإجراءات الرسمية المعتمدة..." if is_ar else "Retrieving official evidence & verifying legal procedures..."):
                 try:
                     res = client.ask(
                         question=active_question,
@@ -2058,7 +2094,7 @@ elif selected_feature_idx == 2:
                     st.download_button(
                         label="📥 تحميل التقرير التنفيذي (.md)" if is_ar else "📥 Download Executive Briefing (.md)",
                         data="\n".join(brief_md),
-                        file_name=f"psut_executive_brief_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md",
+                        file_name=f"amrak_executive_brief_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md",
                         mime="text/markdown",
                         use_container_width=True,
                     )
