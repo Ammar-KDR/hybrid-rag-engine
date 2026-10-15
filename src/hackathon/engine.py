@@ -48,11 +48,6 @@ class HackathonEngine:
                 for m in models:
                     if m.startswith(prefix):
                         return m
-                for candidate in ["qwen2.5:3b", "qwen3.5:4b"]:
-                    if candidate in models:
-                        return candidate
-                if models:
-                    return models[0]
         except Exception:
             pass
         return requested_name
@@ -77,7 +72,7 @@ class HackathonEngine:
                 "contexts": [],
             }
 
-        # Collect target contexts
+        # Collect target contexts strictly from routed services
         contexts: List[str] = []
         for target in decision.targets:
             doc = self.corpus.get_service(target.doc_type, target.situation)
@@ -96,19 +91,20 @@ class HackathonEngine:
                 "contexts": [],
             }
 
-        # Generate answer using Ollama
-        context_block = "\n".join(contexts)
+        # Generate answer using local Ollama model
+        context_block = "\n\n".join(contexts)
         prompt = (
             "أنت مساعد حكومي رسمي لدائرة الأحوال المدنية والجوازات الأردنية.\n"
-            "أجب عن سؤال المواطن بلغة عربية رسمية دقيقة، موجزة، ومباشرة بناءً على السياق الرسمي المرفق فقط.\n"
-            "إرشادات هامة:\n"
-            "- التزم حصرياً بالمعلومات الموجودة في السياق، ولا تضف شروطاً أو متطلبات من عندك لم ترد في السياق.\n"
-            "- إذا سأل المواطن عن عدة معاملات أو أشخاص، أجب عن كل معاملة بشكل مرقم ومستقل ومباشر متجاهلاً التفاصيل الجانبية غير الإجرائية.\n"
-            "- عند تحديد الرسوم، طابق بدقة تفاصيل المواطن (مثل: العمر، التواجد داخل أو خارج الأردن، مدة الصلاحية المتبقية كأن تكون أقل من 180 يوماً = 50 دينار للبالغ، وعدد مرات الفقدان) مع البند المالي المذكور في السياق.\n"
-            "- في معاملات بدل الفاقد أو التالف، انتبه لبند الرسوم: اذكر دائماً الرسم الأساسي المكتوب في أول سطر (مثل: 5 دنانير لدفتر العائلة) ثم اذكر قيمة استيفاء التعهد السابق (10 دنانير) والتعهد الجديد، ولا تخلط بين الرسم والتعهد.\n"
-            "- إذا تضمن السؤال استفساراً عن الرسوم والمدة الزمنية (الزمن المستغرق)، اذكر كليهما بوضوح في إجابتك.\n"
-            "- إذا كان السؤال استفساراً عن إمكانية (مثل: بقدر، هل يجوز، ممكن، هل بدها موافقة)، أجب بالتأكيد أو النفي ثم اذكر التفصيل المذكور في السياق.\n\n"
-            f"السياق الرسمي:\n{context_block}\n\n"
+            "مهمتك: الإجابة عن سؤال المواطن بدقة وأمانة بناءً على النصوص الرسمية المرفقة فقط.\n\n"
+            "القواعد الصارمة للإجابة:\n"
+            "1. طبق حصرياً شروط وأحكام الخدمة المعنية المسترجعة، ولا تخلط إطلاقاً بين خدمات مختلفة أو تنقل شرطاً من معاملة لأخرى.\n"
+            "2. لا تذكر أي مبلغ مالي أو غرامة أو كفالة أو مدة إنجاز إلا إذا كانت واردة ومسندة بنص صريح في السياق المرفق.\n"
+            "3. إذا كان السؤال عن الرسوم، طابق بدقة تفاصيل المواطن (مثل: العمر، الصفة مدني/عسكري، مكان التواجد، ومدة الصلاحية) مع البند المالي المناسب في السياق: لا تطبق بنود العسكريين لمواطن مدني، بل اختر بند المواطن المدني المطابق لعمره وصلاحية جوازه (فإذا كان فوق 16 سنة وباقٍ على جوازه أقل من 180 يوماً / 6 أشهر فإن الرسم المقرر في النص هو 50 ديناراً وليس 20 ديناراً).\n"
+            "4. في معاملات بدل الفاقد، اذكر دائماً الرسم الأساسي بالإضافة إلى قيمة استيفاء التعهد أو الكفالة المقررة.\n"
+            "5. لا تخترع ولا تخمن أي مدد انتظار أو إجراءات غير موجودة في السياق. وإذا كانت معلومة معينة غير مذكورة في الوثائق المرفقة (مثل عدم وجود مدة انتظار محددة)، اذكر بصراحة أنها غير مذكورة في النصوص الرسمية.\n"
+            "6. إذا كانت الرسوم أو الشروط تعتمد على معلومات ناقصة لم يذكرها المواطن، اسأل المواطن عنها أو اذكر الخيارات المقررة بدلاً من افتراض تفاصيل غير مؤكدة.\n"
+            "7. إذا تضمن السؤال عدة معاملات أو استفسارات منفصلة، أجب عن كل منها في بند مرقم ومستقل بدقة واكتمال مع تجاهل التفاصيل الجانبية غير الإجرائية.\n\n"
+            f"السياق الرسمي المعتمد:\n{context_block}\n\n"
             f"سؤال المواطن: {question}\n\n"
             "الجواب المباشر:"
         )
@@ -117,8 +113,7 @@ class HackathonEngine:
             raw_answer = self._call_ollama(prompt)
             clean_answer = self._clean_llm_response(raw_answer)
         except Exception:
-            # Fallback if Ollama has a momentary timeout
-            clean_answer = self._generate_heuristic_fallback(decision, question, contexts)
+            clean_answer = self._generate_fallback(decision, question, contexts)
 
         return {
             "answer": clean_answer,
@@ -152,19 +147,16 @@ class HackathonEngine:
             return data.get("response", "")
 
     def _clean_llm_response(self, text: str) -> str:
-        # Strip <think>...</think> if present (Qwen 3.5 reasoning format)
         text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL)
-        # Strip leading phrases like "الإجابة:" or "الجواب:"
         text = re.sub(r"^(?:الإجابة|الجواب|الرد)\s*[:\-]\s*", "", text.strip())
         return text.strip()
 
-    def _generate_heuristic_fallback(
+    def _generate_fallback(
         self,
         decision: RouteDecision,
         question: str,
         contexts: List[str],
     ) -> str:
-        # If LLM is unreachable, extract the content directly from the context string
         if contexts:
             first_ctx = contexts[0]
             if ":" in first_ctx:
