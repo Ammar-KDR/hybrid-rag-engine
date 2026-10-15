@@ -1449,18 +1449,12 @@ if selected_feature_idx == 0:
     if not st.session_state["chat_turns"]:
         st.markdown(
             f"""
-            <div class="grounded-result-card" style="margin-top: 15px; text-align: center; border-right: 5px solid #002D62; padding: 26px 30px;">
-                <div style="font-size: 2.2rem; margin-bottom: 8px;">🇯🇴</div>
-                <div style="font-size: 1.2rem; font-weight: 800; color: #002D62; margin-bottom: 6px;">
+            <div style="margin-top: 15px; text-align: center !important; background: #FFFFFF; border: 1.5px solid #E2E8F0; border-radius: 12px; padding: 28px 30px; box-shadow: 0 2px 8px rgba(0,45,98,0.04);">
+                <div style="font-size: 1.25rem; font-weight: 800; color: #002D62; margin-bottom: 8px; text-align: center !important;">
                     {'المساعد الذكي لدائرة الأحوال المدنية والجوازات' if is_ar else 'Sovereign Advisory Assistant for Jordan Public Services'}
                 </div>
-                <div style="color: #475569; font-size: 0.92rem; line-height: 1.7; max-width: 700px; margin: 0 auto;">
+                <div style="color: #475569; font-size: 0.95rem; line-height: 1.7; max-width: 680px; margin: 0 auto; text-align: center !important;">
                     {'أنا جاهز للإجابة على استفساراتكم المتعلقة بمعاملات وإجراءات جواز السفر، البطاقة الشخصية الذكية، ودفتر العائلة.' if is_ar else 'Ready to assist you with inquiries regarding Jordanian passport, smart ID card, and family book procedures.'}
-                </div>
-                <div style="margin-top: 14px;">
-                    <span style="background: #EFF6FF; color: #002D62; font-size: 0.82rem; font-weight: 700; padding: 5px 14px; border-radius: 20px; border: 1px solid #BFDBFE;">
-                        {'💬 اكتب استفسارك في الصندوق بالأسفل لبدء المحادثة المباشرة' if is_ar else '💬 Type your inquiry in the chat box below to begin'}
-                    </span>
                 </div>
             </div>
             """,
