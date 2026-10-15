@@ -1,132 +1,100 @@
 {
   "documents": [
     {
-      "document_id": "fc38a1fc19a881dc5b1fd4b7060af6285b69d311ab5760f10d5f797a38b23a66",
-      "filename": "H01.html",
-      "file_type": "html",
-      "chunk_count": 7,
-      "ingested_at": "2026-10-14T16:11:46.726835+00:00",
-      "chunking_strategy": "arabic_service_section"
-    },
-    {
-      "document_id": "7fd9b197b15cb77d8dbb4372bcf353f39c06f9c7396426a78c9a2e5fa1ef53c3",
-      "filename": "H02.html",
-      "file_type": "html",
-      "chunk_count": 7,
-      "ingested_at": "2026-10-14T16:11:46.726835+00:00",
-      "chunking_strategy": "arabic_service_section"
-    },
-    {
-      "document_id": "7264f33e9f48906beccea1e495c202e5af4af1b8fc298ce1038717c6e631239d",
-      "filename": "H03.html",
-      "file_type": "html",
-      "chunk_count": 7,
-      "ingested_at": "2026-10-14T16:11:46.726835+00:00",
-      "chunking_strategy": "arabic_service_section"
-    },
-    {
-      "document_id": "e0b1df0b78aa01e08a06b2207c88b366642bbc486baf6e313f889cc4a02d503e",
-      "filename": "P01.pdf",
-      "file_type": "pdf",
+      "document_id": "4eec934d2e03e574a480b73e7adbf8f5cc2a55db57e1843cac97632ead8176c1",
+      "filename": "family_book_damaged.txt",
+      "file_type": "txt",
       "chunk_count": 3,
-      "ingested_at": "2026-10-14T16:11:46.726835+00:00",
+      "ingested_at": "2026-10-15T09:48:04.408531+00:00",
       "chunking_strategy": "arabic_service_section"
     },
     {
-      "document_id": "dee537936c2c8cce1c8d89131d66c81ca058719e131a4952b3486f1821f32edb",
-      "filename": "P02.pdf",
-      "file_type": "pdf",
-      "chunk_count": 6,
-      "ingested_at": "2026-10-14T16:11:46.726835+00:00",
-      "chunking_strategy": "arabic_service_section"
-    },
-    {
-      "document_id": "aaa6a3dcca32a5802ccabc3a2db3f44c7210537bf246f9c9660280b15c624aab",
-      "filename": "P03.pdf",
-      "file_type": "pdf",
+      "document_id": "828387556d0079d6907c573d16f3c231301522daa3664aae19cc29c3efe6613f",
+      "filename": "family_book_first_issue.txt",
+      "file_type": "txt",
       "chunk_count": 2,
-      "ingested_at": "2026-10-14T16:11:46.726835+00:00",
+      "ingested_at": "2026-10-15T09:48:04.408531+00:00",
       "chunking_strategy": "arabic_service_section"
     },
     {
-      "document_id": "79fdadaa83581a1aca7017e7514ca8f923637bac950978180c96d6aa9e507b61",
-      "filename": "P04.pdf",
-      "file_type": "pdf",
+      "document_id": "f03fc59b774cab2afd1307708192e62828b41f639a8aa07e32f289b944c17f1a",
+      "filename": "family_book_lost.txt",
+      "file_type": "txt",
       "chunk_count": 3,
-      "ingested_at": "2026-10-14T16:11:46.726835+00:00",
+      "ingested_at": "2026-10-15T09:48:04.408531+00:00",
       "chunking_strategy": "arabic_service_section"
     },
     {
-      "document_id": "d5dcb79665b4c1a978f00ef80a7d3243e587ceaef9239d1be2e5540c17683e8a",
-      "filename": "P05.pdf",
-      "file_type": "pdf",
-      "chunk_count": 4,
-      "ingested_at": "2026-10-14T16:11:46.726835+00:00",
+      "document_id": "261b8686e56137d9af55081c2bbe384aa60ede92375ac34a174906f6d45dae01",
+      "filename": "family_book_renewal.txt",
+      "file_type": "txt",
+      "chunk_count": 3,
+      "ingested_at": "2026-10-15T09:48:04.408531+00:00",
       "chunking_strategy": "arabic_service_section"
     },
     {
-      "document_id": "689ffa92f9a9e22851ffe8cfe3b9e649ae06204c548758fcebc5e25d40da962b",
-      "filename": "P06.pdf",
-      "file_type": "pdf",
-      "chunk_count": 42,
-      "ingested_at": "2026-10-14T16:11:46.726835+00:00",
+      "document_id": "0e39f4e0835287910e913eb39135096d91a2326d66a982e37e27b6e18904390f",
+      "filename": "id_card_damaged.txt",
+      "file_type": "txt",
+      "chunk_count": 3,
+      "ingested_at": "2026-10-15T09:48:04.408531+00:00",
       "chunking_strategy": "arabic_service_section"
     },
     {
-      "document_id": "6ab5b19988404ab45442ee3c4fdb5b222f096a1984de83485bc7b91544b03380",
-      "filename": "P07.pdf",
-      "file_type": "pdf",
+      "document_id": "0538b43ced1beaca91a7712ed4e162b2843733da126a3d3fcbd4334f1d41139b",
+      "filename": "id_card_first_issue.txt",
+      "file_type": "txt",
+      "chunk_count": 3,
+      "ingested_at": "2026-10-15T09:48:04.408531+00:00",
+      "chunking_strategy": "arabic_service_section"
+    },
+    {
+      "document_id": "7950561d06392e3c4af8671ecb29af1cb1454dbf2d9dcfbdc8f25a3880758dac",
+      "filename": "id_card_lost.txt",
+      "file_type": "txt",
       "chunk_count": 2,
-      "ingested_at": "2026-10-14T16:11:46.726835+00:00",
+      "ingested_at": "2026-10-15T09:48:04.408531+00:00",
       "chunking_strategy": "arabic_service_section"
     },
     {
-      "document_id": "a93035fd57fc283379d96d1b2b16b1677f2e012618f49abe8ea55cc8a0e5aa02",
-      "filename": "P08.pdf",
-      "file_type": "pdf",
-      "chunk_count": 4,
-      "ingested_at": "2026-10-14T16:11:46.726835+00:00",
+      "document_id": "5edeb130e903dd2fecb50f0d01137e5109ebf9971a94a36be3c15077e0ed80c5",
+      "filename": "id_card_renewal.txt",
+      "file_type": "txt",
+      "chunk_count": 3,
+      "ingested_at": "2026-10-15T09:48:04.408531+00:00",
       "chunking_strategy": "arabic_service_section"
     },
     {
-      "document_id": "72bbfa5d4c765c38cad64aefed5087c63ad2c078d7c6861e4bcc0791434937ef",
-      "filename": "P09.pdf",
-      "file_type": "pdf",
-      "chunk_count": 21,
-      "ingested_at": "2026-10-14T16:11:46.726835+00:00",
+      "document_id": "a565144d5073c93a7de6453ec94a8d51a051cbbc0dadadc9ef74d481e9dd7b00",
+      "filename": "passport_damaged.txt",
+      "file_type": "txt",
+      "chunk_count": 2,
+      "ingested_at": "2026-10-15T09:48:04.408531+00:00",
       "chunking_strategy": "arabic_service_section"
     },
     {
-      "document_id": "456204148c5caf80e65272f0ff20b051ec181d434363bdb0ac682024a45c66de",
-      "filename": "P10.pdf",
-      "file_type": "pdf",
-      "chunk_count": 9,
-      "ingested_at": "2026-10-14T16:11:46.726835+00:00",
+      "document_id": "3dd9d376f85533733d8f60834de3c0bc6cf7fdb5c3cd709c32dabb6867dae3ed",
+      "filename": "passport_first_issue.txt",
+      "file_type": "txt",
+      "chunk_count": 2,
+      "ingested_at": "2026-10-15T09:48:04.408531+00:00",
       "chunking_strategy": "arabic_service_section"
     },
     {
-      "document_id": "c0a5ef563fe592b56c6b4a2bb28d396274f65b484545a7e9b58b6f263113943d",
-      "filename": "passport_service_guide.md",
-      "file_type": "md",
-      "chunk_count": 7,
-      "ingested_at": "2026-10-14T17:08:26.463630+00:00",
-      "chunking_strategy": "arabic_government_structure"
+      "document_id": "92300c3efd4cab4453935593f2e9f1a23a7954b39e407347937820f74b1f1766",
+      "filename": "passport_lost.txt",
+      "file_type": "txt",
+      "chunk_count": 2,
+      "ingested_at": "2026-10-15T09:48:04.408531+00:00",
+      "chunking_strategy": "arabic_service_section"
     },
     {
-      "document_id": "b842586c51d7146af392df1dd55c31781e7aebb274b83385d561dc30531e47bb",
-      "filename": "\u0648\u062b\u064a\u0642\u0629_\u0628_\u0625\u062c\u0631\u0627\u0621_\u062a\u0635\u062f\u064a\u0642_\u0627\u0644\u0648\u062b\u0627\u0626\u0642_\u0627\u062e\u062a\u0628\u0627\u0631\u064a.pdf",
-      "file_type": "pdf",
-      "chunk_count": 9,
-      "ingested_at": "2026-10-14T17:34:37.979798+00:00",
-      "chunking_strategy": "arabic_government_structure"
-    },
-    {
-      "document_id": "8861c4fc19b96dcf2bca4e957bb3e9ca994ffcf7eeea4c861287037350fcccad",
-      "filename": "\u0648\u062b\u064a\u0642\u0629_\u0623_\u0633\u064a\u0627\u0633\u0629_\u0627\u0633\u062a\u0642\u0628\u0627\u0644_\u0627\u0644\u0637\u0644\u0628\u0627\u062a_\u0627\u062e\u062a\u0628\u0627\u0631\u064a\u0629.pdf",
-      "file_type": "pdf",
-      "chunk_count": 7,
-      "ingested_at": "2026-10-14T17:34:56.544444+00:00",
-      "chunking_strategy": "arabic_government_structure"
+      "document_id": "42d8711eefc709f0f2a6db84ff2ddca2de78a9f9034b5a29cdf289159949f8f1",
+      "filename": "passport_renewal.txt",
+      "file_type": "txt",
+      "chunk_count": 2,
+      "ingested_at": "2026-10-15T09:48:04.408531+00:00",
+      "chunking_strategy": "arabic_service_section"
     }
   ]
 }

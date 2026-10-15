@@ -168,7 +168,24 @@ def main():
         return
 
     if len(sys.argv) > 1:
-        input_file = Path(sys.argv[1])
+        raw_arg = sys.argv[1].strip()
+        candidate = Path(raw_arg)
+        if candidate.is_file():
+            input_file = candidate
+        elif candidate.with_suffix(".json").is_file():
+            input_file = candidate.with_suffix(".json")
+        elif (candidate / "questions.json").is_file():
+            input_file = candidate / "questions.json"
+        elif (Path("data") / candidate).is_file():
+            input_file = Path("data") / candidate
+        elif (Path("data") / f"{raw_arg}.json").is_file():
+            input_file = Path("data") / f"{raw_arg}.json"
+        elif (Path("data/hackathon_live_pack/participant_pack") / candidate).is_file():
+            input_file = Path("data/hackathon_live_pack/participant_pack") / candidate
+        elif (Path("data/hackathon_live_pack/participant_pack") / f"{raw_arg}.json").is_file():
+            input_file = Path("data/hackathon_live_pack/participant_pack") / f"{raw_arg}.json"
+        else:
+            input_file = candidate
     else:
         # Default fallback if run without arguments
         default_candidate = Path("questions.json")
@@ -179,7 +196,7 @@ def main():
             sys.exit(1)
 
     if not input_file.exists():
-        print(f"Error: Questions file not found at: {input_file}")
+        print(f"Error: Questions file not found at: {input_file} (tried resolving with .json and in data directories)")
         sys.exit(1)
 
     output_file = input_file.parent / "answers.json"
