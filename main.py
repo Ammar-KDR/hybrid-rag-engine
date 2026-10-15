@@ -120,7 +120,47 @@ def run_evaluation(input_filepath: Path, output_filepath: Path) -> None:
     print("=" * 65)
 
 
+def run_interactive() -> None:
+    print("=" * 65)
+    print(" [Interactive Mode] Jordan Civil Status & Passports Assistant")
+    print(" Type your questions in Arabic. Type 'exit' or 'q' to stop.")
+    print(" Type 'reset' to start a new chat (clear conversational memory).")
+    print("=" * 65)
+    corpus = HackathonCorpus()
+    router = IntentRouter(corpus)
+    engine = HackathonEngine(corpus=corpus, router=router)
+    history = []
+    while True:
+        try:
+            q = input("\n[المواطن] > ").strip()
+            if not q:
+                continue
+            if q.lower() in ["exit", "quit", "q"]:
+                print("[*] Exiting.")
+                break
+            if q.lower() in ["reset", "new", "clear"]:
+                history = []
+                print("[*] تم تصفير الذاكرة وبدء محادثة جديدة.")
+                continue
+            res = engine.answer_question(q, history=history)
+            print(f"\n[المساعد]:\n{res['answer']}")
+            if res.get("contexts"):
+                print("\n[السياقات المسترجعة]:")
+                for c in res["contexts"]:
+                    print(f"  * {c.strip()[:100]}...")
+            else:
+                print("\n[السياقات]: [] (خارج النطاق)")
+            history.append({"question": q, "answer": res["answer"], "contexts": res.get("contexts", [])})
+        except (KeyboardInterrupt, EOFError):
+            print("\n[*] Exiting.")
+            break
+
+
 def main():
+    if len(sys.argv) > 1 and sys.argv[1].lower() in ["-i", "--interactive", "interactive", "chat"]:
+        run_interactive()
+        return
+
     if len(sys.argv) > 1:
         input_file = Path(sys.argv[1])
     else:
@@ -129,7 +169,7 @@ def main():
         if default_candidate.exists():
             input_file = default_candidate
         else:
-            print("Usage: python main.py <questions.json>")
+            print("Usage: python main.py <questions.json>   (or: python main.py -i for interactive mode)")
             sys.exit(1)
 
     if not input_file.exists():
