@@ -40,7 +40,7 @@ class Settings:
 
     OLLAMA_MODEL = os.getenv(
         "OLLAMA_MODEL",
-        "qwen3.5:4b",
+        "command-r7b-arabic:7b",
     )
 
     ENABLE_VERIFICATION = os.getenv(

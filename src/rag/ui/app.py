@@ -1187,7 +1187,7 @@ def generate_executive_brief_export(
             "## 🛡️ سجل التدقيق والموثوقية السيادية",
             "- **محرك الاسترجاع:** هجين (تضمين كثيف Dense + معجمي BM25 + دمج تراتبي RRF)",
             "- **معيد الترتيب:** Cross-Encoder (`BAAI/bge-reranker-base`) متعدد اللغات",
-            "- **محرك التوليد المحلي:** Qwen 3.5 4B (`Ollama`)",
+            "- **محرك التوليد المحلي:** Cohere Command R7B Arabic (`Ollama`)",
             "- **التسريع العتادي:** NVIDIA GeForce RTX 3060 Laptop GPU (CUDA مفعّل)",
             "- **قاعدة المتجهات:** Qdrant مدمجة ومحلية بالكامل",
             f"- **تفصيل زمن الاستجابة:** إجمالي {latency.get('total_ms', 0):.0f} مللي ثانية (الاسترجاع: {latency.get('retrieval_ms', 0):.0f} مللي ثانية | إعادة الترتيب: {latency.get('reranking_ms', 0):.0f} مللي ثانية | التوليد: {latency.get('generation_ms', 0):.0f} مللي ثانية)",
@@ -1237,7 +1237,7 @@ def generate_executive_brief_export(
             "## 🛡️ Reliability & Sovereignty Audit",
             "- **Retrieval Pipeline:** Hybrid (Dense Vector + BM25 Lexical + Reciprocal Rank Fusion)",
             "- **Reranker:** Cross-Encoder (`BAAI/bge-reranker-base`)",
-            "- **Local LLM Engine:** Qwen 3.5 4B (`Ollama`)",
+            "- **Local LLM Engine:** Cohere Command R7B Arabic (`Ollama`)",
             "- **Hardware Acceleration:** NVIDIA GeForce RTX 3060 Laptop GPU (CUDA Active)",
             "- **Vector Index:** Embedded Qdrant (Zero-Docker Local Storage)",
             f"- **Latency Breakdown:** Total {latency.get('total_ms', 0):.0f} ms (Retrieval: {latency.get('retrieval_ms', 0):.0f} ms | Rerank: {latency.get('reranking_ms', 0):.0f} ms | Gen: {latency.get('generation_ms', 0):.0f} ms)",
@@ -2232,7 +2232,7 @@ elif selected_feature_idx == 3:
         with h_col1:
             st.metric(
                 "محرك التوليد Ollama" if is_ar else "Ollama LLM",
-                health_info.get("ollama", {}).get("model", "qwen3.5:4b"),
+                health_info.get("ollama", {}).get("model", "command-r7b-arabic:7b"),
                 "كارت الشاشة GPU" if is_ar else "Local GPU",
             )
         with h_col2:
