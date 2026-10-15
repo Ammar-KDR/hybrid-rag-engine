@@ -1307,6 +1307,28 @@ with st.sidebar:
     st.metric("الوثائق المفهرسة" if is_ar else "Indexed Documents", doc_count)
 
     st.markdown(
+        f'<div class="sidebar-section-title">{"نطاق البحث والتدقيق" if is_ar else "Retrieval & Scope"}</div>',
+        unsafe_allow_html=True,
+    )
+    docs = st.session_state.get("documents", [])
+    all_label = "جميع الوثائق الـ 12 المعتمدة" if is_ar else "All 12 Ingested Documents"
+    doc_options = [all_label] + [f"{clean_source_name(d.get('filename'))[0]} ({d.get('document_id')[:8]})" for d in docs]
+    selected_scope_label = st.selectbox(
+        "نطاق استرجاع الوثائق" if is_ar else "Document Scope",
+        options=doc_options,
+        index=0,
+    )
+    selected_doc_ids = None
+    if selected_scope_label != all_label:
+        selected_idx = doc_options.index(selected_scope_label) - 1
+        selected_doc_ids = [docs[selected_idx]["document_id"]]
+
+    include_trace = st.checkbox(
+        "تضمين تدقيق معيد الترتيب" if is_ar else "Include Reranker Trace",
+        value=True,
+    )
+
+    st.markdown(
         f'<div class="sidebar-section-title">{"إدارة الجلسة" if is_ar else "Session Controls"}</div>',
         unsafe_allow_html=True,
     )
@@ -1318,6 +1340,7 @@ with st.sidebar:
             st.error(str(e))
 
     if st.button("🧹 مسح سجل المحادثة" if is_ar else "🧹 Clear Chat History", use_container_width=True):
+        st.session_state["chat_turns"] = []
         st.session_state["chat_history"] = []
         st.session_state["last_result"] = None
         st.session_state["last_question"] = ""
@@ -1416,108 +1439,21 @@ if selected_feature_idx == 0:
     if "chat_turns" not in st.session_state:
         st.session_state["chat_turns"] = []
 
-    # Preset Starter Inquiries (Tailored to Official Competition Documents)
-    if is_ar:
-        st.markdown(
-            "<span style='font-size:0.82rem; font-weight:800; color:#002D62; text-transform:uppercase; letter-spacing:0.04em;'>"
-            "⚡ سيناريوهات العرض السريعة (انقر للاختبار الفوري والتوليد اللحظي):"
-            "</span>",
-            unsafe_allow_html=True,
-        )
-        preset_cols = st.columns(4)
-        with preset_cols[0]:
-            if st.button("🛂 رسوم التجديد حسب السن", key="preset_gov_1", use_container_width=True):
-                st.session_state["pending_preset"] = "عمري 17 سنة وجوازي باقي عليه 3 شهور، قديش رسوم التجديد؟"
-                st.rerun()
-
-        with preset_cols[1]:
-            if st.button("⚖️ فاقد ثانٍ vs تالف", key="preset_gov_2", use_container_width=True):
-                st.session_state["pending_preset"] = "أيهما أغلى: جواز سفر بدل فاقد للمرة الثانية أم بدل تالف؟"
-                st.rerun()
-
-        with preset_cols[2]:
-            if st.button("📑 فقدان الهوية للمرة الثالثة", key="preset_gov_3", use_container_width=True):
-                st.session_state["pending_preset"] = "الهوية الذكية تبعتي ضاعت وهاي ثالث مرة، شو الإجراء والرسوم والكفالة المطلوبة؟"
-                st.rerun()
-
-        with preset_cols[3]:
-            if st.button("📊 مقارنة رسوم الوثائق الثلاث", key="preset_gov_4", use_container_width=True):
-                st.session_state["pending_preset"] = "قارن في جدول ورسم بياني بين رسوم إصدار جواز السفر والبطاقة الذكية ودفتر العائلة لأول مرة"
-                st.rerun()
-    else:
-        st.markdown(
-            "<span style='font-size:0.82rem; font-weight:800; color:#002D62; text-transform:uppercase; letter-spacing:0.04em;'>"
-            "⚡ Instant Demo Scenarios (Click to test grounded generation):"
-            "</span>",
-            unsafe_allow_html=True,
-        )
-        preset_cols = st.columns(4)
-        with preset_cols[0]:
-            if st.button("🛂 Renewal Fee by Age", key="preset_gov_1", use_container_width=True):
-                st.session_state["pending_preset"] = "How much is passport renewal fee for a 17-year-old with 3 months remaining validity?"
-                st.rerun()
-
-        with preset_cols[1]:
-            if st.button("⚖️ 2nd Lost vs Damaged", key="preset_gov_2", use_container_width=True):
-                st.session_state["pending_preset"] = "Which is more expensive: a second-time lost passport or a damaged passport?"
-                st.rerun()
-
-        with preset_cols[2]:
-            if st.button("📑 Third ID Card Loss", key="preset_gov_3", use_container_width=True):
-                st.session_state["pending_preset"] = "I lost my smart ID card for the third time. What are the procedures, fees, and financial guarantee?"
-                st.rerun()
-
-        with preset_cols[3]:
-            if st.button("📊 Compare Document Fees", key="preset_gov_4", use_container_width=True):
-                st.session_state["pending_preset"] = "Compare first-issue fees for passport, smart ID card, and family book in a table and chart"
-                st.rerun()
-
-    # Scope & Advanced Filters Expander
-    docs = st.session_state.get("documents", [])
-    all_label = "جميع الوثائق الـ 12 المعتمدة (نطاق كامل)" if is_ar else "All 12 Ingested Documents (Full Scope)"
-    doc_options = [all_label] + [f"{clean_source_name(d.get('filename'))[0]} ({d.get('document_id')[:8]})" for d in docs]
-    
-    with st.expander("⚙️ " + ("إعدادات نطاق البحث وأدوات التدقيق" if is_ar else "Retrieval Scope & Audit Controls"), expanded=False):
-        c_scope, c_trace, c_clear = st.columns([2, 1, 1])
-        with c_scope:
-            scope_prompt = "نطاق استرجاع الوثائق" if is_ar else "Document Scope"
-            selected_scope_label = st.selectbox(scope_prompt, options=doc_options, index=0)
-            selected_doc_ids = None
-            if selected_scope_label != all_label:
-                selected_idx = doc_options.index(selected_scope_label) - 1
-                selected_doc_ids = [docs[selected_idx]["document_id"]]
-        with c_trace:
-            include_trace = st.checkbox(
-                "تضمين سجل تدقيق معيد الترتيب" if is_ar else "Include Reranker Trace",
-                value=True,
-            )
-        with c_clear:
-            st.markdown("<div style='height: 25px;'></div>", unsafe_allow_html=True)
-            if st.button("🧹 مسح المحادثة" if is_ar else "🧹 Clear Chat", use_container_width=True):
-                st.session_state["chat_turns"] = []
-                st.session_state["chat_history"] = []
-                st.session_state["last_result"] = None
-                st.session_state["last_question"] = ""
-                st.rerun()
-
-    if selected_scope_label == all_label:
-        selected_doc_ids = None
-
     # Interactive Conversation Feed
     if not st.session_state["chat_turns"]:
         st.markdown(
             f"""
-            <div class="grounded-result-card" style="margin-top: 15px; text-align: center; border-right: 5px solid #002D62; padding: 22px 28px;">
+            <div class="grounded-result-card" style="margin-top: 15px; text-align: center; border-right: 5px solid #002D62; padding: 26px 30px;">
                 <div style="font-size: 2.2rem; margin-bottom: 8px;">🇯🇴</div>
-                <div style="font-size: 1.15rem; font-weight: 800; color: #002D62; margin-bottom: 6px;">
-                    {'المساعد الذكي السيادي لدائرة الأحوال المدنية والجوازات' if is_ar else 'Sovereign RAG Assistant for Jordan Public Services'}
+                <div style="font-size: 1.2rem; font-weight: 800; color: #002D62; margin-bottom: 6px;">
+                    {'المساعد الذكي لدائرة الأحوال المدنية والجوازات' if is_ar else 'Sovereign RAG Assistant for Jordan Public Services'}
                 </div>
-                <div style="color: #475569; font-size: 0.92rem; line-height: 1.7; max-width: 720px; margin: 0 auto;">
+                <div style="color: #475569; font-size: 0.92rem; line-height: 1.7; max-width: 700px; margin: 0 auto;">
                     {'أنا جاهز للإجابة بدقة مطلقة على استفساراتكم حول معاملات جواز السفر، البطاقة الذكية، ودفتر العائلة، مدعوماً بالسند القانوني والوثائق الـ 12 المعتمدة ومحرك Cohere Command R7B المحلي على كارت الشاشة GPU.' if is_ar else 'Ready to answer your queries regarding Jordanian Passport, Smart ID Card, and Family Book services with 100% official grounding and Cohere Command R7B Arabic running locally on GPU.'}
                 </div>
                 <div style="margin-top: 14px;">
-                    <span style="background: #EFF6FF; color: #002D62; font-size: 0.8rem; font-weight: 700; padding: 4px 12px; border-radius: 20px; border: 1px solid #BFDBFE;">
-                        {'⚡ اطرح سؤالك في الصندوق بالأسفل أو اختر أحد السيناريوهات السريعة بالأعلى' if is_ar else '⚡ Type your question below or click any scenario above to begin'}
+                    <span style="background: #EFF6FF; color: #002D62; font-size: 0.82rem; font-weight: 700; padding: 5px 14px; border-radius: 20px; border: 1px solid #BFDBFE;">
+                        {'💬 اكتب استفسارك في الصندوق بالأسفل لبدء المحادثة المباشرة' if is_ar else '💬 Type your inquiry in the chat box below to begin'}
                     </span>
                 </div>
             </div>
@@ -1625,12 +1561,10 @@ if selected_feature_idx == 0:
                 )
 
     # Bottom Pinned Chat Input
-    pending_preset = st.session_state.pop("pending_preset", None)
     chat_prompt = st.chat_input("اطرح استفسارك هنا باللغة العربية..." if is_ar else "Ask your question here in Arabic or English...")
-    active_question = pending_preset or chat_prompt
 
-    if active_question:
-        active_question = active_question.strip()
+    if chat_prompt:
+        active_question = chat_prompt.strip()
         history_payload = [
             {"role": m["role"], "content": m["content"]}
             for m in st.session_state.get("chat_history", [])[-4:]
