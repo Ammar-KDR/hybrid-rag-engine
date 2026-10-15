@@ -1455,7 +1455,7 @@ if selected_feature_idx == 0:
                     {'المساعد الذكي لدائرة الأحوال المدنية والجوازات' if is_ar else 'Sovereign Advisory Assistant for Jordan Public Services'}
                 </div>
                 <div style="color: #475569; font-size: 0.92rem; line-height: 1.7; max-width: 700px; margin: 0 auto;">
-                    {'أنا جاهز للإجابة بدقة مطلقة على استفساراتكم حول معاملات جواز السفر، البطاقة الذكية، ودفتر العائلة، مدعوماً بالسند القانوني والوثائق الـ 12 المعتمدة ومحرك Cohere Command R7B المحلي على كارت الشاشة GPU.' if is_ar else 'Ready to answer your queries regarding Jordanian Passport, Smart ID Card, and Family Book services with 100% official grounding and Cohere Command R7B Arabic running locally on GPU.'}
+                    {'أنا جاهز للإجابة على استفساراتكم المتعلقة بمعاملات وإجراءات جواز السفر، البطاقة الشخصية الذكية، ودفتر العائلة.' if is_ar else 'Ready to assist you with inquiries regarding Jordanian passport, smart ID card, and family book procedures.'}
                 </div>
                 <div style="margin-top: 14px;">
                     <span style="background: #EFF6FF; color: #002D62; font-size: 0.82rem; font-weight: 700; padding: 5px 14px; border-radius: 20px; border: 1px solid #BFDBFE;">
