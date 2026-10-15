@@ -46,3 +46,7 @@ Thumbs.db
 
 experiement/
 data/temp_html/
+data/archive_old_docs/
+answers_baseline.json
+scratch_complex_answer.json
+
