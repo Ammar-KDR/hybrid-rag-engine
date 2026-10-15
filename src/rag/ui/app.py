@@ -1447,26 +1447,6 @@ else:
 # Active Feature Workspace
 # =========================================================
 
-feature_headers = [
-    ("🔍 المحادثة التفاعلية ومستكشف الأدلة الرسمية", "🔍 Interactive Chat & Grounded Evidence Explorer"),
-    ("⚖️ محقق تعارض وتناقض الوثائق والسياسات", "⚖️ Document Conflict & Policy Discrepancy Detective"),
-    ("📋 الإيجاز والاستخبارات التنفيذية متعددة الوثائق", "📋 Multi-Document Executive Briefing & Intelligence Reports"),
-    ("📁 مستودع المعرفة السيادي والتشخيص الفني", "📁 Sovereign Knowledge Repository & Live System Diagnostics"),
-]
-
-cur_header = feature_headers[selected_feature_idx][0] if is_ar else feature_headers[selected_feature_idx][1]
-
-st.markdown(
-    f"""
-    <div style="display:flex; justify-content:space-between; align-items:center; background:#FFFFFF; border:1.5px solid #CBD5E1; border-top:4px solid #002D62; border-radius:10px; padding:12px 20px; margin-bottom:20px; box-shadow:0 2px 8px rgba(0,45,98,0.04); flex-wrap:wrap; gap:8px;">
-        <div style="display:flex; align-items:center; gap:10px;">
-            <span style="font-size:1.12rem; font-weight:800; color:#002D62;">{cur_header}</span>
-        </div>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
 # =========================================================
 # FEATURE 1: INTERACTIVE CHAT & EVIDENCE EXPLORER
 # =========================================================
@@ -1482,7 +1462,7 @@ if selected_feature_idx == 0:
             <div class="grounded-result-card" style="margin-top: 15px; text-align: center; border-right: 5px solid #002D62; padding: 26px 30px;">
                 <div style="font-size: 2.2rem; margin-bottom: 8px;">🇯🇴</div>
                 <div style="font-size: 1.2rem; font-weight: 800; color: #002D62; margin-bottom: 6px;">
-                    {'المساعد الذكي لدائرة الأحوال المدنية والجوازات' if is_ar else 'Sovereign RAG Assistant for Jordan Public Services'}
+                    {'المساعد الذكي لدائرة الأحوال المدنية والجوازات' if is_ar else 'Sovereign Advisory Assistant for Jordan Public Services'}
                 </div>
                 <div style="color: #475569; font-size: 0.92rem; line-height: 1.7; max-width: 700px; margin: 0 auto;">
                     {'أنا جاهز للإجابة بدقة مطلقة على استفساراتكم حول معاملات جواز السفر، البطاقة الذكية، ودفتر العائلة، مدعوماً بالسند القانوني والوثائق الـ 12 المعتمدة ومحرك Cohere Command R7B المحلي على كارت الشاشة GPU.' if is_ar else 'Ready to answer your queries regarding Jordanian Passport, Smart ID Card, and Family Book services with 100% official grounding and Cohere Command R7B Arabic running locally on GPU.'}
