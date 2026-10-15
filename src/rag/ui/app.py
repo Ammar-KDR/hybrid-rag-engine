@@ -1354,26 +1354,7 @@ with st.sidebar:
         st.session_state["last_question"] = ""
         st.rerun()
 
-    st.markdown("---")
-    st.markdown("""
-    <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px; margin-top: 10px;">
-        <div style="font-size: 0.8rem; font-weight: 800; color: #002D62; margin-bottom: 6px;">👥 فريق التطوير والابتكار:</div>
-        <div style="font-size: 0.77rem; color: #334155; line-height: 1.7;">
-            • <b>عمار خضر</b> (20230047)<br>
-            • <b>عبدالله شحادات</b> (20230417)<br>
-            • <b>براء الصمادي</b> (20230749)
-        </div>
-    </div>
-    """ if is_ar else """
-    <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px; margin-top: 10px;">
-        <div style="font-size: 0.8rem; font-weight: 800; color: #002D62; margin-bottom: 6px;">👥 Engineering Team:</div>
-        <div style="font-size: 0.77rem; color: #334155; line-height: 1.7;">
-            • <b>Ammar Khader</b> (20230047)<br>
-            • <b>Abdallah Shhadat</b> (20230417)<br>
-            • <b>Bara Smadi</b> (20230749)
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+
 
 
 
