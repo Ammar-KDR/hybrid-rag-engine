@@ -10,9 +10,10 @@ from src.hackathon.corpus import HackathonCorpus, ServiceDocument
 
 OUT_OF_SCOPE_KEYWORDS = {
     "طيران", "تذكرة", "تذاكر", "دبي", "فندق", "حجز", "فيزا شنغن", "سياحة",
-    "طقس", "جامعة", "شهادة جامعية", "معدل", "توجيهي", "قبول موحد",
+    "طقس", "جامعة", "جامعه", "جامعي", "جامعية", "جامعيه", "جامعات", "شهادة", "شهادات",
+    "تصديق", "تعليم", "تعليم عالي", "مدرسة", "مدرسه", "مدارس", "امتحان", "معدل", "توجيهي", "قبول موحد",
     "ضريبة الدخل", "رخصة قيادة", "مخالفات السير", "ترخيص سيارات",
-    "ضمان اجتماعي", "تقاعد", "شراء بيت", "إيجار"
+    "ضمان اجتماعي", "تقاعد", "شراء بيت", "إيجار", "وظيفة", "وظائف", "ديوان الخدمة"
 }
 
 PRONOUN_FOLLOWUP_INDICATORS = [
@@ -32,6 +33,7 @@ class RouteTarget:
 class RouteDecision:
     targets: List[RouteTarget]
     is_out_of_scope: bool = False
+    is_unclear: bool = False
     refusal_reason: str = ""
 
 
@@ -52,8 +54,8 @@ class IntentRouter:
         # 1. Out of scope check
         for kw in OUT_OF_SCOPE_KEYWORDS:
             if kw in norm_q or kw in q_tokens:
-                # Unless it also explicitly mentions our core documents
-                if not any(d in norm_q for d in ["جواز", "باسبور", "عائلة", "عيلة", "بطاقة ذكية", "هوية"]):
+                # Unless it also explicitly mentions our core civil documents
+                if self._detect_doc_type(norm_q) is None:
                     return RouteDecision(
                         targets=[],
                         is_out_of_scope=True,
@@ -109,12 +111,11 @@ class IntentRouter:
             situation = "renewal"  # Most common default citizen action
 
         if doc_type is None:
-            # Check if this query is completely irrelevant
-            if not any(k in norm_q for k in ["رسوم", "تكلفة", "كم", "وين", "أوراق", "طلب", "سفارة", "شروط", "صورة"]):
-                return RouteDecision(targets=[], is_out_of_scope=True)
-            # Default to passport if generic question
-            doc_type = "passport"
-            situation = "renewal"
+            # If the user asks for renewal/issuance/fees/lost without mentioning which document, clarify!
+            if any(k in norm_q for k in ["اجدد", "أجدد", "تجديد", "اطلع", "أطلع", "اصدار", "إصدار", "بدل فاقد", "بدل تالف", "معاملة", "الوثيقة"]):
+                return RouteDecision(targets=[], is_unclear=True)
+            # Otherwise, since no civil document was mentioned, it's out of scope
+            return RouteDecision(targets=[], is_out_of_scope=True)
 
         # 7. Detect target section(s)
         sections = self._detect_sections(norm_q)
@@ -155,7 +156,11 @@ class IntentRouter:
     def _detect_sections(self, norm_q: str) -> List[str]:
         sections = []
         # SLA
-        if any(w in norm_q for w in ["يستغرق", "تستغرق", "بتستغرق", "كم وقت", "كم مدة", "كم مده", "المدة", "المدة الزمنية", "الزمن", "كم بدها", "كم ياخذ", "كم يأخذ"]):
+        if any(w in norm_q for w in [
+            "يستغرق", "تستغرق", "بتستغرق", "كم وقت", "كم مدة", "كم مده", "المدة", "المدة الزمنية",
+            "الزمن", "كم بدها", "كم بدها وقت", "كم ياخذ", "كم يأخذ", "دقيقة", "دقائق", "ساعة", "ساعات",
+            "بتاخذ", "تاخذ", "بتوخذ", "توخذ", "يوخذ", "ياخذ", "تأخذ"
+        ]):
             sections.append("sla")
         # Locations / Channels
         if any(w in norm_q for w in ["وين", "اين", "أين", "مكان", "اماكن", "أماكن", "سفارة", "سفاره", "السفارة", "السفاره", "قنصلية", "قنصليه", "برا البلد", "خارج الاردن", "خارج الأردن"]):
@@ -167,7 +172,7 @@ class IntentRouter:
         if any(w in norm_q for w in ["رسوم", "كم بكلف", "بتكلف", "قديش بدفع", "كم ادفع", "كم أدفع", "سعر", "دينار", "دنانير", "تكلفة", "غرامة", "أغلى", "اغلى"]):
             sections.append("fees")
         # Conditions / Eligibility
-        if any(w in norm_q for w in ["شروط", "يحق", "موافقة", "موافقه", "ولي الامر", "ولي الأمر", "عمر", "سن", "قاصر", "زوجها", "رب الاسرة", "رب الأسرة", "توفي"]):
+        if any(w in norm_q for w in ["شروط", "يحق", "موافقة", "موافقه", "ولي الامر", "ولي الأمر", "عمر", "سن", "قاصر", "زوجها", "رب الاسرة", "رب الأسرة", "توفي", "وفاة", "وفاه"]):
             sections.append("conditions")
             sections.append("documents")
             sections.append("notes")
@@ -179,14 +184,39 @@ class IntentRouter:
         return sections
 
     def _check_comparison(self, norm_q: str) -> Optional[List[RouteTarget]]:
-        # e.g.: "قديش صورة شخصية بحتاج للبطاقة الذكية لأول مرة، وقديش لتجديد جواز السفر؟"
+        is_comparison = any(w in norm_q for w in [
+            "ايهما", "أيهما", "الفرق", "مقارنة", "مقارنه", "ولا", "مين أغلى", "مين اغلى",
+            "مين أسرع", "مين اسرع", "مين ارخص", "مين أرخص"
+        ])
+
+        # Check for multiple situations (damaged, lost, renewal, first_issue)
+        detected_situations = []
+        if any(w in norm_q for w in ["تالف", "بدل تالف"]):
+            detected_situations.append("damaged")
+        if any(w in norm_q for w in ["فاقد", "بدل فاقد", "ضيع"]):
+            detected_situations.append("lost")
+        if any(w in norm_q for w in ["تجديد", "اجدد", "أجدد", "تجديده"]):
+            detected_situations.append("renewal")
+        if any(w in norm_q for w in ["اول مرة", "أول مرة", "اول مره", "أول مره", "اصدار اول", "إصدار أول"]):
+            detected_situations.append("first_issue")
+
+        doc = self._detect_doc_type(norm_q)
+
+        # Case 1: Same document, multiple situations (e.g. passport damaged vs passport lost)
+        if doc and len(detected_situations) >= 2 and is_comparison:
+            secs = self._detect_sections(norm_q) or ["fees", "conditions"]
+            return [
+                RouteTarget(doc_type=doc, situation=sit, section_keys=secs)
+                for sit in detected_situations
+            ]
+
+        # Case 2: Across different documents (e.g. id_card first_issue vs passport renewal)
         has_id = any(w in norm_q for w in ["بطاقة", "بطاقه", "هوية", "هويه"])
         has_passport = any(w in norm_q for w in ["جواز", "باسبور"])
         has_family = any(w in norm_q for w in ["دفتر", "عائلة", "عيلة"])
 
         matched_docs = []
         if has_id:
-            # find situation for id
             sit = "first_issue" if any(w in norm_q for w in ["اول", "أول"]) else "renewal"
             matched_docs.append(("id_card", sit))
         if has_passport:
